@@ -4,14 +4,19 @@ mario.txt
 coin.txt
 cloud.txt
 brick.txt
+map1.txt
 #
+
 [OBJECTS]
 # type	x	y	extra_settings per object type
 # type: 0 = Mario , 1 = Brick, 2 = Goomba, 3 = Koopas
 # See OBJECT_TYPE constants in AssetIDs.h
 
+#MAP
+-1	1108	50
+
 # MARIO
-0	120	10
+0	180	10
 
 #COIN
 4	100	120

@@ -7,8 +7,10 @@
 #define ID_TEX_MARIO 0
 #define ID_TEX_ENEMY 10
 #define ID_TEX_MISC 20
+#define ID_TEX_MAIN 30
+#define ID_TEX_MAP1 40
 
-
+#define OBJECT_TYPE_MAP	-1
 #define OBJECT_TYPE_MARIO	0
 #define OBJECT_TYPE_BRICK	1
 #define OBJECT_TYPE_GOOMBA	2

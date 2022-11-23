@@ -1,0 +1,11 @@
+# id	left	top	right	bottom	texture_id
+[SPRITES]
+
+#IDLE
+101	0	0	2217	627	40
+
+# ani_id	sprite1_id	time1	sprite2_id	time2	...
+
+[ANIMATIONS]
+#IDLE
+1	101	0
