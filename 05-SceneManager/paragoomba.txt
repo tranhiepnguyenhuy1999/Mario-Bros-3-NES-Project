@@ -1,0 +1,18 @@
+# id	left	top	right	bottom	texture_id
+[SPRITES]
+#WALK
+61001	88	-1	103	16	50
+61002	104	-1	119	16	50
+
+#WINGS
+63001	136	2	143	13	50
+63002	144	7	151	16	50
+
+#DIE
+62001	121	7	134	16	50
+
+# ani_id	sprite1_id	time1	sprite2_id	time2	...
+[ANIMATIONS]
+6000	61001	100	61002	100
+6001	62001	100
+6002	63001	100	63002	100
