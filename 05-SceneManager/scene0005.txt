@@ -13,10 +13,10 @@ map1.txt
 # See OBJECT_TYPE constants in AssetIDs.h
 
 #MAP
--1	1108	50
+#-1	1108	50
 
 # MARIO
-0	180	10
+0	100	10
 
 #COIN
 4	100	120
@@ -35,7 +35,4 @@ map1.txt
 #Platform
 5	100	180	16	15	32	51000	52000	53000
 5	140	160	16	15	2	51000	52000	53000
-
-#Portal 
-50	200	160	216	180	1
 
