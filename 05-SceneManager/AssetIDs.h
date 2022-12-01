@@ -5,7 +5,7 @@
 //
 
 #define ID_TEX_MARIO 0
-#define ID_TEX_ENEMY s10
+#define ID_TEX_ENEMY 10
 #define ID_TEX_MISC 20
 #define ID_TEX_MAIN 30
 #define ID_TEX_MAP1 40
@@ -17,7 +17,7 @@
 #define OBJECT_TYPE_KOOPAS	3
 #define OBJECT_TYPE_COIN 4
 #define OBJECT_TYPE_PLATFORM 5
-
+#define OBJECT_TYPE_CLOUDBRICK 6
 #define OBJECT_TYPE_PORTAL	50
 
 
