@@ -5,6 +5,7 @@ coin.txt
 cloud.txt
 brick.txt
 map1.txt
+doorPortal.txt
 #
 
 [OBJECTS]
@@ -36,3 +37,5 @@ map1.txt
 5	100	180	16	15	32	51000	52000	53000
 5	140	160	16	15	2	51000	52000	53000
 
+#Portal 
+50	200	160	216	180	1

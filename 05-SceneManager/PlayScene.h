@@ -8,6 +8,7 @@
 #include "Goomba.h"
 #include "Map.h"
 #include "CloudBrick.h"
+#include "DoorPoral.h"
 //#include "Koopas.h"
 
 
