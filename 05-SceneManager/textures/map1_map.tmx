@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="176" height="39" tilewidth="16" tileheight="16" infinite="0" nextlayerid="4" nextobjectid="1">
+<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="176" height="39" tilewidth="16" tileheight="16" infinite="0" nextlayerid="7" nextobjectid="69">
+ <editorsettings>
+  <export target="map1_map.tmj" format="json"/>
+ </editorsettings>
  <tileset firstgid="1" name="map1_bank.png" tilewidth="16" tileheight="16" tilecount="121" columns="11">
   <image source="map1_bank.png" width="176" height="176"/>
  </tileset>
+ <tileset firstgid="122" source="enemies.tsx"/>
  <layer id="1" name="ShoeBox Tile Grab" width="176" height="39">
   <data>
    <tile gid="1"/>
