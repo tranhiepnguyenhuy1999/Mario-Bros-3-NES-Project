@@ -173,6 +173,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 }
 void CPlayScene::_ParseSection_TILEDMAP(string line)
 {
+	CGameObject* obj = NULL;
 	string fname;
 	fname = "map1_map.csv";
 	vector<vector<string>> content;
@@ -201,86 +202,12 @@ void CPlayScene::_ParseSection_TILEDMAP(string line)
 		for (int j = 0; j < content[i].size(); j++)
 		{
 			cout << content[i][j] << " ";
+			obj = new CTileSet(i*16,j*16, stoi(content[i][j]));
+			obj->SetPosition(i*16, j*16);
+			objects.push_back(obj);
 		}
 		cout << "\n";
 	}
-	vector<string> tokens = split(line);
-
-	// skip invalid lines - an object set must have at least id, x, y
-	if (tokens.size() < 2) return;
-
-	int object_type = atoi(tokens[0].c_str());
-	float x = (float)atof(tokens[1].c_str());
-	float y = (float)atof(tokens[2].c_str());
-
-	CGameObject* obj = NULL;
-
-	switch (object_type)
-	{
-	case OBJECT_TYPE_MARIO:
-		if (player != NULL)
-		{
-			DebugOut(L"[ERROR] MARIO object was created before!\n");
-			return;
-		}
-		obj = new CMario(x, y);
-		player = (CMario*)obj;
-
-		DebugOut(L"[INFO] Player object has been created!\n");
-		break;
-	case OBJECT_TYPE_GOOMBA: obj = new CGoomba(x, y); break;
-	case OBJECT_TYPE_MAP: obj = new CMap(x, y); break;
-	case OBJECT_TYPE_BRICK: obj = new CBrick(x, y); break;
-	case OBJECT_TYPE_CLOUDBRICK: obj = new CCloudBrick(x, y); break;
-	case OBJECT_TYPE_COIN: obj = new CCoin(x, y); break;
-
-	case OBJECT_TYPE_PLATFORM:
-	{
-
-		float cell_width = (float)atof(tokens[3].c_str());
-		float cell_height = (float)atof(tokens[4].c_str());
-		int length = atoi(tokens[5].c_str());
-		int sprite_begin = atoi(tokens[6].c_str());
-		int sprite_middle = atoi(tokens[7].c_str());
-		int sprite_end = atoi(tokens[8].c_str());
-
-		obj = new CPlatform(
-			x, y,
-			cell_width, cell_height, length,
-			sprite_begin, sprite_middle, sprite_end
-		);
-
-		break;
-	}
-
-	case OBJECT_TYPE_PORTAL:
-	{
-		float r = (float)atof(tokens[3].c_str());
-		float b = (float)atof(tokens[4].c_str());
-		int scene_id = atoi(tokens[5].c_str());
-		obj = new CPortal(x, y, r, b, scene_id);
-	}
-	break;
-	case OBJECT_TYPE_DOORPORTAL:
-	{
-		float r = (float)atof(tokens[3].c_str());
-		float b = (float)atof(tokens[4].c_str());
-		int scene_id = atoi(tokens[5].c_str());
-		obj = new CDoorPoral(x, y, r, b, scene_id);
-	}
-	break;
-
-
-	default:
-		DebugOut(L"[ERROR] Invalid object type: %d\n", object_type);
-		return;
-	}
-
-	// General object setup
-	obj->SetPosition(x, y);
-
-
-	objects.push_back(obj);
 }
 void CPlayScene::LoadAssets(LPCWSTR assetFile)
 {
