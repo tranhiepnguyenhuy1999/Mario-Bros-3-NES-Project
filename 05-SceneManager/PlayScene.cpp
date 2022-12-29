@@ -192,8 +192,8 @@ void CPlayScene::_ParseSection_TILEDMAP()
 	{
 		for (int j = 0; j < content[i].size(); j++)
 		{
-			obj = new CTileSet(i*16,j*16, stoi(content[i][j])+1);
-			obj->SetPosition(i * 16, j * 16);
+			obj = new CTileSet(j*16,i*16, stoi(content[i][j])+1);
+			obj->SetPosition(j * 16, i * 16);
 			tiledMapObjects.push_back(obj);
 		}
 		cout << "\n";
@@ -308,14 +308,14 @@ void CPlayScene::Update(DWORD dt)
 void CPlayScene::Render()
 {
 	float cx, cy;
-	player->GetPosition(cx, cy);
+	CGame::GetInstance()->GetCamPos(cx, cy);
 	CGame* game = CGame::GetInstance();
 	//game->GetBackBufferWidth()
 	float l, t;
 	for (int i = 0; i < tiledMapObjects.size(); i++)
 	{
 		tiledMapObjects[i]->GetPosition(l, t);
-		if (l > cx && l+16<cx + game->GetBackBufferWidth() && t>cy && t+16 < cy + game->GetBackBufferHeight())
+		if (l >= cx && l+16<=cx + game->GetBackBufferWidth()+16 && t>=0 && t+16 <= 0 + game->GetBackBufferHeight())
 		{
 		tiledMapObjects[i]->Render();
 		}
