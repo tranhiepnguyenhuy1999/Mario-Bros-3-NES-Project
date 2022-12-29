@@ -307,11 +307,18 @@ void CPlayScene::Update(DWORD dt)
 
 void CPlayScene::Render()
 {
-	if (isRenderTiledMap==false) {
-		DebugOut(L"[INFO] yeah oh\n");
-		for (int i = 0; i < tiledMapObjects.size(); i++)
-			tiledMapObjects[i]->Render();
-		isRenderTiledMap = true;
+	float cx, cy;
+	player->GetPosition(cx, cy);
+	CGame* game = CGame::GetInstance();
+	//game->GetBackBufferWidth()
+	float l, t;
+	for (int i = 0; i < tiledMapObjects.size(); i++)
+	{
+		tiledMapObjects[i]->GetPosition(l, t);
+		if (l > cx && l+16<cx + game->GetBackBufferWidth() && t>cy && t+16 < cy + game->GetBackBufferHeight())
+		{
+		tiledMapObjects[i]->Render();
+		}
 	}
 	for (int i = 0; i < objects.size(); i++)
 		objects[i]->Render();
