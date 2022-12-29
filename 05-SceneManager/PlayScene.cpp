@@ -150,15 +150,6 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		obj = new CPortal(x, y, r, b, scene_id);
 	}
 	break;
-	case OBJECT_TYPE_DOORPORTAL:
-	{
-		float r = (float)atof(tokens[3].c_str());
-		float b = (float)atof(tokens[4].c_str());
-		int scene_id = atoi(tokens[5].c_str());
-		obj = new CDoorPoral(x, y, r, b, scene_id);
-	}
-	break;
-
 
 	default:
 		DebugOut(L"[ERROR] Invalid object type: %d\n", object_type);
@@ -171,7 +162,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 	objects.push_back(obj);
 }
-void CPlayScene::_ParseSection_TILEDMAP(string line)
+void CPlayScene::_ParseSection_TILEDMAP()
 {
 	CGameObject* obj = NULL;
 	string fname;
@@ -195,16 +186,15 @@ void CPlayScene::_ParseSection_TILEDMAP(string line)
 		}
 	}
 	else
-		cout << "Could not open the file\n";
+		DebugOut(L"[INFO] Could not open the file\n");
 
 	for (int i = 0; i < content.size(); i++)
 	{
 		for (int j = 0; j < content[i].size(); j++)
 		{
-			cout << content[i][j] << " ";
-			obj = new CTileSet(i*16,j*16, stoi(content[i][j]));
-			obj->SetPosition(i*16, j*16);
-			objects.push_back(obj);
+			obj = new CTileSet(i*16,j*16, stoi(content[i][j])+1);
+			obj->SetPosition(i * 16, j * 16);
+			tiledMapObjects.push_back(obj);
 		}
 		cout << "\n";
 	}
@@ -271,6 +261,7 @@ void CPlayScene::Load()
 		switch (section)
 		{ 
 			case SCENE_SECTION_ASSETS: _ParseSection_ASSETS(line); break;
+			case SCENE_SECTION_TILEDMAP: _ParseSection_TILEDMAP(); break;
 			case SCENE_SECTION_OBJECTS: _ParseSection_OBJECTS(line); break;
 		}
 	}
@@ -316,6 +307,12 @@ void CPlayScene::Update(DWORD dt)
 
 void CPlayScene::Render()
 {
+	if (isRenderTiledMap==false) {
+		DebugOut(L"[INFO] yeah oh\n");
+		for (int i = 0; i < tiledMapObjects.size(); i++)
+			tiledMapObjects[i]->Render();
+		isRenderTiledMap = true;
+	}
 	for (int i = 0; i < objects.size(); i++)
 		objects[i]->Render();
 }

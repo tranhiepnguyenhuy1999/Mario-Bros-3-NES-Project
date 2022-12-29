@@ -8,7 +8,6 @@
 #include "Goomba.h"
 #include "Map.h"
 #include "CloudBrick.h"
-#include "DoorPoral.h"
 #include "TileSet.h"
 #include <sstream>
 //#include "Koopas.h"
@@ -21,13 +20,15 @@ protected:
 	LPGAMEOBJECT player;					
 
 	vector<LPGAMEOBJECT> objects;
+	vector<LPGAMEOBJECT> tiledMapObjects;
+	bool isRenderTiledMap = false;
 
 	void _ParseSection_SPRITES(string line);
 	void _ParseSection_ANIMATIONS(string line);
 
 	void _ParseSection_ASSETS(string line);
 	void _ParseSection_OBJECTS(string line);
-	void _ParseSection_TILEDMAP(string line);
+	void _ParseSection_TILEDMAP();
 
 	void LoadAssets(LPCWSTR assetFile);
 	

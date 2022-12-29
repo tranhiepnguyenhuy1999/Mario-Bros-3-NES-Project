@@ -81,7 +81,7 @@
     <ClCompile Include="CloudBrick.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="DoorPoral.cpp">
+    <ClCompile Include="TileSet.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -161,7 +161,7 @@
     <ClInclude Include="CloudBrick.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="DoorPoral.h">
+    <ClInclude Include="TileSet.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

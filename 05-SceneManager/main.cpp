@@ -86,7 +86,7 @@ void Render()
 	ID3D10RenderTargetView* pRenderTargetView = g->GetRenderTargetView();
 	ID3DX10Sprite* spriteHandler = g->GetSpriteHandler();
 
-	pD3DDevice->ClearRenderTargetView(pRenderTargetView, BACKGROUND_COLOR);
+	pD3DDevice->ClearRenderTargetView(pRenderTargetView, BACKGROUND_COLOR);	
 
 	spriteHandler->Begin(D3DX10_SPRITE_SORT_TEXTURE);
 
@@ -94,7 +94,6 @@ void Render()
 	pD3DDevice->OMSetBlendState(g->GetAlphaBlending(), NewBlendFactor, 0xffffffff);
 
 	CGame::GetInstance()->GetCurrentScene()->Render();
-
 	spriteHandler->End();
 	pSwapChain->Present(0, 0);
 }
