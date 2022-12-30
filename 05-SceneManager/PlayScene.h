@@ -10,6 +10,7 @@
 #include "CloudBrick.h"
 #include "TileSet.h"
 #include "QuestionBrick.h"
+#include "Mushroom.h"
 #include <sstream>
 //#include "Koopas.h"
 

@@ -22,3 +22,4 @@ height	240
 50	textures\main-enemies.png
 60	textures\81122.png
 70	textures\map1_bank.png
+80 	textures\172615.png

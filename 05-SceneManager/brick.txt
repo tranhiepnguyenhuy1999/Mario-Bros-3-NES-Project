@@ -14,6 +14,9 @@
 	# TOUCHED
 22005	1208	1	1223	16	60
 
+# mushroom
+23001	1	45	16	60	80
+
 # BREAK BRICK
 # UN-TOUCH
 	1038	1	1053	16	60
@@ -45,7 +48,12 @@
 	953	171	968	186	60
 # ani_id	sprite1_id	time1	sprite2_id	time2	...
 [ANIMATIONS]
+	#brick
 10000	20001	1000
+	#cloud
 10001	21001	1000
+	#question brick
 10002	22001	200	22002	200	22003	200	22004	200
 10003	22005	10000
+	#mushroom
+10004	23001	10000
