@@ -9,6 +9,7 @@
 #include "Portal.h"
 #include "Coin.h"
 #include "Platform.h"
+#include "Pile.h"
 
 #include "SampleKeyEventHandler.h"
 
@@ -126,6 +127,11 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	{
 		float length = (float)atof(tokens[3].c_str());
 	obj = new CDownBrick(x, y, length); break;
+	}
+	case OBJECT_TYPE_PILE:
+	{
+		float height = (float)atof(tokens[3].c_str());
+		obj = new CPile(x, y, height); break;
 	}
 	case OBJECT_TYPE_CLOUDBRICK: obj = new CCloudBrick(x, y); break;
 		//	gift

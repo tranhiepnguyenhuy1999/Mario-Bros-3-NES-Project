@@ -144,8 +144,8 @@ void CMario::OnCollisionWithDownBrick(LPCOLLISIONEVENT e)
 void CMario::OnCollisionWithMushroom(LPCOLLISIONEVENT e)
 {
 	e->obj->Delete();
-	vy = 0;
 	level = MARIO_LEVEL_BIG;
+	vy = 0;
 }
 void CMario::OnCollisionWithCoin(LPCOLLISIONEVENT e)
 {
