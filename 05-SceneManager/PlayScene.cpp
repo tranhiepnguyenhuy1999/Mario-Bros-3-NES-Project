@@ -155,6 +155,11 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	}
 	break;
 
+	case OBJECT_TYPE_USERBOARD:
+	{
+		obj = new CUserBoard(x, y); break;
+	}
+	break;
 	default:
 		DebugOut(L"[ERROR] Invalid object type: %d\n", object_type);
 		return;

@@ -11,6 +11,7 @@
 #include "TileSet.h"
 #include "QuestionBrick.h"
 #include "Mushroom.h"
+#include "UserBoard.h"
 #include <sstream>
 //#include "Koopas.h"
 
