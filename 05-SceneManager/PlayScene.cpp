@@ -301,10 +301,11 @@ void CPlayScene::Update(DWORD dt)
 	CGame *game = CGame::GetInstance();
 	cx -= game->GetBackBufferWidth() / 2;
 	cy -= game->GetBackBufferHeight() / 2;
-
+	
 	if (cx < 0) cx = 0;
-
+	if (cy < 0) cy = 0;
 	//CGame::GetInstance()->SetCamPos(cx, 0.0f);
+	
 	CGame::GetInstance()->SetCamPos(cx, cy);
 	PurgeDeletedObjects();
 }
@@ -319,7 +320,7 @@ void CPlayScene::Render()
 	for (int i = 0; i < tiledMapObjects.size(); i++)
 	{
 		tiledMapObjects[i]->GetPosition(l, t);
-		if (l >= cx && l+16<=cx + game->GetBackBufferWidth()+16 && t>=cy && t+16 <= cy + game->GetBackBufferHeight())
+		if (l >= cx-16 && l<=cx + game->GetBackBufferWidth()+16 && t>=cy-16 && t <= cy + game->GetBackBufferHeight())
 		{
 		tiledMapObjects[i]->Render();
 		}
