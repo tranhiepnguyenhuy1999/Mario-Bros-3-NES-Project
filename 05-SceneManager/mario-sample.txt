@@ -23,3 +23,4 @@ height	240
 60	textures\81122.png
 70	textures\map1_bank.png
 80 	textures\172615.png
+90 	textures\main_flip.png
