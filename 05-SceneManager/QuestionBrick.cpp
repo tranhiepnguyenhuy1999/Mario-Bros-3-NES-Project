@@ -3,12 +3,12 @@
 void CQuestionBrick::Render()
 {
 	CAnimations* animations = CAnimations::GetInstance();
-	if (this->state== QUESTIONBRICK_STATE_TOUCHED)
+	if (this->state!= QUESTIONBRICK_STATE_UNTOUCHED)
 	{
 		animations->Get(ID_ANI_TOUCHED_QUESTION_BRICK)->Render(x, y);
 	}
 	else
-	animations->Get(ID_ANI_UNTOUCHED_QUESTION_BRICK)->Render(x, y);
+		animations->Get(ID_ANI_UNTOUCHED_QUESTION_BRICK)->Render(x, y);
 
 	//RenderBoundingBox();
 }

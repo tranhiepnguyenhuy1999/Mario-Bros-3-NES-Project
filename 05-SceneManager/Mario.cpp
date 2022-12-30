@@ -54,15 +54,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithCoin(e);
 	else if (dynamic_cast<CPortal*>(e->obj))
 		OnCollisionWithPortal(e);
-	else
-	{
-	
-	if (dynamic_cast<CQuestionBrick*>(e->obj))
-	{
-		DebugOut(L">>> touched >>> \n");
+	else if (dynamic_cast<CQuestionBrick*>(e->obj))
 		OnCollisionWithQuestionBrick(e);
-	}
-	}
 }
 
 void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
@@ -101,14 +94,13 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 void CMario::OnCollisionWithQuestionBrick(LPCOLLISIONEVENT e)
 {
 	CQuestionBrick* questionBrick = dynamic_cast<CQuestionBrick*>(e->obj);
-	DebugOut(L">>> touched >>> \n");
-	// jump on top >> kill Goomba and deflect a bit 
+
 	if (e->ny > 0)
 	{
-		if (questionBrick->GetState() != QUESTIONBRICK_STATE_TOUCHED)
+		if (questionBrick->GetState() == QUESTIONBRICK_STATE_UNTOUCHED)
 		{
-			questionBrick->SetState(QUESTIONBRICK_STATE_TOUCHED);
-			vy = -MARIO_JUMP_DEFLECT_SPEED;
+			questionBrick->SetState(QUESTIONBRICK_STATE_TOUCHED_1);
+			vy = MARIO_JUMP_DEFLECT_SPEED;
 		}
 	}
 
