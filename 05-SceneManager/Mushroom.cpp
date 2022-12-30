@@ -21,6 +21,11 @@ void CMushroom::Render()
 }
 void CMushroom::Update(DWORD dt)
 {
+	if ((state == MUSHROOM_STATE_DIE))
+	{
+		isDeleted = true;
+		return;
+	}
 
 }
 void CMushroom::GetBoundingBox(float& l, float& t, float& r, float& b)
