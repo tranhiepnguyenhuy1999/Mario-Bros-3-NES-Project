@@ -11,7 +11,7 @@
 #include "Platform.h"
 #include "Pile.h"
 #include "Flower.h"
-
+#include "Fire.h"
 #include "SampleKeyEventHandler.h"
 
 using namespace std;
@@ -192,6 +192,7 @@ void CPlayScene::createNewObject(int id, float x, float y, float vx)
 	case OBJECT_TYPE_CLOUDBRICK: obj = new CCloudBrick(x, y); break;
 		//	gift
 	case OBJECT_TYPE_MUSHROOM: obj = new CMushroom(x, y, vx); break;
+	case OBJECT_TYPE_FIRE: obj = new CFire(x, y, vx); break;
 	case OBJECT_TYPE_COIN: obj = new CCoin(x, y); break;
 		//
 	default:

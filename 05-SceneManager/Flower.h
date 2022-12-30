@@ -6,7 +6,7 @@
 #define FLOWER_BBOX_WIDTH 16
 #define FLOWER_BBOX_HEIGHT 32
 
-#define GOOMBA_DIE_TIMEOUT 500
+#define GOOMBA_DIE_TIMEOUT 1000
 
 #define FLOWER_STATE_ACTIVE 100
 #define FLOWER_STATE_POW 200
@@ -19,11 +19,13 @@
 
 class CFlower : public CGameObject
 {
-	float yLimit;
+
 protected:
+	float yLimit;
 	float ax;
 	float ay;
-
+	ULONGLONG die_start;
+	
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	virtual void Render();

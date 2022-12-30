@@ -1,11 +1,12 @@
 #include "Flower.h"
-
+#include "AssetIDs.h"
 CFlower::CFlower(float x, float y) :CGameObject(x, y)
 {
 	this->ax = 0;
 	this->ay = -FLOWER_GRAVITY;
 	SetState(FLOWER_STATE_ACTIVE);
 	yLimit = y - FLOWER_BBOX_HEIGHT;
+	die_start = -1;
 }
 
 void CFlower::GetBoundingBox(float& left, float& top, float& right, float& bottom)
@@ -19,15 +20,26 @@ void CFlower::GetBoundingBox(float& left, float& top, float& right, float& botto
 
 void CFlower::OnNoCollision(DWORD dt)
 {
-	//y += vy * dt;
-	//if (y <= yLimit) {
-	//	y = yLimit;
-	//	vy = FLOWER_GRAVITY;
+	y += vy * dt;
+	if (y <= yLimit) {
+		y = yLimit;
+		vy = FLOWER_GRAVITY;
+		return;
+	}
+	if (y >= yLimit + FLOWER_BBOX_HEIGHT) {
+		y = yLimit + FLOWER_BBOX_HEIGHT;
+		vy = -FLOWER_GRAVITY;
+	}
+
+	//if ((state == FLOWER_STATE_ACTIVE) && (GetTickCount64() - die_start > GOOMBA_DIE_TIMEOUT))
+	//{
+	//	SetState(FLOWER_STATE_POW);
 	//	return;
 	//}
-	//if (y >= yLimit + FLOWER_BBOX_HEIGHT) {
-	//	y = yLimit + FLOWER_BBOX_HEIGHT;
-	//	vy = -FLOWER_GRAVITY;
+	//if (state == FLOWER_STATE_POW) {
+	//	CGame::GetInstance()->GetCurrentScene()->createNewObject(OBJECT_TYPE_FIRE, x, y, -1);
+	//	SetState(FLOWER_STATE_POW);
+	//		return;
 	//}
 };
 
@@ -45,16 +57,16 @@ void CFlower::OnCollisionWith(LPCOLLISIONEVENT e)
 	//	vx = -vx;
 	//}
 
-	y += vy;
-	if (y <= yLimit) {
-		y = yLimit;
-		vy = FLOWER_GRAVITY;
-		return;
-	}
-	if (y >= yLimit + FLOWER_BBOX_HEIGHT) {
-		y = yLimit + FLOWER_BBOX_HEIGHT;
-		vy = -FLOWER_GRAVITY;
-	}
+	//y += vy;
+	//if (y <= yLimit) {
+	//	y = yLimit;
+	//	vy = FLOWER_GRAVITY;
+	//	return;
+	//}
+	//if (y >= yLimit + FLOWER_BBOX_HEIGHT) {
+	//	y = yLimit + FLOWER_BBOX_HEIGHT;
+	//	vy = -FLOWER_GRAVITY;
+	//}
 }
 
 void CFlower::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
@@ -65,8 +77,8 @@ void CFlower::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	//	return;
 	//}
 
-	//CGameObject::Update(dt, coObjects);
-	//CCollision::GetInstance()->Process(this, dt, coObjects);
+	CGameObject::Update(dt, coObjects);
+	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
 
 
@@ -83,6 +95,7 @@ void CFlower::SetState(int state)
 	switch (state)
 	{
 	case FLOWER_STATE_ACTIVE:
+		die_start = GetTickCount64();
 		//vy = -FLOWER_GRAVITY;
 		break;
 	}
