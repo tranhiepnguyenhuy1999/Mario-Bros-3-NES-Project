@@ -4,12 +4,14 @@
 #include "Animation.h"
 #include "Animations.h"
 
-#define ID_ANI_QUESTION_BRICK 1010
+#define ID_ANI_UNTOUCHED_QUESTION_BRICK 10002
+#define ID_ANI_TOUCHED_QUESTION_BRICK 10003
 #define BRICK_WIDTH 16
 #define BRICK_BBOX_WIDTH 16
 #define BRICK_BBOX_HEIGHT 16
 
 class CQuestionBrick : public CGameObject {
+	bool isTouched = false;
 public:
 	CQuestionBrick(float x, float y) : CGameObject(x, y) {}
 	void Render();

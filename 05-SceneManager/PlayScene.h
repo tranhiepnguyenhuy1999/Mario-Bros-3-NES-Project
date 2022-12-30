@@ -9,6 +9,7 @@
 #include "Map.h"
 #include "CloudBrick.h"
 #include "TileSet.h"
+#include "QuestionBrick.h"
 #include <sstream>
 //#include "Koopas.h"
 
