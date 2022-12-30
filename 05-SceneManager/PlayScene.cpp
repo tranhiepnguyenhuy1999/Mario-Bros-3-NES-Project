@@ -122,6 +122,11 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		// brick 
 	case OBJECT_TYPE_BRICK: obj = new CBrick(x,y); break;
 	case OBJECT_TYPE_QUESTIONBRICK: obj = new CQuestionBrick(x, y); break;
+	case OBJECT_TYPE_DOWNBRICK:
+	{
+		float length = (float)atof(tokens[3].c_str());
+	obj = new CDownBrick(x, y, length); break;
+	}
 	case OBJECT_TYPE_CLOUDBRICK: obj = new CCloudBrick(x, y); break;
 		//	gift
 	case OBJECT_TYPE_MUSHROOM: obj = new CMushroom(x, y); break;

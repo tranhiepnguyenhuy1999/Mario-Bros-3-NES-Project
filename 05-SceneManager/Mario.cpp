@@ -8,6 +8,8 @@
 #include "Coin.h"
 #include "Portal.h"
 #include "QuestionBrick.h"
+#include "DownBrick.h"
+
 #include "AssetIDs.h"
 #include "Collision.h"
 
@@ -34,6 +36,7 @@ void CMario::OnNoCollision(DWORD dt)
 {
 	x += vx * dt;
 	y += vy * dt;
+
 }
 
 void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
@@ -56,6 +59,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithPortal(e);
 	else if (dynamic_cast<CQuestionBrick*>(e->obj))
 		OnCollisionWithQuestionBrick(e);
+	else if (dynamic_cast<CDownBrick*>(e->obj))
+		OnCollisionWithDownBrick(e);
 }
 
 void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
@@ -99,12 +104,31 @@ void CMario::OnCollisionWithQuestionBrick(LPCOLLISIONEVENT e)
 	{
 		if (questionBrick->GetState() == QUESTIONBRICK_STATE_UNTOUCHED)
 		{
-			CGame::GetInstance()->GetCurrentScene()->createNewObject(OBJECT_TYPE_MUSHROOM,100, 130-16);
+			float x, y;
+			questionBrick->GetPosition(x, y);
+			CGame::GetInstance()->GetCurrentScene()->createNewObject(OBJECT_TYPE_MUSHROOM,x, y-16);
 			questionBrick->SetState(QUESTIONBRICK_STATE_TOUCHED_1);
 			vy = MARIO_JUMP_DEFLECT_SPEED;
 		}
 	}
 
+}
+void CMario::OnCollisionWithDownBrick(LPCOLLISIONEVENT e)
+{
+	//DebugOut(L">>> Mario touch downbrick >>> \n");
+	CDownBrick* downBrick = dynamic_cast<CDownBrick*>(e->obj);
+
+	if (e->ny < 0 && downBrick->GetState()== DOWNBRICK_STATE_STATIC)
+	{
+		downBrick->SetState(DOWNBRICK_STATE_ONTOP);
+		vy = -0.2f;
+
+	}
+	if (e->ny > 0 && downBrick->GetState() == DOWNBRICK_STATE_ONTOP)
+	{
+		downBrick->SetState(DOWNBRICK_STATE_STATIC);
+		vy = -0.5f;
+	}
 }
 void CMario::OnCollisionWithCoin(LPCOLLISIONEVENT e)
 {

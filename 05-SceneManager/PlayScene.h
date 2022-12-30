@@ -12,6 +12,7 @@
 #include "QuestionBrick.h"
 #include "Mushroom.h"
 #include "UserBoard.h"
+#include "DownBrick.h"
 #include <sstream>
 //#include "Koopas.h"
 
