@@ -166,6 +166,31 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 	objects.push_back(obj);
 }
+void CPlayScene::createNewObject(int id, float x, float y)
+{
+	CGameObject* obj = NULL;
+
+	switch (id)
+	{
+	case OBJECT_TYPE_GOOMBA: obj = new CGoomba(x, y); break;
+	case OBJECT_TYPE_BRICK: obj = new CBrick(x, y); break;
+	case OBJECT_TYPE_QUESTIONBRICK: obj = new CQuestionBrick(x, y); break;
+	case OBJECT_TYPE_CLOUDBRICK: obj = new CCloudBrick(x, y); break;
+		//	gift
+	case OBJECT_TYPE_MUSHROOM: obj = new CMushroom(x, y); break;
+	case OBJECT_TYPE_COIN: obj = new CCoin(x, y); break;
+		//
+	default:
+		DebugOut(L"[ERROR] Invalid object type: %d\n", id);
+		return;
+	}
+
+	// General object setup
+	obj->SetPosition(x, y);
+
+
+	objects.push_back(obj);
+}
 void CPlayScene::_ParseSection_TILEDMAP()
 {
 	CGameObject* obj = NULL;

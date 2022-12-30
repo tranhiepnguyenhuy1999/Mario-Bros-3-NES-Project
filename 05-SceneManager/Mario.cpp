@@ -8,7 +8,7 @@
 #include "Coin.h"
 #include "Portal.h"
 #include "QuestionBrick.h"
-
+#include "AssetIDs.h"
 #include "Collision.h"
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
@@ -99,6 +99,7 @@ void CMario::OnCollisionWithQuestionBrick(LPCOLLISIONEVENT e)
 	{
 		if (questionBrick->GetState() == QUESTIONBRICK_STATE_UNTOUCHED)
 		{
+			CGame::GetInstance()->GetCurrentScene()->createNewObject(OBJECT_TYPE_MUSHROOM,100, 130-16);
 			questionBrick->SetState(QUESTIONBRICK_STATE_TOUCHED_1);
 			vy = MARIO_JUMP_DEFLECT_SPEED;
 		}

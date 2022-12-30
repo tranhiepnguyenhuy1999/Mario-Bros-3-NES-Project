@@ -30,12 +30,11 @@ protected:
 	void _ParseSection_ASSETS(string line);
 	void _ParseSection_OBJECTS(string line);
 	void _ParseSection_TILEDMAP();
-
 	void LoadAssets(LPCWSTR assetFile);
 	
 public: 
 	CPlayScene(int id, LPCWSTR filePath);
-
+	virtual void createNewObject(int id, float x, float y);
 	virtual void Load();
 	virtual void Update(DWORD dt);
 	virtual void Render();
