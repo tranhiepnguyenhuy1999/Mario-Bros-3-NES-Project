@@ -10,6 +10,7 @@
 #include "Coin.h"
 #include "Platform.h"
 #include "Pile.h"
+#include "Flower.h"
 
 #include "SampleKeyEventHandler.h"
 
@@ -120,7 +121,6 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		break;
 	case OBJECT_TYPE_GOOMBA: obj = new CGoomba(x,y); break;
 	case OBJECT_TYPE_MAP: obj = new CMap(x, y); break;
-		// brick 
 	case OBJECT_TYPE_BRICK: obj = new CBrick(x,y); break;
 	case OBJECT_TYPE_QUESTIONBRICK: obj = new CQuestionBrick(x, y); break;
 	case OBJECT_TYPE_DOWNBRICK:
@@ -134,9 +134,8 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		obj = new CPile(x, y, height); break;
 	}
 	case OBJECT_TYPE_CLOUDBRICK: obj = new CCloudBrick(x, y); break;
-		//	gift
+	case OBJECT_TYPE_FLOWER: obj = new CFlower(x, y); break;
 	case OBJECT_TYPE_COIN: obj = new CCoin(x, y); break;
-		//
 	case OBJECT_TYPE_PLATFORM:
 	{
 

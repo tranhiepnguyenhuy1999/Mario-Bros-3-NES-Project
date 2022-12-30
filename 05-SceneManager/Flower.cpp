@@ -1,78 +1,79 @@
 #include "Flower.h"
-#include "Goomba.h"
 
 CFlower::CFlower(float x, float y) :CGameObject(x, y)
 {
 	this->ax = 0;
-	this->ay = GOOMBA_GRAVITY;
-	die_start = -1;
-	SetState(GOOMBA_STATE_WALKING);
+	this->ay = -FLOWER_GRAVITY;
+	SetState(FLOWER_STATE_ACTIVE);
+	yLimit = y - FLOWER_BBOX_HEIGHT;
 }
 
 void CFlower::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
-	if (state == GOOMBA_STATE_DIE)
-	{
-		left = x - GOOMBA_BBOX_WIDTH / 2;
-		top = y - GOOMBA_BBOX_HEIGHT_DIE / 2;
-		right = left + GOOMBA_BBOX_WIDTH;
-		bottom = top + GOOMBA_BBOX_HEIGHT_DIE;
-	}
-	else
-	{
-		left = x - GOOMBA_BBOX_WIDTH / 2;
-		top = y - GOOMBA_BBOX_HEIGHT / 2;
-		right = left + GOOMBA_BBOX_WIDTH;
-		bottom = top + GOOMBA_BBOX_HEIGHT;
-	}
+
+		left = x - FLOWER_BBOX_WIDTH / 2;
+		top = 368;
+		right = left + FLOWER_BBOX_WIDTH;
+		bottom = top + FLOWER_BBOX_HEIGHT;
 }
 
 void CFlower::OnNoCollision(DWORD dt)
 {
-	x += vx * dt;
-	y += vy * dt;
+	//y += vy * dt;
+	//if (y <= yLimit) {
+	//	y = yLimit;
+	//	vy = FLOWER_GRAVITY;
+	//	return;
+	//}
+	//if (y >= yLimit + FLOWER_BBOX_HEIGHT) {
+	//	y = yLimit + FLOWER_BBOX_HEIGHT;
+	//	vy = -FLOWER_GRAVITY;
+	//}
 };
 
 void CFlower::OnCollisionWith(LPCOLLISIONEVENT e)
 {
-	if (!e->obj->IsBlocking()) return;
-	if (dynamic_cast<CFlower*>(e->obj)) return;
+	//if (!e->obj->IsBlocking()) return;
+	//if (dynamic_cast<CFlower*>(e->obj)) return;
 
-	if (e->ny != 0)
-	{
-		vy = 0;
+	//if (e->ny != 0)
+	//{
+	//	vy = 0;
+	//}
+	//else if (e->nx != 0)
+	//{
+	//	vx = -vx;
+	//}
+
+	y += vy;
+	if (y <= yLimit) {
+		y = yLimit;
+		vy = FLOWER_GRAVITY;
+		return;
 	}
-	else if (e->nx != 0)
-	{
-		vx = -vx;
+	if (y >= yLimit + FLOWER_BBOX_HEIGHT) {
+		y = yLimit + FLOWER_BBOX_HEIGHT;
+		vy = -FLOWER_GRAVITY;
 	}
 }
 
 void CFlower::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	vy += ay * dt;
-	vx += ax * dt;
+	//if ((state == GOOMBA_STATE_DIE) && (GetTickCount64() - die_start > GOOMBA_DIE_TIMEOUT))
+	//{
+	//	isDeleted = true;
+	//	return;
+	//}
 
-	if ((state == GOOMBA_STATE_DIE) && (GetTickCount64() - die_start > GOOMBA_DIE_TIMEOUT))
-	{
-		isDeleted = true;
-		return;
-	}
-
-	CGameObject::Update(dt, coObjects);
-	CCollision::GetInstance()->Process(this, dt, coObjects);
+	//CGameObject::Update(dt, coObjects);
+	//CCollision::GetInstance()->Process(this, dt, coObjects);
 }
 
 
 void CFlower::Render()
 {
-	int aniId = ID_ANI_GOOMBA_WALKING;
-	if (state == GOOMBA_STATE_DIE)
-	{
-		aniId = ID_ANI_GOOMBA_DIE;
-	}
-
-	CAnimations::GetInstance()->Get(aniId)->Render(x, y);
+	int aniId = ID_ANI_FOLOWER_UP_LEFT_MOVING;
+	CAnimations::GetInstance()->Get(aniId)->Render(x, y +8);
 	RenderBoundingBox();
 }
 
@@ -81,15 +82,8 @@ void CFlower::SetState(int state)
 	CGameObject::SetState(state);
 	switch (state)
 	{
-	case GOOMBA_STATE_DIE:
-		die_start = GetTickCount64();
-		y += (GOOMBA_BBOX_HEIGHT - GOOMBA_BBOX_HEIGHT_DIE) / 2;
-		vx = 0;
-		vy = 0;
-		ay = 0;
-		break;
-	case GOOMBA_STATE_WALKING:
-		vx = -GOOMBA_WALKING_SPEED;
+	case FLOWER_STATE_ACTIVE:
+		//vy = -FLOWER_GRAVITY;
 		break;
 	}
 }

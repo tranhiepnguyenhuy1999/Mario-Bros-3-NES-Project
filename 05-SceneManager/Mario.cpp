@@ -145,6 +145,7 @@ void CMario::OnCollisionWithMushroom(LPCOLLISIONEVENT e)
 {
 	e->obj->Delete();
 	level = MARIO_LEVEL_BIG;
+	y = y - (MARIO_BIG_BBOX_HEIGHT - MARIO_SMALL_BBOX_HEIGHT);
 	vy = 0;
 }
 void CMario::OnCollisionWithCoin(LPCOLLISIONEVENT e)

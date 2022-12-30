@@ -1,10 +1,12 @@
 # list of object assets to load in this scene
 [ASSETS]
+tileSets.txt
 mario.txt
 coin.txt
 cloud.txt
 brick.txt
-tileSets.txt
+goomba.txt
+piranhaplant.txt
 
 [TILEDMAP]
 # apply tiled map editor
@@ -17,6 +19,9 @@ tileSets.txt
 # MARIO
 0	50	10
 
+#goomba
+2	330	400
+2	608	400
 #COIN
 4	50	120
 4	50	120
@@ -69,6 +74,7 @@ tileSets.txt
 9	512	384	6
 
 #pile
+11	330	368
 10 	352	368	2
 
 #Platform	
