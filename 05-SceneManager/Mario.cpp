@@ -6,6 +6,7 @@
 
 #include "Goomba.h"
 #include "Coin.h"
+#include "Mushroom.h"
 #include "Portal.h"
 #include "QuestionBrick.h"
 #include "DownBrick.h"
@@ -55,6 +56,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithGoomba(e);
 	else if (dynamic_cast<CCoin*>(e->obj))
 		OnCollisionWithCoin(e);
+	else if (dynamic_cast<CMushroom*>(e->obj))
+		OnCollisionWithMushroom(e);
 	else if (dynamic_cast<CPortal*>(e->obj))
 		OnCollisionWithPortal(e);
 	else if (dynamic_cast<CQuestionBrick*>(e->obj))
@@ -104,11 +107,19 @@ void CMario::OnCollisionWithQuestionBrick(LPCOLLISIONEVENT e)
 	{
 		if (questionBrick->GetState() == QUESTIONBRICK_STATE_UNTOUCHED)
 		{
-			float x, y;
-			questionBrick->GetPosition(x, y);
-			CGame::GetInstance()->GetCurrentScene()->createNewObject(OBJECT_TYPE_MUSHROOM,x, y-16);
+			float qx, qy, qvx;
+			questionBrick->GetPosition(qx, qy);
+			
+			if (this->x <= qx + 8) {
+				qvx = -1;
+			}
+			else
+			{
+				qvx = 1;
+			}
+			CGame::GetInstance()->GetCurrentScene()->createNewObject(OBJECT_TYPE_MUSHROOM,qx, qy, qvx);
+
 			questionBrick->SetState(QUESTIONBRICK_STATE_TOUCHED_1);
-			vy = MARIO_JUMP_DEFLECT_SPEED;
 		}
 	}
 
@@ -130,12 +141,17 @@ void CMario::OnCollisionWithDownBrick(LPCOLLISIONEVENT e)
 		vy = -0.5f;
 	}
 }
+void CMario::OnCollisionWithMushroom(LPCOLLISIONEVENT e)
+{
+	e->obj->Delete();
+	vy = 0;
+	level = MARIO_LEVEL_BIG;
+}
 void CMario::OnCollisionWithCoin(LPCOLLISIONEVENT e)
 {
 	e->obj->Delete();
 	coin++;
 }
-
 void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)
 {
 	CPortal* p = (CPortal*)e->obj;

@@ -36,7 +36,7 @@ protected:
 	
 public: 
 	CPlayScene(int id, LPCWSTR filePath);
-	virtual void createNewObject(int id, float x, float y);
+	virtual void createNewObject(int id, float x, float y, float vx);
 	virtual void Load();
 	virtual void Update(DWORD dt);
 	virtual void Render();

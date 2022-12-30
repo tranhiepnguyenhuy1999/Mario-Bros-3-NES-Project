@@ -129,7 +129,6 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	}
 	case OBJECT_TYPE_CLOUDBRICK: obj = new CCloudBrick(x, y); break;
 		//	gift
-	case OBJECT_TYPE_MUSHROOM: obj = new CMushroom(x, y); break;
 	case OBJECT_TYPE_COIN: obj = new CCoin(x, y); break;
 		//
 	case OBJECT_TYPE_PLATFORM:
@@ -176,7 +175,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 	objects.push_back(obj);
 }
-void CPlayScene::createNewObject(int id, float x, float y)
+void CPlayScene::createNewObject(int id, float x, float y, float vx)
 {
 	CGameObject* obj = NULL;
 
@@ -187,7 +186,7 @@ void CPlayScene::createNewObject(int id, float x, float y)
 	case OBJECT_TYPE_QUESTIONBRICK: obj = new CQuestionBrick(x, y); break;
 	case OBJECT_TYPE_CLOUDBRICK: obj = new CCloudBrick(x, y); break;
 		//	gift
-	case OBJECT_TYPE_MUSHROOM: obj = new CMushroom(x, y); break;
+	case OBJECT_TYPE_MUSHROOM: obj = new CMushroom(x, y, vx); break;
 	case OBJECT_TYPE_COIN: obj = new CCoin(x, y); break;
 		//
 	default:

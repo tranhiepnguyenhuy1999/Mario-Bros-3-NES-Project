@@ -26,9 +26,9 @@ class CDownBrick : public CGameObject {
 	}
 
 	public:
-	CDownBrick(float x, float y, int item) : CGameObject(x, y) {
+	CDownBrick(float x, float y, float length) : CGameObject(x, y) {
 		state = DOWNBRICK_STATE_STATIC;
-		length = item;
+		this->length = length;
 	}
 	virtual void SetState(int state);
 };

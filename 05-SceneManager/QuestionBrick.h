@@ -51,9 +51,9 @@ public:
 	}
 	void GetBoundingBox(float& l, float& t, float& r, float& b);
 	virtual void SetState(int state);
-	int IsBlocking() { 
-		if (state == QUESTIONBRICK_STATE_UNTOUCHED)
-			return 0;
-		else return 1;
-	}
+	//int IsBlocking() { 
+	//	if (state == QUESTIONBRICK_STATE_UNTOUCHED)
+	//		return 0;
+	//	else return 1;
+	//}
 };
