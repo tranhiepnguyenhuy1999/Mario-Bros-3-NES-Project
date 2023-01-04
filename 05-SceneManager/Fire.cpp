@@ -1,44 +1,21 @@
 #include "Fire.h"
 
-CFire::CFire(float x, float y, float vx) :CGameObject(x, y)
+CFire::CFire(float x, float y, float nx, float ny ) :CGameObject(x, y)
 {
-	this->ax = 0;
-	this->ay = 0;
+	vx = nx*FIRE_MOVING_SPEED;
+	vy = ny * FIRE_GRAVITY;
 	SetState(FIRE_STATE_RELASE);
-	yLimit = y - 16;
-	xLimit = x;
-	this->rect = vx;
-
 }
 void CFire::Render()
 {
 	CAnimations* animations = CAnimations::GetInstance();
-	if (this->state == FIRE_STATE_DIE)
-	{
-		animations->Get(ID_ANI_UNTOUCHED_MUSHROOM)->Render(x, y);
-	}
-	else
-	{
-		animations->Get(ID_ANI_UNTOUCHED_MUSHROOM)->Render(x, y);
-	}
+		animations->Get(ID_ANI_FIRE)->Render(x, y);
 	//RenderBoundingBox();
 }
 void CFire::OnNoCollision(DWORD dt)
 {
 	x += vx * dt;
 	y += vy * dt;
-	if (y <= yLimit) {
-		y = yLimit;
-		SetState(FIRE_STATE_ACTIVE);
-		return;
-	}
-	if (vy != 0) {
-		vx = 0;
-		if (x + FIRE_WIDTH <= xLimit) x = xLimit - FIRE_WIDTH;
-	}
-	if (vy == 0) {
-		vx = rect * FIRE_WALKING_SPEED;
-	}
 };
 
 void CFire::OnCollisionWith(LPCOLLISIONEVENT e)
@@ -63,15 +40,6 @@ void CFire::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		isDeleted = true;
 		return;
 	}
-
-	vy += ay * dt;
-	vx += ax * dt;
-
-	//if ((state == GOOMBA_STATE_DIE) && (GetTickCount64() - die_start > GOOMBA_DIE_TIMEOUT))
-	//{
-	//	isDeleted = true;
-	//	return;
-	//}
 
 	CGameObject::Update(dt, coObjects);
 	CCollision::GetInstance()->Process(this, dt, coObjects);

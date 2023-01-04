@@ -61,7 +61,8 @@ void CFlower::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	}
 	if ((state == FLOWER_STATE_POW) && (GetTickCount64() - loop_start > FLOWER_LOOP_TIMEOUT))
 	{
-		CGame::GetInstance()->GetCurrentScene()->createNewObject(OBJECT_TYPE_FIRE, x, y, -1);
+
+		CGame::GetInstance()->GetCurrentScene()->createNewObject(OBJECT_TYPE_FIRE, x, y);
 		SetState(FLOWER_STATE_ACTIVE);
 		return;
 	}

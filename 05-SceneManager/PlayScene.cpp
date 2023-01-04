@@ -180,10 +180,10 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 	objects.push_back(obj);
 }
-void CPlayScene::createNewObject(int id, float x, float y, float vx)
+void CPlayScene::createNewObject(int id, float x, float y, float nx=0, float ny=0)
 {
 	CGameObject* obj = NULL;
-
+	float px, py;
 	switch (id)
 	{
 	case OBJECT_TYPE_GOOMBA: obj = new CGoomba(x, y); break;
@@ -191,8 +191,20 @@ void CPlayScene::createNewObject(int id, float x, float y, float vx)
 	case OBJECT_TYPE_QUESTIONBRICK: obj = new CQuestionBrick(x, y); break;
 	case OBJECT_TYPE_CLOUDBRICK: obj = new CCloudBrick(x, y); break;
 		//	gift
-	case OBJECT_TYPE_MUSHROOM: obj = new CMushroom(x, y, vx); break;
-	case OBJECT_TYPE_FIRE: obj = new CFire(x, y, vx); break;
+	case OBJECT_TYPE_MUSHROOM: obj = new CMushroom(x, y, nx); break;
+	case OBJECT_TYPE_FIRE:
+	{
+		player->GetPosition(px, py);
+		if (px >= x) {
+			nx = 1;
+		}
+		else nx = -1;
+		if (py >= y) {
+			ny = 1;
+		}
+		else ny = -1;
+		obj = new CFire(x, y, nx, ny); break;
+	}
 	case OBJECT_TYPE_COIN: obj = new CCoin(x, y); break;
 		//
 	default:
