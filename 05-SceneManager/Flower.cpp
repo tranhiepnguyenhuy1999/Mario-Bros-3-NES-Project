@@ -1,19 +1,21 @@
 #include "Flower.h"
 #include "AssetIDs.h"
+#include "Pile.h"
+#include "debug.h"
 CFlower::CFlower(float x, float y) :CGameObject(x, y)
 {
 	this->ax = 0;
-	this->ay = -FLOWER_GRAVITY;
+	this->ay = 0;
 	SetState(FLOWER_STATE_ACTIVE);
 	yLimit = y - FLOWER_BBOX_HEIGHT;
-	die_start = -1;
+	loop_start = -1;
 }
 
 void CFlower::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
 
 		left = x - FLOWER_BBOX_WIDTH / 2;
-		top = 368;
+		top = y- (FLOWER_BBOX_HEIGHT/2 - 8);
 		right = left + FLOWER_BBOX_WIDTH;
 		bottom = top + FLOWER_BBOX_HEIGHT;
 }
@@ -21,32 +23,12 @@ void CFlower::GetBoundingBox(float& left, float& top, float& right, float& botto
 void CFlower::OnNoCollision(DWORD dt)
 {
 	y += vy * dt;
-	if (y <= yLimit) {
-		y = yLimit;
-		vy = FLOWER_GRAVITY;
-		return;
-	}
-	if (y >= yLimit + FLOWER_BBOX_HEIGHT) {
-		y = yLimit + FLOWER_BBOX_HEIGHT;
-		vy = -FLOWER_GRAVITY;
-	}
-
-	//if ((state == FLOWER_STATE_ACTIVE) && (GetTickCount64() - die_start > GOOMBA_DIE_TIMEOUT))
-	//{
-	//	SetState(FLOWER_STATE_POW);
-	//	return;
-	//}
-	//if (state == FLOWER_STATE_POW) {
-	//	CGame::GetInstance()->GetCurrentScene()->createNewObject(OBJECT_TYPE_FIRE, x, y, -1);
-	//	SetState(FLOWER_STATE_POW);
-	//		return;
-	//}
 };
 
 void CFlower::OnCollisionWith(LPCOLLISIONEVENT e)
 {
 	//if (!e->obj->IsBlocking()) return;
-	//if (dynamic_cast<CFlower*>(e->obj)) return;
+	//if (dynamic_cast<CPile*>(e->obj)) return;
 
 	//if (e->ny != 0)
 	//{
@@ -71,11 +53,30 @@ void CFlower::OnCollisionWith(LPCOLLISIONEVENT e)
 
 void CFlower::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	//if ((state == GOOMBA_STATE_DIE) && (GetTickCount64() - die_start > GOOMBA_DIE_TIMEOUT))
-	//{
-	//	isDeleted = true;
-	//	return;
-	//}
+	DebugOut(L">>> Mario DIE >>> %d \n", GetTickCount64() - loop_start);
+	if ((state == FLOWER_STATE_ONTOP) && (GetTickCount64() - loop_start > FLOWER_LOOP_TIMEOUT))
+	{
+		SetState(FLOWER_STATE_POW);
+		return;
+	}
+	if ((state == FLOWER_STATE_POW) && (GetTickCount64() - loop_start > FLOWER_LOOP_TIMEOUT))
+	{
+		CGame::GetInstance()->GetCurrentScene()->createNewObject(OBJECT_TYPE_FIRE, x, y, -1);
+		SetState(FLOWER_STATE_ACTIVE);
+		return;
+	}
+	if ((state == FLOWER_STATE_ONBOTTOM) && (GetTickCount64() - loop_start > FLOWER_BOTTOM_LOOP_TIMEOUT))
+	{
+		SetState(FLOWER_STATE_ACTIVE);
+		return;
+	}
+	if (y < yLimit)
+	{
+		SetState(FLOWER_STATE_ONTOP);
+	}else if (y > yLimit + FLOWER_BBOX_HEIGHT)
+	{
+		SetState(FLOWER_STATE_ONBOTTOM);
+	}
 
 	CGameObject::Update(dt, coObjects);
 	CCollision::GetInstance()->Process(this, dt, coObjects);
@@ -85,8 +86,8 @@ void CFlower::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 void CFlower::Render()
 {
 	int aniId = ID_ANI_FOLOWER_UP_LEFT_MOVING;
-	CAnimations::GetInstance()->Get(aniId)->Render(x, y +8);
-	RenderBoundingBox();
+	CAnimations::GetInstance()->Get(aniId)->Render(x, y+8);
+	//RenderBoundingBox();
 }
 
 void CFlower::SetState(int state)
@@ -94,9 +95,27 @@ void CFlower::SetState(int state)
 	CGameObject::SetState(state);
 	switch (state)
 	{
+	case FLOWER_STATE_POW:
+		break;
+	case FLOWER_STATE_ONTOP:
+		y = yLimit;
+		loop_start = GetTickCount64();
+		vy = 0;
+		break;
+	case FLOWER_STATE_ONBOTTOM:
+		y = yLimit + FLOWER_BBOX_HEIGHT;
+		loop_start = GetTickCount64();
+		vy = 0;
+		break;
 	case FLOWER_STATE_ACTIVE:
-		die_start = GetTickCount64();
-		//vy = -FLOWER_GRAVITY;
+		if (y <= yLimit)
+		{
+			vy = FLOWER_SPEED;
+		}
+		else if (y >= yLimit + FLOWER_BBOX_HEIGHT)
+		{
+			vy = -FLOWER_SPEED;
+		}
 		break;
 	}
 }

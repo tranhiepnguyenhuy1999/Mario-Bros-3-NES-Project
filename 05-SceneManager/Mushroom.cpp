@@ -1,9 +1,8 @@
 #include "Mushroom.h"
-#include "debug.h"
 CMushroom::CMushroom(float x, float y, float vx) :CGameObject(x, y)
 {
 	this->ax = 0;
-	this->ay = -MUSHROOM_GRAVITY;
+	this->ay = 0;
 	SetState(MUSHROOM_STATE_RELASE);
 	yLimit = y - 16;
 	xLimit = x;
@@ -68,6 +67,7 @@ void CMushroom::SetState(int state)
 	switch (state)
 	{
 	case MUSHROOM_STATE_RELASE:
+		vy = -MUSHROOM_WALKING_SPEED;
 		break;
 	case MUSHROOM_STATE_MOVING:
 		vx = -MUSHROOM_WALKING_SPEED;
