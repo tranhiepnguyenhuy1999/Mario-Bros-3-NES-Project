@@ -4,7 +4,7 @@ CFire::CFire(float x, float y, float vx) :CGameObject(x, y)
 {
 	this->ax = 0;
 	this->ay = 0;
-	SetState(MUSHROOM_STATE_RELASE);
+	SetState(FIRE_STATE_RELASE);
 	yLimit = y - 16;
 	xLimit = x;
 	this->rect = vx;
@@ -13,7 +13,7 @@ CFire::CFire(float x, float y, float vx) :CGameObject(x, y)
 void CFire::Render()
 {
 	CAnimations* animations = CAnimations::GetInstance();
-	if (this->state == MUSHROOM_STATE_DIE)
+	if (this->state == FIRE_STATE_DIE)
 	{
 		animations->Get(ID_ANI_UNTOUCHED_MUSHROOM)->Render(x, y);
 	}
@@ -29,15 +29,15 @@ void CFire::OnNoCollision(DWORD dt)
 	y += vy * dt;
 	if (y <= yLimit) {
 		y = yLimit;
-		SetState(MUSHROOM_STATE_ACTIVE);
+		SetState(FIRE_STATE_ACTIVE);
 		return;
 	}
 	if (vy != 0) {
 		vx = 0;
-		if (x + MUSHROOM_WIDTH <= xLimit) x = xLimit - MUSHROOM_WIDTH;
+		if (x + FIRE_WIDTH <= xLimit) x = xLimit - FIRE_WIDTH;
 	}
 	if (vy == 0) {
-		vx = rect * MUSHROOM_WALKING_SPEED;
+		vx = rect * FIRE_WALKING_SPEED;
 	}
 };
 
@@ -58,7 +58,7 @@ void CFire::OnCollisionWith(LPCOLLISIONEVENT e)
 
 void CFire::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	if ((state == MUSHROOM_STATE_DIE))
+	if ((state == FIRE_STATE_DIE))
 	{
 		isDeleted = true;
 		return;
@@ -78,10 +78,10 @@ void CFire::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 }
 void CFire::GetBoundingBox(float& l, float& t, float& r, float& b)
 {
-	l = x - MUSHROOM_BBOX_WIDTH / 2;
-	t = y - MUSHROOM_BBOX_HEIGHT / 2;
-	r = l + MUSHROOM_BBOX_WIDTH;
-	b = t + MUSHROOM_BBOX_HEIGHT;
+	l = x - FIRE_BBOX_WIDTH / 2;
+	t = y - FIRE_BBOX_HEIGHT / 2;
+	r = l + FIRE_BBOX_WIDTH;
+	b = t + FIRE_BBOX_HEIGHT;
 }
 void CFire::SetState(int state)
 {
@@ -89,19 +89,5 @@ void CFire::SetState(int state)
 
 	switch (state)
 	{
-	case MUSHROOM_STATE_RELASE:
-		vx = 0;
-		vy = -MUSHROOM_GRAVITY;
-		break;
-	case MUSHROOM_STATE_ACTIVE:
-		vx = rect * MUSHROOM_WALKING_SPEED;
-		vy = MUSHROOM_GRAVITY;
-		break;
-	case MUSHROOM_STATE_DIE:
-		vx = 0;
-		vy = 0;
-		ay = 0;
-		ax = 0;
-		break;
 	}
 }

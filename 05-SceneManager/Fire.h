@@ -4,17 +4,17 @@
 #include "Animation.h"
 #include "Animations.h"
 
-#define MUSHROOM_GRAVITY 0.07f
-#define MUSHROOM_WALKING_SPEED 0.07f
+#define FIRE_GRAVITY 0.07f
+#define FIRE_WALKING_SPEED 0.07f
 
 #define ID_ANI_UNTOUCHED_MUSHROOM 12005
-#define MUSHROOM_WIDTH 16
-#define	MUSHROOM_BBOX_WIDTH 16
-#define MUSHROOM_BBOX_HEIGHT 16
+#define FIRE_WIDTH 16
+#define	FIRE_BBOX_WIDTH 16
+#define FIRE_BBOX_HEIGHT 16
 
-#define MUSHROOM_STATE_RELASE 100
-#define MUSHROOM_STATE_ACTIVE 200
-#define MUSHROOM_STATE_DIE 300
+#define FIRE_STATE_RELASE 100
+#define FIRE_STATE_ACTIVE 200
+#define FIRE_STATE_DIE 300
 
 class CFire : public CGameObject {
 	float ax;

@@ -4,8 +4,8 @@
 #include "Animation.h"
 #include "Animations.h"
 
-#define MUSHROOM_GRAVITY 0.07f
-#define MUSHROOM_WALKING_SPEED 0.07f
+#define MUSHROOM_GRAVITY 0.002f
+#define MUSHROOM_WALKING_SPEED 0.05f
 
 #define ID_ANI_UNTOUCHED_MUSHROOM 10004
 #define MUSHROOM_WIDTH 16
@@ -13,9 +13,9 @@
 #define MUSHROOM_BBOX_HEIGHT 16
 
 #define MUSHROOM_STATE_RELASE 100
-#define MUSHROOM_STATE_ACTIVE 200
-#define MUSHROOM_STATE_DIE 300
-
+#define MUSHROOM_STATE_MOVING 200
+#define MUSHROOM_STATE_FALL 300
+#define MUSHROOM_STATE_DIE 400
 class CMushroom : public CGameObject {
 	float ax;
 	float ay;

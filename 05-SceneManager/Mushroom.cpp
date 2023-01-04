@@ -1,9 +1,9 @@
 #include "Mushroom.h"
-
+#include "debug.h"
 CMushroom::CMushroom(float x, float y, float vx) :CGameObject(x, y)
 {
 	this->ax = 0;
-	this->ay = 0;
+	this->ay = -MUSHROOM_GRAVITY;
 	SetState(MUSHROOM_STATE_RELASE);
 	yLimit = y - 16;
 	xLimit = x;
@@ -13,39 +13,19 @@ CMushroom::CMushroom(float x, float y, float vx) :CGameObject(x, y)
 void CMushroom::Render()
 {
 	CAnimations* animations = CAnimations::GetInstance();
-	if (this->state == MUSHROOM_STATE_DIE)
-	{
-		animations->Get(ID_ANI_UNTOUCHED_MUSHROOM)->Render(x, y);
-	}
-	else
-	{
-		animations->Get(ID_ANI_UNTOUCHED_MUSHROOM)->Render(x, y);
-	}
-	//RenderBoundingBox();
+	animations->Get(ID_ANI_UNTOUCHED_MUSHROOM)->Render(x, y);
+	RenderBoundingBox();
 }
 void CMushroom::OnNoCollision(DWORD dt)
 {
 	x += vx * dt;
 	y += vy * dt;
-	if (y <= yLimit) {
-		y = yLimit;
-		SetState(MUSHROOM_STATE_ACTIVE);
-		return;
-	}
-	if (vy != 0) {
-		vx = 0;
-		if (x+ MUSHROOM_WIDTH <= xLimit) x = xLimit- MUSHROOM_WIDTH;
-	}
-	if (vy == 0) {
-		vx = rect*MUSHROOM_WALKING_SPEED;
-	}
 };
 
 void CMushroom::OnCollisionWith(LPCOLLISIONEVENT e)
 {
-	if (!e->obj->IsBlocking()) return;
-	if (dynamic_cast<CMushroom*>(e->obj)) return;
 
+	if (!e->obj->IsBlocking()) return;
 	if (e->ny != 0)
 	{
 		vy = 0;
@@ -67,12 +47,10 @@ void CMushroom::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	vy += ay * dt;
 	vx += ax * dt;
 
-	//if ((state == GOOMBA_STATE_DIE) && (GetTickCount64() - die_start > GOOMBA_DIE_TIMEOUT))
-	//{
-	//	isDeleted = true;
-	//	return;
-	//}
-
+	if (y < yLimit ) {
+		y = yLimit;
+		SetState(MUSHROOM_STATE_MOVING);
+	}
 	CGameObject::Update(dt, coObjects);
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
@@ -90,18 +68,15 @@ void CMushroom::SetState(int state)
 	switch (state)
 	{
 	case MUSHROOM_STATE_RELASE:
-		vx = 0;
-		vy = -MUSHROOM_GRAVITY;
 		break;
-	case MUSHROOM_STATE_ACTIVE:
-		vx = rect*MUSHROOM_WALKING_SPEED;
-		vy = MUSHROOM_GRAVITY;
+	case MUSHROOM_STATE_MOVING:
+		vx = -MUSHROOM_WALKING_SPEED;
+		ay = MUSHROOM_GRAVITY;
 		break;
-	case MUSHROOM_STATE_DIE:
-		vx = 0;
-		vy = 0;
-		ay = 0;
-		ax = 0;
+	case MUSHROOM_STATE_FALL:
+		vx = -MUSHROOM_WALKING_SPEED;
+		ay = MUSHROOM_GRAVITY;
 		break;
-	}
+
+}
 }
