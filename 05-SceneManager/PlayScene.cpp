@@ -12,6 +12,7 @@
 #include "Pile.h"
 #include "Flower.h"
 #include "Fire.h"
+#include "SmallCoin.h"
 #include "SampleKeyEventHandler.h"
 
 using namespace std;
@@ -122,7 +123,12 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_GOOMBA: obj = new CGoomba(x,y); break;
 	case OBJECT_TYPE_MAP: obj = new CMap(x, y); break;
 	case OBJECT_TYPE_BRICK: obj = new CBrick(x,y); break;
-	case OBJECT_TYPE_QUESTIONBRICK: obj = new CQuestionBrick(x, y); break;
+	case OBJECT_TYPE_QUESTIONBRICK:
+	{
+		float type = (float)atof(tokens[3].c_str());
+	
+		obj = new CQuestionBrick(x, y, type); break;
+	}
 	case OBJECT_TYPE_DOWNBRICK:
 	{
 		float length = (float)atof(tokens[3].c_str());
@@ -134,6 +140,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		obj = new CPile(x, y, height); break;
 	}
 	case OBJECT_TYPE_CLOUDBRICK: obj = new CCloudBrick(x, y); break;
+	case OBJECT_TYPE_SMALLCOIN: obj = new CSmallCoin(x, y); break;
 	case OBJECT_TYPE_FLOWER: obj = new CFlower(x, y); break;
 	case OBJECT_TYPE_COIN: obj = new CCoin(x, y); break;
 	case OBJECT_TYPE_PLATFORM:
@@ -192,6 +199,7 @@ void CPlayScene::createNewObject(int id, float x, float y, float nx=0, float ny=
 	case OBJECT_TYPE_CLOUDBRICK: obj = new CCloudBrick(x, y); break;
 		//	gift
 	case OBJECT_TYPE_MUSHROOM: obj = new CMushroom(x, y, nx); break;
+	case OBJECT_TYPE_SMALLCOIN: obj = new CSmallCoin(x, y); break;
 	case OBJECT_TYPE_FIRE:
 	{
 		player->GetPosition(px, py);

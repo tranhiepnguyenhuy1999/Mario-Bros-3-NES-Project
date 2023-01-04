@@ -53,7 +53,7 @@ void CFlower::OnCollisionWith(LPCOLLISIONEVENT e)
 
 void CFlower::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	DebugOut(L">>> Mario DIE >>> %d \n", GetTickCount64() - loop_start);
+	//DebugOut(L">>> Count time >>> %d \n", GetTickCount64() - loop_start);
 	if ((state == FLOWER_STATE_ONTOP) && (GetTickCount64() - loop_start > FLOWER_LOOP_TIMEOUT))
 	{
 		SetState(FLOWER_STATE_POW);
