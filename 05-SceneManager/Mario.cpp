@@ -12,6 +12,7 @@
 #include "DownBrick.h"
 #include "KoopaTroopa.h"
 #include "Flower.h"
+#include "Fire.h"
 
 #include "AssetIDs.h"
 #include "Collision.h"
@@ -71,6 +72,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithDownBrick(e);
 	else if (dynamic_cast<CFlower*>(e->obj))
 		OnCollisionWithFlower(e);
+	else if (dynamic_cast<CFire*>(e->obj))
+		OnCollisionWithFire(e);
 }
 
 void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
@@ -121,6 +124,22 @@ void CMario::OnCollisionWithFlower(LPCOLLISIONEVENT e)
 				SetState(MARIO_STATE_DIE);
 			}
 		}
+}
+void CMario::OnCollisionWithFire(LPCOLLISIONEVENT e)
+{
+	if (untouchable == 0)
+	{
+		if (level > MARIO_LEVEL_SMALL)
+		{
+			level = level-1;
+			StartUntouchable();
+		}
+		else
+		{
+			DebugOut(L">>> Mario DIE >>> \n");
+			SetState(MARIO_STATE_DIE);
+		}
+	}
 }
 void CMario::OnCollisionWithKoopaTroopa(LPCOLLISIONEVENT e)
 {

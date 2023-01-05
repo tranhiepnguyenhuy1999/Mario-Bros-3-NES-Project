@@ -21,11 +21,13 @@
 #define ID_ANI_KOOPATROOPA_DIE 7001
 #define ID_ANI_KOOPATROOPA_KICKING 7002
 #define ID_ANI_KOOPATROOPA_ALIVE 7003
+
 class CKoopaTroopa : public CGameObject
 {
 protected:
 	float ax;
 	float ay;
+	float type;
 
 	ULONGLONG count_start;
 

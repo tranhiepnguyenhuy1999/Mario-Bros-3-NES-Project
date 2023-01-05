@@ -21,7 +21,7 @@ piranhaplant.txt
 0	50	10
 
 #goomba
-14	100	390
+#14	100	390
 #2	330	400
 #2	608	400
 #COIN
@@ -77,7 +77,7 @@ piranhaplant.txt
 
 #pile
 
-11	360	368	
+11	360	378	
 10 	352	368	2
 
 #Platform	

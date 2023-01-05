@@ -15,7 +15,7 @@ void CFlower::GetBoundingBox(float& left, float& top, float& right, float& botto
 {
 
 		left = x - FLOWER_BBOX_WIDTH / 2;
-		top = y- (FLOWER_BBOX_HEIGHT/2 - 8);
+		top = y- (FLOWER_BBOX_HEIGHT/2);
 		right = left + FLOWER_BBOX_WIDTH;
 		bottom = top + FLOWER_BBOX_HEIGHT;
 }
@@ -87,8 +87,8 @@ void CFlower::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 void CFlower::Render()
 {
 	int aniId = ID_ANI_FOLOWER_UP_LEFT_MOVING;
-	CAnimations::GetInstance()->Get(aniId)->Render(x, y+8);
-	//RenderBoundingBox();
+	CAnimations::GetInstance()->Get(aniId)->Render(x, y);
+	RenderBoundingBox();
 }
 
 void CFlower::SetState(int state)
