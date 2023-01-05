@@ -30,8 +30,8 @@
 73004	79	48	96	63	50
 	
 	#alive
-72001	32	48	48	63	50
-72002	32	64	47	79	50
+72001	32	48	47	63	50
+72002	64	48	79	63	50
 # ani_id	sprite1_id	time1	sprite2_id	time2	...
 [ANIMATIONS]
 #red

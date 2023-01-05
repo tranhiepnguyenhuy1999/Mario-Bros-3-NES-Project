@@ -3,26 +3,26 @@
 CKoopaTroopa::CKoopaTroopa(float x, float y) :CGameObject(x, y)
 {
 	this->ax = 0;
-	this->ay = GOOMBA_GRAVITY;
-	die_start = -1;
-	SetState(GOOMBA_STATE_WALKING);
+	this->ay = KOOPATROOPA_GRAVITY;
+	count_start = -1;
+	SetState(KOOPATROOPA_STATE_WALKING);
 }
 
 void CKoopaTroopa::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
-	if (state == GOOMBA_STATE_DIE)
+	if (state == KOOPATROOPA_STATE_DIE || state== KOOPATROOPA_STATE_ALIVE)
 	{
-		left = x - GOOMBA_BBOX_WIDTH / 2;
-		top = y - (GOOMBA_BBOX_HEIGHT_DIE / 2 - 8 );
-		right = left + GOOMBA_BBOX_WIDTH;
-		bottom = top + GOOMBA_BBOX_HEIGHT_DIE;
+		left = x - KOOPATROOPA_BBOX_WIDTH / 2;
+		top = y - (KOOPATROOPA_BBOX_HEIGHT_DIE / 2);
+		right = left + KOOPATROOPA_BBOX_WIDTH;
+		bottom = top + KOOPATROOPA_BBOX_HEIGHT_DIE;
 	}
 	else
 	{
-		left = x - GOOMBA_BBOX_WIDTH / 2;
-		top = y - (GOOMBA_BBOX_HEIGHT / 2 - 8 );
-		right = left + GOOMBA_BBOX_WIDTH;
-		bottom = top + GOOMBA_BBOX_HEIGHT;
+		left = x - KOOPATROOPA_BBOX_WIDTH / 2;
+		top = y - (KOOPATROOPA_BBOX_HEIGHT/2);
+		right = left + KOOPATROOPA_BBOX_WIDTH;
+		bottom = top + KOOPATROOPA_BBOX_HEIGHT ;
 	}
 }
 
@@ -52,26 +52,38 @@ void CKoopaTroopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	vy += ay * dt;
 	vx += ax * dt;
 
-	if ((state == GOOMBA_STATE_DIE) && (GetTickCount64() - die_start > GOOMBA_DIE_TIMEOUT))
+	if ((state == KOOPATROOPA_STATE_DIE) && (GetTickCount64() - count_start > KOOPATROOPA_DIE_TIMEOUT))
 	{
-		isDeleted = true;
+		SetState(KOOPATROOPA_STATE_ALIVE);
 		return;
 	}
-
-	//CGameObject::Update(dt, coObjects);
-	//CCollision::GetInstance()->Process(this, dt, coObjects);
+	if ((state == KOOPATROOPA_STATE_ALIVE) && (GetTickCount64() - count_start > KOOPATROOPA_ALIVE_TIMEOUT))
+	{
+		SetState(KOOPATROOPA_STATE_WALKING);
+		y = y + (KOOPATROOPA_BBOX_HEIGHT_DIE/2) - KOOPATROOPA_BBOX_HEIGHT/2 ;
+		return;
+	}
+	CGameObject::Update(dt, coObjects);
+	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
 
 
 void CKoopaTroopa::Render()
 {
-	int aniId = ID_ANI_GOOMBA_WALKING;
-	if (state == GOOMBA_STATE_DIE)
+	int aniId = ID_ANI_KOOPATROOPA_WALKING;
+	if (state == KOOPATROOPA_STATE_DIE)
 	{
-		aniId = ID_ANI_GOOMBA_DIE;
+		aniId = ID_ANI_KOOPATROOPA_DIE;
 	}
-
-	CAnimations::GetInstance()->Get(aniId)->Render(x, y + (GOOMBA_BBOX_HEIGHT / 2 - 8));
+	if (state == KOOPATROOPA_STATE_ALIVE)
+	{
+		aniId = ID_ANI_KOOPATROOPA_ALIVE;
+	}
+	if (state == KOOPATROOPA_STATE_KICKING)
+	{
+		aniId = ID_ANI_KOOPATROOPA_KICKING;
+	}
+	CAnimations::GetInstance()->Get(aniId)->Render(x, y);
 	RenderBoundingBox();
 }
 
@@ -80,15 +92,24 @@ void CKoopaTroopa::SetState(int state)
 	CGameObject::SetState(state);
 	switch (state)
 	{
-	case GOOMBA_STATE_DIE:
-		die_start = GetTickCount64();
-		y += (GOOMBA_BBOX_HEIGHT - GOOMBA_BBOX_HEIGHT_DIE) / 2;
+	case KOOPATROOPA_STATE_DIE:
+		count_start = GetTickCount64();
+		y += (KOOPATROOPA_BBOX_HEIGHT - KOOPATROOPA_BBOX_HEIGHT_DIE) / 2;
 		vx = 0;
 		vy = 0;
 		ay = 0;
 		break;
-	case GOOMBA_STATE_WALKING:
-		vx = -GOOMBA_WALKING_SPEED;
+	case KOOPATROOPA_STATE_ALIVE:
+		count_start = GetTickCount64();
+		vx = 0;
+		vy = 0;
+		ay = 0;
+		break;
+	case KOOPATROOPA_STATE_WALKING:
+		vx = -KOOPATROOPA_WALKING_SPEED;
+		break;
+	case KOOPATROOPA_STATE_KICKING:
+		vx = KOOPATROOPA_KICKING_SPEED;
 		break;
 	}
 }

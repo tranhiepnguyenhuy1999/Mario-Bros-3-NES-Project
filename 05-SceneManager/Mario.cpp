@@ -10,6 +10,8 @@
 #include "Portal.h"
 #include "QuestionBrick.h"
 #include "DownBrick.h"
+#include "KoopaTroopa.h"
+#include "Flower.h"
 
 #include "AssetIDs.h"
 #include "Collision.h"
@@ -37,11 +39,11 @@ void CMario::OnNoCollision(DWORD dt)
 {
 	x += vx * dt;
 	y += vy * dt;
-
 }
 
 void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 {
+
 	if (e->ny != 0 && e->obj->IsBlocking())
 	{
 		vy = 0;
@@ -51,9 +53,12 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 	if (e->nx != 0 && e->obj->IsBlocking())
 	{
 		vx = 0;
+		DebugOut(L"yeah \n");
 	}
 	if (dynamic_cast<CGoomba*>(e->obj))
 		OnCollisionWithGoomba(e);
+	if (dynamic_cast<CKoopaTroopa*>(e->obj))
+		OnCollisionWithKoopaTroopa(e);
 	else if (dynamic_cast<CCoin*>(e->obj))
 		OnCollisionWithCoin(e);
 	else if (dynamic_cast<CMushroom*>(e->obj))
@@ -64,6 +69,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithQuestionBrick(e);
 	else if (dynamic_cast<CDownBrick*>(e->obj))
 		OnCollisionWithDownBrick(e);
+	else if (dynamic_cast<CFlower*>(e->obj))
+		OnCollisionWithFlower(e);
 }
 
 void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
@@ -84,6 +91,59 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 		if (untouchable == 0)
 		{
 			if (goomba->GetState() != GOOMBA_STATE_DIE)
+			{
+				if (level > MARIO_LEVEL_SMALL)
+				{
+					level = MARIO_LEVEL_SMALL;
+					StartUntouchable();
+				}
+				else
+				{
+					DebugOut(L">>> Mario DIE >>> \n");
+					SetState(MARIO_STATE_DIE);
+				}
+			}
+		}
+	}
+}
+void CMario::OnCollisionWithFlower(LPCOLLISIONEVENT e)
+{
+		if (untouchable == 0)
+		{
+			if (level > MARIO_LEVEL_SMALL)
+			{
+				level = MARIO_LEVEL_SMALL;
+				StartUntouchable();
+			}
+			else
+			{
+				DebugOut(L">>> Mario DIE >>> \n");
+				SetState(MARIO_STATE_DIE);
+			}
+		}
+}
+void CMario::OnCollisionWithKoopaTroopa(LPCOLLISIONEVENT e)
+{
+	CKoopaTroopa* item = dynamic_cast<CKoopaTroopa*>(e->obj);
+	DebugOut(L"touched \n");
+	// jump on top >> kill Goomba and deflect a bit 
+	if (item->GetState() == KOOPATROOPA_STATE_DIE || item->GetState() == KOOPATROOPA_STATE_ALIVE) {
+		item->SetState(KOOPATROOPA_STATE_KICKING);
+		return;
+	}
+	if (e->ny < 0)
+	{
+		if (item->GetState() != KOOPATROOPA_STATE_DIE)
+		{
+			item->SetState(KOOPATROOPA_STATE_DIE);
+			vy = -MARIO_JUMP_DEFLECT_SPEED;
+		}
+	}
+	else // hit by Goomba
+	{
+		if (untouchable == 0)
+		{
+			if (item->GetState() != KOOPATROOPA_STATE_DIE)
 			{
 				if (level > MARIO_LEVEL_SMALL)
 				{
