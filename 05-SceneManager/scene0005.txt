@@ -6,6 +6,7 @@ coin.txt
 cloud.txt
 brick.txt
 goomba.txt
+koopatroopa.txt
 piranhaplant.txt
 
 [TILEDMAP]
@@ -20,6 +21,7 @@ piranhaplant.txt
 0	50	10
 
 #goomba
+14	100	352
 #2	330	400
 #2	608	400
 #COIN
@@ -74,9 +76,9 @@ piranhaplant.txt
 9	512	384	6
 
 #pile
-13	80	368	
-11	108	368	
-10 	100	368	2
+
+11	360	368	
+10 	352	368	2
 
 #Platform	
 5	0	416	16	15	39	1089	1090	1091	
