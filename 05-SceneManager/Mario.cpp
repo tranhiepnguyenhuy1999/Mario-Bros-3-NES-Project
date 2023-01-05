@@ -54,12 +54,11 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 	if (e->nx != 0 && e->obj->IsBlocking())
 	{
 		vx = 0;
-		DebugOut(L"yeah \n");
 	}
 	if (dynamic_cast<CGoomba*>(e->obj))
 		OnCollisionWithGoomba(e);
-	if (dynamic_cast<CKoopaTroopa*>(e->obj))
-		OnCollisionWithKoopaTroopa(e);
+	//if (dynamic_cast<CKoopaTroopa*>(e->obj))
+	//	OnCollisionWithKoopaTroopa(e);
 	else if (dynamic_cast<CCoin*>(e->obj))
 		OnCollisionWithCoin(e);
 	else if (dynamic_cast<CMushroom*>(e->obj))
@@ -144,7 +143,6 @@ void CMario::OnCollisionWithFire(LPCOLLISIONEVENT e)
 void CMario::OnCollisionWithKoopaTroopa(LPCOLLISIONEVENT e)
 {
 	CKoopaTroopa* item = dynamic_cast<CKoopaTroopa*>(e->obj);
-	DebugOut(L"touched \n");
 	// jump on top >> kill Goomba and deflect a bit 
 	if (item->GetState() == KOOPATROOPA_STATE_DIE || item->GetState() == KOOPATROOPA_STATE_ALIVE) {
 		item->SetState(KOOPATROOPA_STATE_KICKING);

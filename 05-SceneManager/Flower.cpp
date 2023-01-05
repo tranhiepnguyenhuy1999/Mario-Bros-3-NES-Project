@@ -54,6 +54,18 @@ void CFlower::OnCollisionWith(LPCOLLISIONEVENT e)
 void CFlower::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	//DebugOut(L">>> Count time >>> %d \n", GetTickCount64() - loop_start);
+	float px, py, nx, ny;
+	CGame::GetInstance()->GetCurrentScene()->getPlayerPosition(px, py);
+
+	if (px >= x) {
+		nx = 1;
+	}
+	else nx = -1;
+	if (py >= y) {
+		ny = 1;
+	}
+	else ny = -1;
+
 	if ((state == FLOWER_STATE_ONTOP) && (GetTickCount64() - loop_start > FLOWER_LOOP_TIMEOUT))
 	{
 		SetState(FLOWER_STATE_POW);
@@ -62,7 +74,7 @@ void CFlower::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	if ((state == FLOWER_STATE_POW) && (GetTickCount64() - loop_start > FLOWER_LOOP_TIMEOUT))
 	{
 
-		CGame::GetInstance()->GetCurrentScene()->createNewObject(OBJECT_TYPE_FIRE, x, y);
+	 	CGame::GetInstance()->GetCurrentScene()->createNewObject(OBJECT_TYPE_FIRE, x, y);
 		SetState(FLOWER_STATE_ACTIVE);
 		return;
 	}

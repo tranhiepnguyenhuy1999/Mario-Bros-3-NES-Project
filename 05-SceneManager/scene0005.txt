@@ -21,7 +21,7 @@ piranhaplant.txt
 0	50	10
 
 #goomba
-#14	100	390
+14	200	390
 #2	330	400
 #2	608	400
 #COIN
@@ -50,6 +50,7 @@ piranhaplant.txt
 1	1664	368
 
 #question brick
+#7	150	400	2
 7	1440	128	1
 
 7	224	304	1

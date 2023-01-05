@@ -375,10 +375,11 @@ void CPlayScene::Update(DWORD dt)
 void CPlayScene::Render()
 {
 	float cx, cy;
-	CGame::GetInstance()->GetCamPos(cx, cy);
 	CGame* game = CGame::GetInstance();
-	//game->GetBackBufferWidth()
+	game->GetCamPos(cx, cy);
 	float l, t;
+
+	// tilemap render
 	for (int i = 0; i < tiledMapObjects.size(); i++)
 	{
 		tiledMapObjects[i]->GetPosition(l, t);
@@ -387,6 +388,8 @@ void CPlayScene::Render()
 		tiledMapObjects[i]->Render();
 		}
 	}
+
+	// obj render
 	for (int i = 0; i < objects.size(); i++)
 		objects[i]->Render();
 }
