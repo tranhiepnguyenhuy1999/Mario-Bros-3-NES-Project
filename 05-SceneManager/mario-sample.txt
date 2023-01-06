@@ -18,7 +18,6 @@ height	240
 10	textures\enemies.png
 20	textures\misc.png
 30	textures\main.png
-
 50	textures\main-enemies.png
 60	textures\81122.png
 70	textures\map1_bank.png
@@ -26,3 +25,5 @@ height	240
 90 	textures\main_flip.png
 100 	textures\172719.png
 110 	textures\main-enemies-flip.png
+120 	textures\25687.png
+130 	textures\25687-flip.png

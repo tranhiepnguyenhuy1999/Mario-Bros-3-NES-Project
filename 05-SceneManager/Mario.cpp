@@ -256,15 +256,15 @@ void CMario::OnCollisionWithQuestionBrick(LPCOLLISIONEVENT e)
 }
 void CMario::OnCollisionWithDownBrick(LPCOLLISIONEVENT e)
 {
-	//DebugOut(L">>> Mario touch downbrick >>> \n");
+	DebugOut(L">>> Mario touch downbrick >>> \n");
 	CDownBrick* downBrick = dynamic_cast<CDownBrick*>(e->obj);
-
 	if (e->ny < 0 && downBrick->GetState()== DOWNBRICK_STATE_STATIC)
 	{
 		downBrick->SetState(DOWNBRICK_STATE_ONTOP);
 		vy = -0.2f;
 
 	}
+	else
 	if (e->ny > 0 && downBrick->GetState() == DOWNBRICK_STATE_ONTOP)
 	{
 		downBrick->SetState(DOWNBRICK_STATE_STATIC);

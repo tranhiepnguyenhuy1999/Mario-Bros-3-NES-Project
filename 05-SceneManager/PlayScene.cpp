@@ -17,6 +17,7 @@
 #include "ParaGoomba.h"
 #include "ParaKoopaTroopa.h"
 #include "FallObject.h"
+#include "Leaf.h"
 
 #include "SampleKeyEventHandler.h"
 
@@ -126,6 +127,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		DebugOut(L"[INFO] Player object has been created!\n");
 		break;
 	case OBJECT_TYPE_GOOMBA: obj = new CGoomba(x,y); break;
+	case OBJECT_TYPE_LEAF: obj = new CLeaf(x, y); break;
 	case OBJECT_TYPE_PARAGOOMBA: obj = new CParaGoomba(x, y); break;
 	case OBJECT_TYPE_KOOPATROOPA: obj = new CKoopaTroopa(x, y); break;
 	case OBJECT_TYPE_PARAKOOPATROOPA: obj = new CParaKoopaTroopa(x, y); break;

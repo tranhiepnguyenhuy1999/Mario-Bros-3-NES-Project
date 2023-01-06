@@ -29,7 +29,6 @@ protected:
 	virtual int IsBlocking() { return 0; }
 	virtual void OnNoCollision(DWORD dt);
 	virtual void OnCollisionWith(LPCOLLISIONEVENT e);
-	void OnCollisionWithQuestionBrick(LPCOLLISIONEVENT e);
 public:
 	CFallObject(float x, float y, LPGAMEOBJECT obj);
 	virtual void SetState(int state);

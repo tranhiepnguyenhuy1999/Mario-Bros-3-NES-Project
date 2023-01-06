@@ -7,7 +7,7 @@ CFallObject::CFallObject(float x, float y, LPGAMEOBJECT obj):CGameObject(x, y)
 
 	this->ax = 0;
 	this->ay = FALLOBJECT_GRAVITY;
-	yLimit = y + 50;
+	yLimit = y + FALLOBJECT_BBOX_HEIGHT*2;
 	count_start = -1;
 	this->obj = obj;
 	if (dynamic_cast<CKoopaTroopa*>(obj)) {
