@@ -15,6 +15,8 @@
 #include "SmallCoin.h"
 #include "KoopaTroopa.h"
 #include "ParaGoomba.h"
+#include "ParaKoopaTroopa.h"
+#include "FallObject.h"
 
 #include "SampleKeyEventHandler.h"
 
@@ -126,6 +128,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_GOOMBA: obj = new CGoomba(x,y); break;
 	case OBJECT_TYPE_PARAGOOMBA: obj = new CParaGoomba(x, y); break;
 	case OBJECT_TYPE_KOOPATROOPA: obj = new CKoopaTroopa(x, y); break;
+	case OBJECT_TYPE_PARAKOOPATROOPA: obj = new CParaKoopaTroopa(x, y); break;
 	case OBJECT_TYPE_MAP: obj = new CMap(x, y); break;
 	case OBJECT_TYPE_BRICK: obj = new CBrick(x,y); break;
 	case OBJECT_TYPE_QUESTIONBRICK:
@@ -192,7 +195,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 	objects.push_back(obj);
 }
-void CPlayScene::createNewObject(int id, float x, float y, float nx=0, float ny=0)
+void CPlayScene::createNewObject(int id, float x, float y, float nx=0, float ny=0, LPGAMEOBJECT objSrc)
 {
 	CGameObject* obj = NULL;
 	float px, py;
@@ -204,6 +207,7 @@ void CPlayScene::createNewObject(int id, float x, float y, float nx=0, float ny=
 	case OBJECT_TYPE_CLOUDBRICK: obj = new CCloudBrick(x, y); break;
 		//	gift
 	case OBJECT_TYPE_MUSHROOM: obj = new CMushroom(x, y, nx); break;
+	case OBJECT_TYPE_FALLOBJECT: obj = new CFallObject(x, y, objSrc); break;
 	case OBJECT_TYPE_SMALLCOIN: obj = new CSmallCoin(x, y); break;
 	case OBJECT_TYPE_FIRE:
 	{

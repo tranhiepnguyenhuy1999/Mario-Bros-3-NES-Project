@@ -117,6 +117,12 @@
     <ClCompile Include="ParaGoomba.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ParaKoopaTroopa.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FallObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h">
@@ -228,6 +234,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ParaGoomba.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ParaKoopaTroopa.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FallObject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

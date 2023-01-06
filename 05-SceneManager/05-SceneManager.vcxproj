@@ -152,6 +152,7 @@
     <ClCompile Include="Collision.cpp" />
     <ClCompile Include="debug.cpp" />
     <ClCompile Include="DownBrick.cpp" />
+    <ClCompile Include="FallObject.cpp" />
     <ClCompile Include="Fire.cpp" />
     <ClCompile Include="Flower.cpp" />
     <ClCompile Include="Game.cpp" />
@@ -163,6 +164,7 @@
     <ClCompile Include="Mario.cpp" />
     <ClCompile Include="Mushroom.cpp" />
     <ClCompile Include="ParaGoomba.cpp" />
+    <ClCompile Include="ParaKoopaTroopa.cpp" />
     <ClCompile Include="Pile.cpp" />
     <ClCompile Include="Platform.cpp" />
     <ClCompile Include="PlayScene.cpp" />
@@ -189,6 +191,7 @@
     <ClInclude Include="Collision.h" />
     <ClInclude Include="debug.h" />
     <ClInclude Include="DownBrick.h" />
+    <ClInclude Include="FallObject.h" />
     <ClInclude Include="Fire.h" />
     <ClInclude Include="Flower.h" />
     <ClInclude Include="Game.h" />
@@ -200,6 +203,7 @@
     <ClInclude Include="Mario.h" />
     <ClInclude Include="Mushroom.h" />
     <ClInclude Include="ParaGoomba.h" />
+    <ClInclude Include="ParaKoopaTroopa.h" />
     <ClInclude Include="Pile.h" />
     <ClInclude Include="Platform.h" />
     <ClInclude Include="PlayScene.h" />

@@ -5,6 +5,9 @@
 /*
 *  Abstract class for a game scene
 */
+class CGameObject;
+typedef CGameObject* LPGAMEOBJECT;
+
 class CScene
 {
 protected:
@@ -25,7 +28,7 @@ public:
 	virtual void Unload() = 0;
 	virtual void Update(DWORD dt) = 0;
 	virtual void Render() = 0;
-	virtual void createNewObject(int id, float x, float y, float nx=0, float ny=0)=0;
+	virtual void createNewObject(int id, float x, float y, float nx=0, float ny=0, LPGAMEOBJECT objSrc = NULL)=0;
 	virtual void getPlayerPosition(float &x, float &y) = 0;
 };
 typedef CScene * LPSCENE;

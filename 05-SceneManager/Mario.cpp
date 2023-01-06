@@ -221,7 +221,6 @@ void CMario::OnCollisionWithKoopaTroopa(LPCOLLISIONEVENT e)
 		}
 	}
 }
-
 void CMario::OnCollisionWithQuestionBrick(LPCOLLISIONEVENT e)
 {
 	CQuestionBrick* questionBrick = dynamic_cast<CQuestionBrick*>(e->obj);
@@ -350,8 +349,6 @@ int CMario::GetAniIdSmall()
 
 	return aniId;
 }
-
-
 //
 // Get animdation ID for big Mario
 //

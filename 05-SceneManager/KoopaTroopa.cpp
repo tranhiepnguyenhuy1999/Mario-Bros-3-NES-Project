@@ -5,12 +5,12 @@
 CKoopaTroopa::CKoopaTroopa(float x, float y) :CGameObject(x, y)
 {
 	this->ax = 0;
-	this->ay = 0;
-	vy = KOOPATROOPA_JUMP_SPEED;
+	this->ay = KOOPATROOPA_GRAVITY;
 	ready_jump_start = -1;
 	//this->ay = KOOPATROOPA_GRAVITY;
 	count_start = -1;
 	SetState(KOOPATROOPA_STATE_WALKING);
+	CGame::GetInstance()->GetCurrentScene()->createNewObject(OBJECT_TYPE_FALLOBJECT, x-KOOPATROOPA_BBOX_WIDTH/2 -8, y,0,0,this);
 }
 
 void CKoopaTroopa::GetBoundingBox(float& left, float& top, float& right, float& bottom)
@@ -18,7 +18,7 @@ void CKoopaTroopa::GetBoundingBox(float& left, float& top, float& right, float& 
 	if (state == KOOPATROOPA_STATE_DIE || state== KOOPATROOPA_STATE_ALIVE)
 	{
 		left = x - KOOPATROOPA_BBOX_WIDTH / 2;
-		top = y - (KOOPATROOPA_BBOX_HEIGHT_DIE / 2);
+		top = y - (KOOPATROOPA_BBOX_HEIGHT_DIE / 2);	
 		right = left + KOOPATROOPA_BBOX_WIDTH;
 		bottom = top + KOOPATROOPA_BBOX_HEIGHT_DIE;
 	}
@@ -44,19 +44,7 @@ void CKoopaTroopa::OnCollisionWith(LPCOLLISIONEVENT e)
 
 	if (e->ny != 0)
 	{
-		if (e->ny < 0)
-		{
-			//if (ready_jump_start == -1)
-			//{			
-			//	ready_jump_start = GetTickCount64();
-			//	return;
-			//}
-			//if (GetTickCount64() - ready_jump_start > KOOPATROOPA_JUMP_TIMEOUT)
-			//{
-				SetState(KOOPATROOPA_STATE_JUMP);
-	/*			ready_jump_start = -1;
-			}*/
-		}
+		vy = 0;
 	}
 	else if (e->nx != 0)
 	{
@@ -111,12 +99,6 @@ void CKoopaTroopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		y = y + (KOOPATROOPA_BBOX_HEIGHT_DIE/2) - KOOPATROOPA_BBOX_HEIGHT/2 ;
 		return;
 	}
-	if ((state == KOOPATROOPA_STATE_JUMP) && (GetTickCount64() - count_start > KOOPATROOPA_JUMP_TIMEOUT))
-	{
-		SetState(KOOPATROOPA_STATE_RELEASE_JUMP);
-		count_start = -1;
-		return;
-	}
 	CGameObject::Update(dt, coObjects);
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
@@ -159,18 +141,14 @@ void CKoopaTroopa::SetState(int state)
 		vy = 0;
 		ay = 0;
 		break;
-	case KOOPATROOPA_STATE_JUMP:
-		count_start = GetTickCount64();
-		vy = -KOOPATROOPA_JUMP_SPEED;
-		break;
-	case KOOPATROOPA_STATE_RELEASE_JUMP:
-		vy = KOOPATROOPA_JUMP_SPEED;
-		break;
 	case KOOPATROOPA_STATE_WALKING:
 		vx = -KOOPATROOPA_WALKING_SPEED;
 		break;
 	case KOOPATROOPA_STATE_KICKING:
 		vx = KOOPATROOPA_KICKING_SPEED;
+		break;
+	case KOOPATROOPA_STATE_TURNBACK:
+		vx = -vx;
 		break;
 	}
 }
