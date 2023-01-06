@@ -1,16 +1,15 @@
 #include "KoopaTroopa.h"
 #include "QuestionBrick.h"
-#include "AssetIDs.h"
 
 CKoopaTroopa::CKoopaTroopa(float x, float y) :CGameObject(x, y)
 {
 	this->ax = 0;
 	this->ay = KOOPATROOPA_GRAVITY;
 	ready_jump_start = -1;
-	//this->ay = KOOPATROOPA_GRAVITY;
 	count_start = -1;
+	vx = -KOOPATROOPA_WALKING_SPEED;
 	SetState(KOOPATROOPA_STATE_WALKING);
-	CGame::GetInstance()->GetCurrentScene()->createNewObject(OBJECT_TYPE_FALLOBJECT, x-KOOPATROOPA_BBOX_WIDTH/2 -8, y,0,0,this);
+	createFallObject();
 }
 
 void CKoopaTroopa::GetBoundingBox(float& left, float& top, float& right, float& bottom)
@@ -86,16 +85,28 @@ void CKoopaTroopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	vy += ay * dt;
 	vx += ax * dt;
+	
 	//DebugOut(L"count %d", GetTickCount64() - count_start);
 	if ((state == KOOPATROOPA_STATE_DIE) && (GetTickCount64() - count_start > KOOPATROOPA_DIE_TIMEOUT))
 	{
 		SetState(KOOPATROOPA_STATE_ALIVE);
 		return;
 	}
+	if ((state == KOOPATROOPA_STATE_TURNBACK) && (GetTickCount64() - count_start > 500))
+	{
+		createFallObject();
+		count_start = -1;
+		SetState(KOOPATROOPA_STATE_WALKING);
+
+		return;
+	}
 	if ((state == KOOPATROOPA_STATE_ALIVE) && (GetTickCount64() - count_start > KOOPATROOPA_ALIVE_TIMEOUT))
 	{
 		SetState(KOOPATROOPA_STATE_WALKING);
 		count_start = -1;
+		vx = -KOOPATROOPA_WALKING_SPEED;
+		ay = KOOPATROOPA_GRAVITY;
+		createFallObject();
 		y = y + (KOOPATROOPA_BBOX_HEIGHT_DIE/2) - KOOPATROOPA_BBOX_HEIGHT/2 ;
 		return;
 	}
@@ -106,7 +117,10 @@ void CKoopaTroopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 void CKoopaTroopa::Render()
 {
-	int aniId = ID_ANI_KOOPATROOPA_WALKING;
+	int aniId = ID_ANI_KOOPATROOPA_WALKING_LEFT;
+	if (vx > 0) {
+		aniId = ID_ANI_KOOPATROOPA_WALKING_RIGHT;
+	}
 	if (state == KOOPATROOPA_STATE_DIE)
 	{
 		aniId = ID_ANI_KOOPATROOPA_DIE;
@@ -131,6 +145,7 @@ void CKoopaTroopa::SetState(int state)
 	case KOOPATROOPA_STATE_DIE:
 		count_start = GetTickCount64();
 		y += (KOOPATROOPA_BBOX_HEIGHT - KOOPATROOPA_BBOX_HEIGHT_DIE) / 2;
+		fallObj->SetState(FALLOBJECT_STATE_DIE);
 		vx = 0;
 		vy = 0;
 		ay = 0;
@@ -142,12 +157,12 @@ void CKoopaTroopa::SetState(int state)
 		ay = 0;
 		break;
 	case KOOPATROOPA_STATE_WALKING:
-		vx = -KOOPATROOPA_WALKING_SPEED;
 		break;
 	case KOOPATROOPA_STATE_KICKING:
 		vx = KOOPATROOPA_KICKING_SPEED;
 		break;
 	case KOOPATROOPA_STATE_TURNBACK:
+		count_start = GetTickCount64();
 		vx = -vx;
 		break;
 	}

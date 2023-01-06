@@ -25,3 +25,4 @@ height	240
 80 	textures\172615.png
 90 	textures\main_flip.png
 100 	textures\172719.png
+110 	textures\main-enemies-flip.png

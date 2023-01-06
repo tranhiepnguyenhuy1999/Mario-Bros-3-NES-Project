@@ -4,11 +4,16 @@
 
 CFallObject::CFallObject(float x, float y, LPGAMEOBJECT obj):CGameObject(x, y)
 {
+
 	this->ax = 0;
 	this->ay = FALLOBJECT_GRAVITY;
 	yLimit = y + 50;
 	count_start = -1;
 	this->obj = obj;
+	if (dynamic_cast<CKoopaTroopa*>(obj)) {
+		CKoopaTroopa* objSrc = dynamic_cast<CKoopaTroopa*>(obj);
+		objSrc->addFallObject(this);
+	}
 	SetState(FALLOBJECT_STATE_WALKING);
 }
 
@@ -80,7 +85,9 @@ void CFallObject::SetState(int state)
 		ay = 0;
 		break;
 	case FALLOBJECT_STATE_WALKING:
-		vx = -FALLOBJECT_WALKING_SPEED;
+		float ovx, ovy;
+		obj->GetSpeed(ovx, ovy);
+		vx = ovx;
 		break;
 	}
 }
