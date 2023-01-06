@@ -128,7 +128,6 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		DebugOut(L"[INFO] Player object has been created!\n");
 		break;
 	case OBJECT_TYPE_GOOMBA: obj = new CGoomba(x,y); break;
-	case OBJECT_TYPE_LEAF: obj = new CLeaf(x, y); break;
 	case OBJECT_TYPE_PARAGOOMBA: obj = new CParaGoomba(x, y); break;
 	case OBJECT_TYPE_KOOPATROOPA: obj = new CKoopaTroopa(x, y); break;
 	case OBJECT_TYPE_PARAKOOPATROOPA: obj = new CParaKoopaTroopa(x, y); break;
@@ -209,6 +208,7 @@ void CPlayScene::createNewObject(int id, float x, float y, float nx=0, float ny=
 	case OBJECT_TYPE_QUESTIONBRICK: obj = new CQuestionBrick(x, y); break;
 	case OBJECT_TYPE_CLOUDBRICK: obj = new CCloudBrick(x, y); break;
 	case OBJECT_TYPE_MUSHROOM: obj = new CMushroom(x, y, nx); break;
+	case OBJECT_TYPE_LEAF: obj = new CLeaf(x, y); break;
 	case OBJECT_TYPE_TAIL: obj = new CTail(x, y); break;
 	case OBJECT_TYPE_FALLOBJECT: obj = new CFallObject(x, y, objSrc); break;
 	case OBJECT_TYPE_SMALLCOIN: obj = new CSmallCoin(x, y); break;

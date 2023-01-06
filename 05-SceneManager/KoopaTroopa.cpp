@@ -14,7 +14,7 @@ CKoopaTroopa::CKoopaTroopa(float x, float y) :CGameObject(x, y)
 
 void CKoopaTroopa::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
-	if (state == KOOPATROOPA_STATE_DIE || state== KOOPATROOPA_STATE_ALIVE)
+	if (state != KOOPATROOPA_STATE_WALKING && state != KOOPATROOPA_STATE_TURNBACK)
 	{
 		left = x - KOOPATROOPA_BBOX_WIDTH / 2;
 		top = y - (KOOPATROOPA_BBOX_HEIGHT_DIE / 2);	
@@ -92,7 +92,7 @@ void CKoopaTroopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		SetState(KOOPATROOPA_STATE_ALIVE);
 		return;
 	}
-	if ((state == KOOPATROOPA_STATE_TURNBACK) && (GetTickCount64() - count_start > 500))
+	if ((state == KOOPATROOPA_STATE_TURNBACK) && (GetTickCount64() - count_start > 100))
 	{
 		createFallObject();
 		count_start = -1;
@@ -129,7 +129,7 @@ void CKoopaTroopa::Render()
 	{
 		aniId = ID_ANI_KOOPATROOPA_ALIVE;
 	}
-	if (state == KOOPATROOPA_STATE_KICKING)
+	if (state == KOOPATROOPA_STATE_KICKING_LEFT || state == KOOPATROOPA_STATE_KICKING_RIGHT)
 	{
 		aniId = ID_ANI_KOOPATROOPA_KICKING;
 	}
@@ -145,7 +145,10 @@ void CKoopaTroopa::SetState(int state)
 	case KOOPATROOPA_STATE_DIE:
 		count_start = GetTickCount64();
 		y += (KOOPATROOPA_BBOX_HEIGHT - KOOPATROOPA_BBOX_HEIGHT_DIE) / 2;
-		fallObj->SetState(FALLOBJECT_STATE_DIE);
+		if (fallObj)
+		{
+			fallObj->SetState(FALLOBJECT_STATE_DIE);
+		}
 		vx = 0;
 		vy = 0;
 		ay = 0;
@@ -158,8 +161,13 @@ void CKoopaTroopa::SetState(int state)
 		break;
 	case KOOPATROOPA_STATE_WALKING:
 		break;
-	case KOOPATROOPA_STATE_KICKING:
+	case KOOPATROOPA_STATE_KICKING_LEFT:
+		ay = KOOPATROOPA_GRAVITY;
 		vx = KOOPATROOPA_KICKING_SPEED;
+		break;
+	case KOOPATROOPA_STATE_KICKING_RIGHT:
+		ay = KOOPATROOPA_GRAVITY;
+		vx = -KOOPATROOPA_KICKING_SPEED;
 		break;
 	case KOOPATROOPA_STATE_TURNBACK:
 		count_start = GetTickCount64();

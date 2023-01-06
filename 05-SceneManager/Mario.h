@@ -35,8 +35,12 @@
 
 #define MARIO_STATE_ATTACK			700
 
+#define MARIO_STATE_RACOON_TRANSFORM	800
+
 #pragma region ANIMATION_ID
 // RACOON
+#define	ID_ANI_RACOON_TRANSFORM 10009
+
 #define ID_ANI_RACOON_IDLE_RIGHT 1700
 #define ID_ANI_RACOON_IDLE_LEFT 1701
 
@@ -136,6 +140,7 @@ class CMario : public CGameObject
 	int untouchable; 
 	ULONGLONG untouchable_start;
 	BOOLEAN isOnPlatform;
+	ULONGLONG count_start;
 	int coin; 
 
 	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
@@ -160,9 +165,10 @@ public:
 		ax = 0.0f;
 		ay = MARIO_GRAVITY; 
 
-		level = MARIO_LEVEL_RACOON;
+		level = MARIO_LEVEL_BIG;
 		untouchable = 0;
 		untouchable_start = -1;
+		count_start = -1;
 		isOnPlatform = false;
 		coin = 0;
 	}

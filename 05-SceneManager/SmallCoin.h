@@ -8,7 +8,7 @@
 #define ID_ANI_SMALL_COIN 11001
 
 #define COIN_SPEED 0.2f
-#define COIN_MAX_Y 32
+#define COIN_MAX_Y 50
 #define	COIN_WIDTH 10
 #define COIN_BBOX_WIDTH 9
 #define COIN_BBOX_HEIGHT 14

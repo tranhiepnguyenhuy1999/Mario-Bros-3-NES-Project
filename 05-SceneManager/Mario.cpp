@@ -194,7 +194,11 @@ void CMario::OnCollisionWithKoopaTroopa(LPCOLLISIONEVENT e)
 	CKoopaTroopa* item = dynamic_cast<CKoopaTroopa*>(e->obj);
 	// jump on top >> kill Goomba and deflect a bit 
 	if (item->GetState() == KOOPATROOPA_STATE_DIE || item->GetState() == KOOPATROOPA_STATE_ALIVE) {
-		item->SetState(KOOPATROOPA_STATE_KICKING);
+		
+		if(e->nx > 0)
+			item->SetState(KOOPATROOPA_STATE_KICKING_RIGHT);
+		else
+			item->SetState(KOOPATROOPA_STATE_KICKING_LEFT);
 		return;
 	}
 	if (e->ny < 0)
@@ -238,19 +242,22 @@ void CMario::OnCollisionWithQuestionBrick(LPCOLLISIONEVENT e)
 			
 			if (questionBrick->getType() == 1)
 			{
-			
+				CGame::GetInstance()->GetCurrentScene()->createNewObject(OBJECT_TYPE_SMALLCOIN, qx, qy-16);
 			}
 			else
 			{
-			// check direction
-			if (this->x <= qx + 8) {
-				qvx = -1;
-			}
-			else
-			{
-				qvx = 1;
-			}
-			CGame::GetInstance()->GetCurrentScene()->createNewObject(OBJECT_TYPE_MUSHROOM,qx, qy, qvx);
+				// check direction
+				if (this->x <= qx + 8) {
+					qvx = -1;
+				}
+				else
+				{
+					qvx = 1;
+				}
+				if (level == MARIO_LEVEL_BIG)
+					CGame::GetInstance()->GetCurrentScene()->createNewObject(OBJECT_TYPE_LEAF, qx, qy);
+				else
+					CGame::GetInstance()->GetCurrentScene()->createNewObject(OBJECT_TYPE_MUSHROOM, qx, qy, qvx);
 			}
 
 			questionBrick->SetState(QUESTIONBRICK_STATE_TOUCHED_1);
@@ -284,8 +291,8 @@ void CMario::OnCollisionWithMushroom(LPCOLLISIONEVENT e)
 void CMario::OnCollisionWithLeaf(LPCOLLISIONEVENT e)
 {
 	e->obj->Delete();
-	level = MARIO_LEVEL_BIG;
-	y = y - (MARIO_BIG_BBOX_HEIGHT - MARIO_SMALL_BBOX_HEIGHT);
+	level = MARIO_LEVEL_RACOON;
+	SetState(MARIO_STATE_RACOON_TRANSFORM);
 	vy = 0;
 }
 void CMario::OnCollisionWithCoin(LPCOLLISIONEVENT e)
@@ -480,8 +487,15 @@ void CMario::Render()
 {
 	CAnimations* animations = CAnimations::GetInstance();
 	int aniId = -1;
-
-	if (state == MARIO_STATE_DIE)
+	if (state == MARIO_STATE_RACOON_TRANSFORM) aniId = ID_ANI_RACOON_TRANSFORM;
+	else if (state == MARIO_STATE_ATTACK)
+	{
+	 if(nx>0)
+		aniId = ID_ANI_RACOON_ATTACK_RIGHT;
+	 else
+		 aniId = ID_ANI_RACOON_ATTACK_LEFT;
+	}
+	else if (state == MARIO_STATE_DIE)
 		aniId = ID_ANI_MARIO_DIE;
 	else if (level == MARIO_LEVEL_RACOON)
 		aniId = GetAniIdRacoon();
@@ -499,6 +513,8 @@ void CMario::Render()
 
 void CMario::SetState(int state)
 {
+	if ((this->state == MARIO_STATE_RACOON_TRANSFORM) && (GetTickCount64() - count_start < 500)) return;
+	if ((this->state == MARIO_STATE_ATTACK) && (GetTickCount64() - count_start < 500)) return;
 	// DIE is the end state, cannot be changed! 
 	if (this->state == MARIO_STATE_DIE) return; 
 
@@ -568,9 +584,10 @@ void CMario::SetState(int state)
 		break;
 
 	case MARIO_STATE_ATTACK:
+		count_start = GetTickCount64();
+		createTailObject();
 		ax = 0.0f;
 		vx = 0.0f;
-		createTailObject();
 		break;
 
 	case MARIO_STATE_DIE:
@@ -578,6 +595,8 @@ void CMario::SetState(int state)
 		vx = 0;
 		ax = 0;
 		break;
+	case MARIO_STATE_RACOON_TRANSFORM:
+		count_start = GetTickCount64();
 	}
 
 	CGameObject::SetState(state);
@@ -623,7 +642,7 @@ void CMario::SetLevel(int l)
 
 void CMario::createTailObject() {
 
-	if (vx < 0) {
+	if (nx < 0) {
 		CGame::GetInstance()->GetCurrentScene()->createNewObject(OBJECT_TYPE_TAIL, x - MARIO_BIG_BBOX_WIDTH / 2 - TAIL_BBOX_WIDTH / 2, y+ MARIO_BIG_BBOX_HEIGHT/2 - TAIL_BBOX_HEIGHT);
 	}
 	else

@@ -20,7 +20,6 @@ void CTail::OnNoCollision(DWORD dt)
 
 void CTail::OnCollisionWith(LPCOLLISIONEVENT e)
 {
-	DebugOut(L"yeah");
 	if (e->ny != 0)
 	{
 		vy = 0;
