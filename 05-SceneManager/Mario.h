@@ -33,9 +33,32 @@
 #define MARIO_STATE_SIT				600
 #define MARIO_STATE_SIT_RELEASE		601
 
+#define MARIO_STATE_ATTACK			700
 
 #pragma region ANIMATION_ID
+// RACOON
+#define ID_ANI_RACOON_IDLE_RIGHT 1700
+#define ID_ANI_RACOON_IDLE_LEFT 1701
 
+#define ID_ANI_RACOON_WALKING_RIGHT 1702
+#define ID_ANI_RACOON_WALKING_LEFT 1703
+
+#define ID_ANI_RACOON_RUNNING_RIGHT 1704
+#define ID_ANI_RACOON_RUNNING_LEFT 1705
+
+#define ID_ANI_RACOON_BRACE_RIGHT 1706
+#define ID_ANI_RACOON_BRACE_LEFT 1707
+
+#define ID_ANI_RACOON_JUMP_WALK_RIGHT 1708
+#define ID_ANI_RACOON_JUMP_WALK_LEFT 1709
+
+#define ID_ANI_RACOON_JUMP_RUN_RIGHT 1710
+#define ID_ANI_RACOON_JUMP_RUN_LEFT 1711
+
+#define ID_ANI_RACOON_ATTACK_RIGHT 1712
+#define ID_ANI_RACOON_ATTACK_LEFT 1713
+
+//BIG
 #define ID_ANI_MARIO_IDLE_RIGHT 400
 #define ID_ANI_MARIO_IDLE_LEFT 401
 
@@ -87,6 +110,7 @@
 
 #define	MARIO_LEVEL_SMALL	1
 #define	MARIO_LEVEL_BIG		2
+#define	MARIO_LEVEL_RACOON	3
 
 #define MARIO_BIG_BBOX_WIDTH  14
 #define MARIO_BIG_BBOX_HEIGHT 28
@@ -121,12 +145,13 @@ class CMario : public CGameObject
 	void OnCollisionWithFire(LPCOLLISIONEVENT e);
 	void OnCollisionWithCoin(LPCOLLISIONEVENT e);
 	void OnCollisionWithMushroom(LPCOLLISIONEVENT e);
+	void OnCollisionWithLeaf(LPCOLLISIONEVENT e);
 	void OnCollisionWithQuestionBrick(LPCOLLISIONEVENT e);
 	void OnCollisionWithDownBrick(LPCOLLISIONEVENT e);
 	void OnCollisionWithPortal(LPCOLLISIONEVENT e);
 	int GetAniIdBig();
 	int GetAniIdSmall();
-
+	int GetAniIdRacoon();
 public:
 	CMario(float x, float y) : CGameObject(x, y)
 	{
@@ -135,7 +160,7 @@ public:
 		ax = 0.0f;
 		ay = MARIO_GRAVITY; 
 
-		level = MARIO_LEVEL_SMALL;
+		level = MARIO_LEVEL_RACOON;
 		untouchable = 0;
 		untouchable_start = -1;
 		isOnPlatform = false;
@@ -159,4 +184,7 @@ public:
 	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount64(); }
 
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom);
+
+	void createTailObject();
+
 };

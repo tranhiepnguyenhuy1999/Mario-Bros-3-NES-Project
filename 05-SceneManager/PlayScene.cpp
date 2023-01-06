@@ -18,6 +18,7 @@
 #include "ParaKoopaTroopa.h"
 #include "FallObject.h"
 #include "Leaf.h"
+#include "Tail.h"
 
 #include "SampleKeyEventHandler.h"
 
@@ -207,8 +208,8 @@ void CPlayScene::createNewObject(int id, float x, float y, float nx=0, float ny=
 	case OBJECT_TYPE_BRICK: obj = new CBrick(x, y); break;
 	case OBJECT_TYPE_QUESTIONBRICK: obj = new CQuestionBrick(x, y); break;
 	case OBJECT_TYPE_CLOUDBRICK: obj = new CCloudBrick(x, y); break;
-		//	gift
 	case OBJECT_TYPE_MUSHROOM: obj = new CMushroom(x, y, nx); break;
+	case OBJECT_TYPE_TAIL: obj = new CTail(x, y); break;
 	case OBJECT_TYPE_FALLOBJECT: obj = new CFallObject(x, y, objSrc); break;
 	case OBJECT_TYPE_SMALLCOIN: obj = new CSmallCoin(x, y); break;
 	case OBJECT_TYPE_FIRE:
