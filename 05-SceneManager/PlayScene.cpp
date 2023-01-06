@@ -14,6 +14,8 @@
 #include "Fire.h"
 #include "SmallCoin.h"
 #include "KoopaTroopa.h"
+#include "ParaGoomba.h"
+
 #include "SampleKeyEventHandler.h"
 
 using namespace std;
@@ -122,6 +124,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		DebugOut(L"[INFO] Player object has been created!\n");
 		break;
 	case OBJECT_TYPE_GOOMBA: obj = new CGoomba(x,y); break;
+	case OBJECT_TYPE_PARAGOOMBA: obj = new CParaGoomba(x, y); break;
 	case OBJECT_TYPE_KOOPATROOPA: obj = new CKoopaTroopa(x, y); break;
 	case OBJECT_TYPE_MAP: obj = new CMap(x, y); break;
 	case OBJECT_TYPE_BRICK: obj = new CBrick(x,y); break;
