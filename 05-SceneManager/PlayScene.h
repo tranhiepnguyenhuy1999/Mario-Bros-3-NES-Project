@@ -40,6 +40,9 @@ public:
 	virtual void getPlayerPosition(float& x, float& y) {
 		player->GetPosition(x, y);
 	};
+	virtual void getPlayerLevel(int& level) {
+		player->getLevel(level);
+	};
 	virtual void Load();
 	virtual void Update(DWORD dt);
 	virtual void Render();

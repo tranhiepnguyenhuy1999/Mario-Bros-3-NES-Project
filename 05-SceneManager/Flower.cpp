@@ -13,11 +13,20 @@ CFlower::CFlower(float x, float y) :CGameObject(x, y)
 
 void CFlower::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
-
+	if (state == FLOWER_STATE_ONBOTTOM)
+	{
+		left = 0;
+		top = 0;
+		right = 0;
+		bottom = 0;
+	}
+	else {
+	
 		left = x - FLOWER_BBOX_WIDTH / 2;
-		top = y- (FLOWER_BBOX_HEIGHT/2);
+		top = y	- (FLOWER_BBOX_HEIGHT/2);
 		right = left + FLOWER_BBOX_WIDTH;
 		bottom = top + FLOWER_BBOX_HEIGHT;
+	}
 }
 
 void CFlower::OnNoCollision(DWORD dt)
@@ -80,6 +89,7 @@ void CFlower::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	}
 	if ((state == FLOWER_STATE_ONBOTTOM) && (GetTickCount64() - loop_start > FLOWER_BOTTOM_LOOP_TIMEOUT))
 	{
+		if (px >= x - 50 && px < x + 50) return;
 		SetState(FLOWER_STATE_ACTIVE);
 		return;
 	}

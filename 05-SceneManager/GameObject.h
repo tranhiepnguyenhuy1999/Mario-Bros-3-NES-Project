@@ -35,6 +35,7 @@ public:
 	void SetSpeed(float vx, float vy) { this->vx = vx, this->vy = vy; }
 	void GetPosition(float &x, float &y) { x = this->x; y = this->y; }
 	void GetSpeed(float &vx, float &vy) { vx = this->vx; vy = this->vy; }
+	virtual void getLevel(int& level) {};
 
 	int GetState() { return this->state; }
 	virtual void Delete() { isDeleted = true;  }
@@ -50,7 +51,6 @@ public:
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) {};
 	virtual void Render() = 0;
 	virtual void SetState(int state) { this->state = state; }
-
 	//
 	// Collision ON or OFF ? This can change depending on object's state. For example: die
 	//

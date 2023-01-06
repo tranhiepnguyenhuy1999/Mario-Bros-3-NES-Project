@@ -1,5 +1,6 @@
 #include "KoopaTroopa.h"
 #include "QuestionBrick.h"
+#include "Mario.h"
 
 CKoopaTroopa::CKoopaTroopa(float x, float y) :CGameObject(x, y)
 {
@@ -54,7 +55,9 @@ void CKoopaTroopa::OnCollisionWith(LPCOLLISIONEVENT e)
 
 void CKoopaTroopa::OnCollisionWithQuestionBrick(LPCOLLISIONEVENT e)
 {
-	CQuestionBrick* questionBrick = dynamic_cast<CQuestionBrick*>(e->obj);
+		CQuestionBrick* questionBrick = dynamic_cast<CQuestionBrick*>(e->obj);
+		int playerLevel;
+		CGame::GetInstance()->GetCurrentScene()->getPlayerLevel(playerLevel);
 		if (questionBrick->GetState() == QUESTIONBRICK_STATE_UNTOUCHED)
 		{
 			float qx, qy, qvx;
@@ -74,7 +77,10 @@ void CKoopaTroopa::OnCollisionWithQuestionBrick(LPCOLLISIONEVENT e)
 				{
 					qvx = 1;
 				}
-				CGame::GetInstance()->GetCurrentScene()->createNewObject(OBJECT_TYPE_MUSHROOM, qx, qy, qvx);
+				if (playerLevel == MARIO_LEVEL_BIG)
+					CGame::GetInstance()->GetCurrentScene()->createNewObject(OBJECT_TYPE_LEAF, qx, qy);
+				else
+					CGame::GetInstance()->GetCurrentScene()->createNewObject(OBJECT_TYPE_MUSHROOM, qx, qy, qvx);
 			}
 
 			questionBrick->SetState(QUESTIONBRICK_STATE_TOUCHED_1);
