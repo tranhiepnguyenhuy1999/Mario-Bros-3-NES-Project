@@ -47,7 +47,6 @@ void CMario::OnNoCollision(DWORD dt)
 
 void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 {
-
 	if (e->ny != 0 && e->obj->IsBlocking())
 	{
 		vy = 0;
@@ -267,18 +266,12 @@ void CMario::OnCollisionWithQuestionBrick(LPCOLLISIONEVENT e)
 }
 void CMario::OnCollisionWithDownBrick(LPCOLLISIONEVENT e)
 {
-	CDownBrick* downBrick = dynamic_cast<CDownBrick*>(e->obj);
-	if (e->ny < 0 && downBrick->GetState()== DOWNBRICK_STATE_STATIC)
-	{
-		downBrick->SetState(DOWNBRICK_STATE_ONTOP);
-		vy = -0.2f;
 
-	}
-	else
-	if (e->ny > 0 && downBrick->GetState() == DOWNBRICK_STATE_ONTOP)
+	CDownBrick* downBrick = dynamic_cast<CDownBrick*>(e->obj);
+	if (e->ny < 0)
 	{
-		downBrick->SetState(DOWNBRICK_STATE_STATIC);
-		vy = -0.5f;
+		isOnPlatform = true;
+		vy = 0;
 	}
 }
 void CMario::OnCollisionWithMushroom(LPCOLLISIONEVENT e)
@@ -286,14 +279,12 @@ void CMario::OnCollisionWithMushroom(LPCOLLISIONEVENT e)
 	e->obj->Delete();
 	level = MARIO_LEVEL_BIG;
 	y = y - (MARIO_BIG_BBOX_HEIGHT - MARIO_SMALL_BBOX_HEIGHT);
-	vy = 0;
 }
 void CMario::OnCollisionWithLeaf(LPCOLLISIONEVENT e)
 {
 	e->obj->Delete();
 	level = MARIO_LEVEL_RACOON;
 	SetState(MARIO_STATE_RACOON_TRANSFORM);
-	vy = 0;
 }
 void CMario::OnCollisionWithCoin(LPCOLLISIONEVENT e)
 {
@@ -506,7 +497,7 @@ void CMario::Render()
 
 	animations->Get(aniId)->Render(x, y);
 
-	//RenderBoundingBox();
+	RenderBoundingBox();
 	
 	DebugOutTitle(L"Coins: %d", coin);
 }

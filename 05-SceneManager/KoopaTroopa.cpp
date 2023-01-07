@@ -1,4 +1,5 @@
 #include "KoopaTroopa.h"
+#include "DownBrick.h"
 #include "QuestionBrick.h"
 #include "Mario.h"
 
@@ -51,6 +52,7 @@ void CKoopaTroopa::OnCollisionWith(LPCOLLISIONEVENT e)
 		vx = -vx;
 	}
 	if (dynamic_cast<CQuestionBrick*>(e->obj))OnCollisionWithQuestionBrick(e);
+	else if (dynamic_cast<CDownBrick*>(e->obj))OnCollisionWithDownBrick(e);
 }
 
 void CKoopaTroopa::OnCollisionWithQuestionBrick(LPCOLLISIONEVENT e)
@@ -86,6 +88,23 @@ void CKoopaTroopa::OnCollisionWithQuestionBrick(LPCOLLISIONEVENT e)
 			questionBrick->SetState(QUESTIONBRICK_STATE_TOUCHED_1);
 		}
 
+}
+void CKoopaTroopa::OnCollisionWithDownBrick(LPCOLLISIONEVENT e)
+{
+	CDownBrick* downBrick = dynamic_cast<CDownBrick*>(e->obj);
+	if (e->ny < 0 && downBrick->GetState() == DOWNBRICK_STATE_STATIC)
+	{
+		downBrick->SetState(DOWNBRICK_STATE_ONTOP);
+		vy = 0;
+		ay = 0;
+
+	}
+	else
+		if (e->ny > 0 && downBrick->GetState() == DOWNBRICK_STATE_ONTOP)
+		{
+			downBrick->SetState(DOWNBRICK_STATE_STATIC);
+			vy = 0;
+		}
 }
 void CKoopaTroopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {

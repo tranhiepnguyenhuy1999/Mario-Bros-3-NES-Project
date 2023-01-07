@@ -94,11 +94,11 @@ void CParaGoomba::Render()
 	{
 		aniId = ID_ANI_PARAGOOMBA_DIE;
 	}
-	CAnimations::GetInstance()->Get(aniId)->Render(x, y);
+		CAnimations::GetInstance()->Get(aniId)->Render(x, y);
 	if (state != PARAGOOMBA_STATE_WALKING && state != PARAGOOMBA_STATE_DIE)
 	{
-		CAnimations::GetInstance()->Get(ID_ANI_PARAGOOMBA_WINNGS)->Render(x + PARAGOOMBA_BBOX_WIDTH/2, y-PARAGOOMBA_BBOX_HEIGHT/2);
-		CAnimations::GetInstance()->Get(ID_ANI_PARAGOOMBA_WINNGS)->Render(x - PARAGOOMBA_BBOX_WIDTH / 2, y - PARAGOOMBA_BBOX_HEIGHT / 2);
+		CAnimations::GetInstance()->Get(ID_ANI_PARAGOOMBA_WINNGS_RIGHT)->Render(x + PARAGOOMBA_BBOX_WIDTH/2, y-PARAGOOMBA_BBOX_HEIGHT/2);
+		CAnimations::GetInstance()->Get(ID_ANI_PARAGOOMBA_WINNGS_LEFT)->Render(x - PARAGOOMBA_BBOX_WIDTH / 2, y - PARAGOOMBA_BBOX_HEIGHT / 2);
 	}
 	RenderBoundingBox();
 }

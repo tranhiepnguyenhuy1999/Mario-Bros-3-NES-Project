@@ -5,7 +5,6 @@
 #include "Animations.h"
 #include "debug.h"
 
-#define ID_ANI_BRICK 10006
 #define BRICK_WIDTH 16
 #define BRICK_BBOX_WIDTH 16
 #define BRICK_BBOX_HEIGHT 16
@@ -18,12 +17,8 @@ class CDownBrick : public CGameObject {
 
 	void GetBoundingBox(float& l, float& t, float& r, float& b);
 	void Render();
-
-	int IsBlocking() {
-		if (state == DOWNBRICK_STATE_STATIC)
-			return 0;
-		else return 1;
-	}
+	void Update(DWORD dt) {};
+	int IsBlocking() { return 0; };
 
 	public:
 	CDownBrick(float x, float y, float length) : CGameObject(x, y) {

@@ -28,18 +28,6 @@ void CQuestionBrick::OnCollisionWith(LPCOLLISIONEVENT e)
 }
 void CQuestionBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	//if ((state == QUESTIONBRICK_STATE_TOUCHED_1) && (GetTickCount64() - count_start > 200))
-	//{
-	//	count_start = -1;
-	//	SetState(QUESTIONBRICK_STATE_TOUCHED_2);
-	//	return;
-	//}
-	//if ((state == QUESTIONBRICK_STATE_TOUCHED_2) && (GetTickCount64() - count_start > 200))
-	//{
-	//	count_start = -1;
-	//	SetState(QUESTIONBRICK_STATE_STATIC);
-	//	return;
-	//}
 	if (state== QUESTIONBRICK_STATE_TOUCHED_1 && (GetTickCount64() - count_start > 150))
 	{
 		SetState(QUESTIONBRICK_STATE_STATIC);
