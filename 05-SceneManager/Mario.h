@@ -6,11 +6,11 @@
 
 #include "debug.h"
 
-#define MARIO_WALKING_SPEED		0.1f
-#define MARIO_RUNNING_SPEED		0.5f
+#define MARIO_WALKING_SPEED		0.2f
+#define MARIO_RUNNING_SPEED		0.3f
 
 #define MARIO_ACCEL_WALK_X	0.0005f
-#define MARIO_ACCEL_RUN_X	0.0007f
+#define MARIO_ACCEL_RUN_X	0.001f
 
 #define MARIO_JUMP_SPEED_Y		0.6f
 #define MARIO_JUMP_RUN_SPEED_Y	0.7f
@@ -18,6 +18,7 @@
 #define MARIO_GRAVITY			0.002f
 
 #define MARIO_JUMP_DEFLECT_SPEED  0.5f
+#define MARIO_FLY_SPEED  0.2f
 
 #define MARIO_STATE_DIE				-10
 #define MARIO_STATE_IDLE			0
@@ -36,6 +37,9 @@
 #define MARIO_STATE_ATTACK			700
 
 #define MARIO_STATE_RACOON_TRANSFORM	800
+
+#define MARIO_STATE_READYFLY	900
+#define MARIO_STATE_FLY	1000
 
 #pragma region ANIMATION_ID
 // RACOON
@@ -61,6 +65,9 @@
 
 #define ID_ANI_RACOON_ATTACK_RIGHT 1712
 #define ID_ANI_RACOON_ATTACK_LEFT 1713
+
+#define ID_ANI_RACOON_FLY_RIGHT 1714
+#define ID_ANI_RACOON_FLY_LEFT 1715
 
 //BIG
 #define ID_ANI_MARIO_IDLE_RIGHT 400
@@ -137,10 +144,14 @@ class CMario : public CGameObject
 	float ay;				// acceleration on y 
 
 	int level; 
-	int untouchable; 
+	int untouchable;
+	
+
 	ULONGLONG untouchable_start;
 	BOOLEAN isOnPlatform;
+	bool isFly;
 	ULONGLONG count_start;
+	ULONGLONG readyFly_start;
 	int coin; 
 
 	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
@@ -169,7 +180,9 @@ public:
 		untouchable = 0;
 		untouchable_start = -1;
 		count_start = -1;
+		readyFly_start = -1;
 		isOnPlatform = false;
+		isFly = false;
 		coin = 0;
 	}
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
@@ -187,8 +200,8 @@ public:
 	void OnCollisionWith(LPCOLLISIONEVENT e);
 
 	void SetLevel(int l);
-	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount64(); }
-
+	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount64(); };
+	bool isFlying() { return this->isFly; };
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 
 	void createTailObject();

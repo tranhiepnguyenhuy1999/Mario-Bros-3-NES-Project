@@ -420,6 +420,10 @@ int CMario::GetAniIdBig()
 int CMario::GetAniIdRacoon()
 {
 	int aniId = -1;
+	if (isFly) {
+		aniId = ID_ANI_RACOON_FLY_RIGHT;
+	}
+	else
 	if (!isOnPlatform)
 	{
 		if (abs(ax) == MARIO_ACCEL_RUN_X)
@@ -513,6 +517,16 @@ void CMario::SetState(int state)
 	{
 	case MARIO_STATE_RUNNING_RIGHT:
 		if (isSitting) break;
+		if(readyFly_start==-1)
+		{
+			readyFly_start = GetTickCount64();
+		}
+		else
+		{
+			if (GetTickCount64() - readyFly_start > 1000) {
+				this->isFly = true;
+			}
+		}
 		maxVx = MARIO_RUNNING_SPEED;
 		ax = MARIO_ACCEL_RUN_X;
 		nx = 1;
@@ -585,6 +599,13 @@ void CMario::SetState(int state)
 		vy = -MARIO_JUMP_DEFLECT_SPEED;
 		vx = 0;
 		ax = 0;
+		break;
+	case MARIO_STATE_READYFLY:
+		isFly = true;
+		break;
+	case MARIO_STATE_FLY:
+		vy = -MARIO_FLY_SPEED;
+		ay = 0;
 		break;
 	case MARIO_STATE_RACOON_TRANSFORM:
 		count_start = GetTickCount64();
