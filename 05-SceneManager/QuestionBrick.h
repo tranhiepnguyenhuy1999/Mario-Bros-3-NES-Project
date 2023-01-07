@@ -21,38 +21,20 @@
 #define QUESTIONBRICK_STATE_TOUCHED_2 300
 #define QUESTIONBRICK_STATE_STATIC 400
 class CQuestionBrick : public CGameObject {
-	float cell;
-	float floor;
 	float type;
+	float yLimit;
+	ULONGLONG count_start;
 public:
 	CQuestionBrick(float x, float y, float type=1) : CGameObject(x, y) {
-		state = QUESTIONBRICK_STATE_UNTOUCHED;
-		cell = y + 50;
-		floor = y;
+		SetState(QUESTIONBRICK_STATE_UNTOUCHED);
 		this->type = type;
+		yLimit = y - 2;
+		count_start = -1;
 	}
 	void Render();
-	void Update(DWORD dt) {
-		//if (state == QUESTIONBRICK_STATE_STATIC) return;
-		//if (state == QUESTIONBRICK_STATE_TOUCHED_1) {
-		//	y += dt*-QUESTIONBRICK_MOVING_SPEED;
-		//	if (y <= cell) {
-		//		y = cell;
-		//		SetState(QUESTIONBRICK_STATE_TOUCHED_2);
-		//	}
-		//	return;
-		//}
-		//if (state == QUESTIONBRICK_STATE_TOUCHED_2) {
-		//	y += dt * QUESTIONBRICK_MOVING_SPEED;
-		//	if (y >= floor)
-		//	{
-		//		y = floor;
-		//		SetState(QUESTIONBRICK_STATE_STATIC);
-		//	}
-		//	return;
-		//}
-
-	}
+	void OnNoCollision(DWORD dt);
+	void OnCollisionWith(LPCOLLISIONEVENT e);
+	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void GetBoundingBox(float& l, float& t, float& r, float& b);
 	virtual void SetState(int state);
 	float getType() { return this->type; };

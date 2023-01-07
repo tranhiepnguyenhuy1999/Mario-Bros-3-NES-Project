@@ -3,12 +3,9 @@
 void CQuestionBrick::Render()
 {
 	CAnimations* animations = CAnimations::GetInstance();
-	if (this->state!= QUESTIONBRICK_STATE_UNTOUCHED)
-	{
-		animations->Get(ID_ANI_TOUCHED_QUESTION_BRICK)->Render(x, y);
-	}
-	else
-		animations->Get(ID_ANI_UNTOUCHED_QUESTION_BRICK)->Render(x, y);
+	float aniID = ID_ANI_TOUCHED_QUESTION_BRICK;
+	if (this->state == QUESTIONBRICK_STATE_UNTOUCHED) aniID = ID_ANI_UNTOUCHED_QUESTION_BRICK;
+		animations->Get(aniID)->Render(x, y);
 
 	//RenderBoundingBox();
 }
@@ -20,7 +17,49 @@ void CQuestionBrick::GetBoundingBox(float& l, float& t, float& r, float& b)
 	r = l + BRICK_BBOX_WIDTH;
 	b = t + BRICK_BBOX_HEIGHT;
 }
+void CQuestionBrick::OnNoCollision(DWORD dt)
+{
+	x += vx * dt;
+	y += vy * dt;
+};
+
+void CQuestionBrick::OnCollisionWith(LPCOLLISIONEVENT e)
+{
+}
+void CQuestionBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
+{
+	//if ((state == QUESTIONBRICK_STATE_TOUCHED_1) && (GetTickCount64() - count_start > 200))
+	//{
+	//	count_start = -1;
+	//	SetState(QUESTIONBRICK_STATE_TOUCHED_2);
+	//	return;
+	//}
+	//if ((state == QUESTIONBRICK_STATE_TOUCHED_2) && (GetTickCount64() - count_start > 200))
+	//{
+	//	count_start = -1;
+	//	SetState(QUESTIONBRICK_STATE_STATIC);
+	//	return;
+	//}
+	if (state== QUESTIONBRICK_STATE_TOUCHED_1 && (GetTickCount64() - count_start > 150))
+	{
+		SetState(QUESTIONBRICK_STATE_STATIC);
+	}
+	CGameObject::Update(dt, coObjects);
+	CCollision::GetInstance()->Process(this, dt, coObjects);
+}
 void CQuestionBrick::SetState(int state)
 {
 	CGameObject::SetState(state);
+
+	switch (state)
+	{
+	case  QUESTIONBRICK_STATE_TOUCHED_1:
+		count_start = GetTickCount64();
+		y = yLimit;
+		break;
+	case  QUESTIONBRICK_STATE_UNTOUCHED:
+	case  QUESTIONBRICK_STATE_STATIC:
+		y = yLimit + 2;
+		break;
+	}
 }
