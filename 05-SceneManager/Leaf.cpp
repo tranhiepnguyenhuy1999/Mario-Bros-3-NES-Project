@@ -1,6 +1,8 @@
 #include "Leaf.h"
 CLeaf::CLeaf(float x, float y) :CGameObject(x, y)
 {
+	count_start = -1;
+	yLimit = y - 48;
 	SetState(LEAF_STATE_RELASE);
 }
 void CLeaf::Render()
@@ -19,16 +21,6 @@ void CLeaf::OnNoCollision(DWORD dt)
 
 void CLeaf::OnCollisionWith(LPCOLLISIONEVENT e)
 {
-
-	if (!e->obj->IsBlocking()) return;
-	if (e->ny != 0)
-	{
-		vy = 0;
-	}
-	else if (e->nx != 0)
-	{
-		vx = -vx;
-	}
 }
 
 void CLeaf::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
@@ -38,10 +30,14 @@ void CLeaf::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		isDeleted = true;
 		return;
 	}
-	if ((state != LEAF_STATE_DIE) && (GetTickCount64() - count_start > 1000))
+	if ((state == LEAF_STATE_MOVING_TURN) && (GetTickCount64() - count_start > 700))
 	{
 		SetState(LEAF_STATE_MOVING_TURN);
 		return;
+	}
+	if (y < yLimit && state== LEAF_STATE_RELASE) {
+		SetState(LEAF_STATE_MOVING_TURN);
+		vx = LEAF_WALKING_SPEED;
 	}
 	CGameObject::Update(dt, coObjects);
 	CCollision::GetInstance()->Process(this, dt, coObjects);
@@ -60,12 +56,12 @@ void CLeaf::SetState(int state)
 	switch (state)
 	{
 	case LEAF_STATE_RELASE:
-		count_start = GetTickCount64();
-		vx = LEAF_WALKING_SPEED;
-		vy = LEAF_FALL_SPEED;
+		vy = -LEAF_RELASE_SPEED;
+		vx = 0;
 		break;
 	case LEAF_STATE_MOVING_TURN:
 		count_start = GetTickCount64();
+		vy = LEAF_GRAVITY;
 		vx = -vx;
 		break;
 	}

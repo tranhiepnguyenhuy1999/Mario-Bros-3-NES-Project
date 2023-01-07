@@ -40,19 +40,17 @@ void CKoopaTroopa::OnNoCollision(DWORD dt)
 
 void CKoopaTroopa::OnCollisionWith(LPCOLLISIONEVENT e)
 {
-	if (!e->obj->IsBlocking()) return;
 	if (dynamic_cast<CKoopaTroopa*>(e->obj)) return;
 
 	if (e->ny != 0)
 	{
 		vy = 0;
 	}
-	else if (e->nx != 0)
+	else if (e->nx != 0 && !dynamic_cast<CDownBrick*>(e->obj))
 	{
 		vx = -vx;
 	}
 	if (dynamic_cast<CQuestionBrick*>(e->obj))OnCollisionWithQuestionBrick(e);
-	else if (dynamic_cast<CDownBrick*>(e->obj))OnCollisionWithDownBrick(e);
 }
 
 void CKoopaTroopa::OnCollisionWithQuestionBrick(LPCOLLISIONEVENT e)
@@ -91,20 +89,8 @@ void CKoopaTroopa::OnCollisionWithQuestionBrick(LPCOLLISIONEVENT e)
 }
 void CKoopaTroopa::OnCollisionWithDownBrick(LPCOLLISIONEVENT e)
 {
-	CDownBrick* downBrick = dynamic_cast<CDownBrick*>(e->obj);
-	if (e->ny < 0 && downBrick->GetState() == DOWNBRICK_STATE_STATIC)
-	{
-		downBrick->SetState(DOWNBRICK_STATE_ONTOP);
+	if (e->ny < 0)
 		vy = 0;
-		ay = 0;
-
-	}
-	else
-		if (e->ny > 0 && downBrick->GetState() == DOWNBRICK_STATE_ONTOP)
-		{
-			downBrick->SetState(DOWNBRICK_STATE_STATIC);
-			vy = 0;
-		}
 }
 void CKoopaTroopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
