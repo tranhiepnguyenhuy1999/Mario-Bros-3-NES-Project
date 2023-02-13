@@ -277,7 +277,9 @@ void CMario::OnCollisionWithDownBrick(LPCOLLISIONEVENT e)
 void CMario::OnCollisionWithMushroom(LPCOLLISIONEVENT e)
 {
 	e->obj->Delete();
+	if (level == MARIO_LEVEL_SMALL) {
 	level = MARIO_LEVEL_BIG;
+	}
 	y = y - (MARIO_BIG_BBOX_HEIGHT - MARIO_SMALL_BBOX_HEIGHT);
 }
 void CMario::OnCollisionWithLeaf(LPCOLLISIONEVENT e)

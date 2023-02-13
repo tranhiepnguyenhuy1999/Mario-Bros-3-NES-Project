@@ -1,6 +1,7 @@
 #include "KoopaTroopa.h"
 #include "DownBrick.h"
 #include "QuestionBrick.h"
+#include "Goomba.h"
 #include "Mario.h"
 
 CKoopaTroopa::CKoopaTroopa(float x, float y) :CGameObject(x, y)
@@ -51,8 +52,17 @@ void CKoopaTroopa::OnCollisionWith(LPCOLLISIONEVENT e)
 		vx = -vx;
 	}
 	if (dynamic_cast<CQuestionBrick*>(e->obj))OnCollisionWithQuestionBrick(e);
+	else if (dynamic_cast<CGoomba*>(e->obj))OnCollisionWithGoomba(e);
 }
+void CKoopaTroopa::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
+{
+	CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
 
+	if (goomba->GetState() != GOOMBA_STATE_DIE)
+	{
+		goomba->SetState(GOOMBA_STATE_DIE);
+	}
+}
 void CKoopaTroopa::OnCollisionWithQuestionBrick(LPCOLLISIONEVENT e)
 {
 		CQuestionBrick* questionBrick = dynamic_cast<CQuestionBrick*>(e->obj);

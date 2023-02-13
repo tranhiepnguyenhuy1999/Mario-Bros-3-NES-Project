@@ -47,6 +47,7 @@ protected:
 	virtual void OnNoCollision(DWORD dt);
 	virtual void OnCollisionWith(LPCOLLISIONEVENT e);
 	void OnCollisionWithQuestionBrick(LPCOLLISIONEVENT e);
+	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
 public:
 	CParaKoopaTroopa(float x, float y);
 	virtual void SetState(int state);

@@ -1,5 +1,6 @@
 #include "ParaKoopaTroopa.h"
 #include "QuestionBrick.h"
+#include "Goomba.h"
 #include "AssetIDs.h"
 
 CParaKoopaTroopa::CParaKoopaTroopa(float x, float y) :CGameObject(x, y)
@@ -39,7 +40,6 @@ void CParaKoopaTroopa::OnNoCollision(DWORD dt)
 
 void CParaKoopaTroopa::OnCollisionWith(LPCOLLISIONEVENT e)
 {
-	if (!e->obj->IsBlocking()) return;
 	if (dynamic_cast<CParaKoopaTroopa*>(e->obj)) return;
 
 	if (e->ny != 0)
@@ -63,8 +63,17 @@ void CParaKoopaTroopa::OnCollisionWith(LPCOLLISIONEVENT e)
 		vx = -vx;
 	}
 	if (dynamic_cast<CQuestionBrick*>(e->obj))OnCollisionWithQuestionBrick(e);
+	else if (dynamic_cast<CGoomba*>(e->obj))OnCollisionWithGoomba(e);
 }
+void CParaKoopaTroopa::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
+{
+	CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
 
+	if (goomba->GetState() != GOOMBA_STATE_DIE)
+	{
+		goomba->SetState(GOOMBA_STATE_DIE);
+	}
+}
 void CParaKoopaTroopa::OnCollisionWithQuestionBrick(LPCOLLISIONEVENT e)
 {
 	CQuestionBrick* questionBrick = dynamic_cast<CQuestionBrick*>(e->obj);
@@ -89,7 +98,6 @@ void CParaKoopaTroopa::OnCollisionWithQuestionBrick(LPCOLLISIONEVENT e)
 			}
 			CGame::GetInstance()->GetCurrentScene()->createNewObject(OBJECT_TYPE_MUSHROOM, qx, qy, qvx);
 		}
-
 		questionBrick->SetState(QUESTIONBRICK_STATE_TOUCHED_1);
 	}
 

@@ -49,6 +49,7 @@ protected:
 	virtual void OnNoCollision(DWORD dt);
 	virtual void OnCollisionWith(LPCOLLISIONEVENT e);
 	void OnCollisionWithQuestionBrick(LPCOLLISIONEVENT e);
+	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
 	void OnCollisionWithDownBrick(LPCOLLISIONEVENT e);
 
 	void createFallObject() {
