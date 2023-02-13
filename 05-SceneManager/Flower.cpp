@@ -43,6 +43,7 @@ void CFlower::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	//DebugOut(L">>> Count time >>> %d \n", GetTickCount64() - loop_start);
 	float px, py;
 	CGame::GetInstance()->GetCurrentScene()->getPlayerPosition(px, py);
+
 	if ((state == FLOWER_STATE_ONTOP) && (GetTickCount64() - loop_start > FLOWER_LOOP_TIMEOUT))
 	{
 		SetState(FLOWER_STATE_POW);
@@ -117,7 +118,7 @@ void CFlower::Render()
 {
 	int flag = getFlowerPosition();
 	int aniId;
-	if (this->state == FLOWER_STATE_POW) {
+	if (this->state == FLOWER_STATE_ONTOP) {
 		aniId = getStaticFlowerAniId(flag);
 	}
 	else {
