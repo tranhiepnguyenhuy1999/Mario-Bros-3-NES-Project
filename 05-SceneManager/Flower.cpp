@@ -76,31 +76,43 @@ void CFlower::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 int CFlower::getMovingFlowerAniId(int flag) {
 	switch (flag)
 	{
-	case 1:
-		return ID_ANI_FLOWER_UP_LEFT_MOVING;
-	case 2:
-		return ID_ANI_FLOWER_DOWN_LEFT_MOVING;
-	case 3:
-		return ID_ANI_FLOWER_UP_RIGHT_MOVING;
-	case 4:
-		return ID_ANI_FLOWER_DOWN_RIGHT_MOVING;
+		case 1:
+			return ID_ANI_FLOWER_UP_LEFT_MOVING;
+		case 2:
+			return ID_ANI_FLOWER_DOWN_LEFT_MOVING;
+		case 3:
+			return ID_ANI_FLOWER_UP_RIGHT_MOVING;
+		case 4:
+			return ID_ANI_FLOWER_DOWN_RIGHT_MOVING;
 	}
 
 };
 int CFlower::getStaticFlowerAniId(int flag) {
 	switch (flag)
 	{
-	case 1:
-		return ID_ANI_FLOWER_UP_LEFT_IDLE;
-	case 2:
-		return ID_ANI_FLOWER_DOWN_LEFT_IDLE;
-	case 3:
-		return ID_ANI_FLOWER_UP_RIGHT_IDLE;
-	case 4:
-		return ID_ANI_FLOWER_DOWN_RIGHT_IDLE;
+		case 1:
+			return ID_ANI_FLOWER_UP_LEFT_IDLE;
+		case 2:
+			return ID_ANI_FLOWER_DOWN_LEFT_IDLE;
+		case 3:
+			return ID_ANI_FLOWER_UP_RIGHT_IDLE;
+		case 4:
+			return ID_ANI_FLOWER_DOWN_RIGHT_IDLE;
 	}
 };
-
+int CFlower::getFlowerPosition() {
+	float px, py;
+	CGame::GetInstance()->GetCurrentScene()->getPlayerPosition(px, py);
+	if (px < x) {
+		if (py < y) return 1; //top-left
+		else return 2; //bot-left
+	}
+	else
+	{
+		if (py < y) return 3; //top-right
+		else return 4; // bot-right
+	}
+}
 void CFlower::Render()
 {
 	int flag = getFlowerPosition();
@@ -113,19 +125,6 @@ void CFlower::Render()
 	}
 	CAnimations::GetInstance()->Get(aniId)->Render(x, y);
 	RenderBoundingBox();
-}
-int CFlower::getFlowerPosition() {
-	float px, py;
-	CGame::GetInstance()->GetCurrentScene()->getPlayerPosition(px, py);
-	if (px < x) {
-		if (py >= y) return 1; //top-left
-		else return 2; //bot-left
-	}
-	else
-	{
-		if (py >= y) return 3; //top-right
-		else return 4; // bot-right
-	}
 }
 void CFlower::SetState(int state)
 {
