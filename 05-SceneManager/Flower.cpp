@@ -36,45 +36,13 @@ void CFlower::OnNoCollision(DWORD dt)
 
 void CFlower::OnCollisionWith(LPCOLLISIONEVENT e)
 {
-	//if (!e->obj->IsBlocking()) return;
-	//if (dynamic_cast<CPile*>(e->obj)) return;
-
-	//if (e->ny != 0)
-	//{
-	//	vy = 0;
-	//}
-	//else if (e->nx != 0)
-	//{
-	//	vx = -vx;
-	//}
-
-	//y += vy;
-	//if (y <= yLimit) {
-	//	y = yLimit;
-	//	vy = FLOWER_GRAVITY;
-	//	return;
-	//}
-	//if (y >= yLimit + FLOWER_BBOX_HEIGHT) {
-	//	y = yLimit + FLOWER_BBOX_HEIGHT;
-	//	vy = -FLOWER_GRAVITY;
-	//}
 }
 
 void CFlower::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	//DebugOut(L">>> Count time >>> %d \n", GetTickCount64() - loop_start);
-	float px, py, nx, ny;
+	float px, py;
 	CGame::GetInstance()->GetCurrentScene()->getPlayerPosition(px, py);
-
-	if (px >= x) {
-		nx = 1;
-	}
-	else nx = -1;
-	if (py >= y) {
-		ny = 1;
-	}
-	else ny = -1;
-
 	if ((state == FLOWER_STATE_ONTOP) && (GetTickCount64() - loop_start > FLOWER_LOOP_TIMEOUT))
 	{
 		SetState(FLOWER_STATE_POW);
@@ -93,6 +61,7 @@ void CFlower::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		SetState(FLOWER_STATE_ACTIVE);
 		return;
 	}
+
 	if (y < yLimit)
 	{
 		SetState(FLOWER_STATE_ONTOP);
@@ -104,15 +73,60 @@ void CFlower::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	CGameObject::Update(dt, coObjects);
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
+int CFlower::getMovingFlowerAniId(int flag) {
+	switch (flag)
+	{
+	case 1:
+		return ID_ANI_FLOWER_UP_LEFT_MOVING;
+	case 2:
+		return ID_ANI_FLOWER_DOWN_LEFT_MOVING;
+	case 3:
+		return ID_ANI_FLOWER_UP_RIGHT_MOVING;
+	case 4:
+		return ID_ANI_FLOWER_DOWN_RIGHT_MOVING;
+	}
 
+};
+int CFlower::getStaticFlowerAniId(int flag) {
+	switch (flag)
+	{
+	case 1:
+		return ID_ANI_FLOWER_UP_LEFT_IDLE;
+	case 2:
+		return ID_ANI_FLOWER_DOWN_LEFT_IDLE;
+	case 3:
+		return ID_ANI_FLOWER_UP_RIGHT_IDLE;
+	case 4:
+		return ID_ANI_FLOWER_DOWN_RIGHT_IDLE;
+	}
+};
 
 void CFlower::Render()
 {
-	int aniId = ID_ANI_FOLOWER_UP_LEFT_MOVING;
+	int flag = getFlowerPosition();
+	int aniId;
+	if (this->state == FLOWER_STATE_POW) {
+		aniId = getStaticFlowerAniId(flag);
+	}
+	else {
+		aniId = getMovingFlowerAniId(flag);
+	}
 	CAnimations::GetInstance()->Get(aniId)->Render(x, y);
 	RenderBoundingBox();
 }
-
+int CFlower::getFlowerPosition() {
+	float px, py;
+	CGame::GetInstance()->GetCurrentScene()->getPlayerPosition(px, py);
+	if (px < x) {
+		if (py >= y) return 1; //top-left
+		else return 2; //bot-left
+	}
+	else
+	{
+		if (py >= y) return 3; //top-right
+		else return 4; // bot-right
+	}
+}
 void CFlower::SetState(int state)
 {
 	CGameObject::SetState(state);

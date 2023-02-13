@@ -16,8 +16,15 @@
 
 #define ID_ANI_FLOWER_UP_LEFT_IDLE 12001
 #define ID_ANI_FLOWER_DOWN_LEFT_IDLE 12002
-#define ID_ANI_FOLOWER_UP_LEFT_MOVING	
-#define ID_ANI_FOLOWER_UP_LEFT_MOVING 12004
+
+#define ID_ANI_FLOWER_UP_LEFT_MOVING 12003
+#define ID_ANI_FLOWER_DOWN_LEFT_MOVING 12004
+
+#define ID_ANI_FLOWER_UP_RIGHT_IDLE 12005
+#define ID_ANI_FLOWER_DOWN_RIGHT_IDLE 12006
+
+#define ID_ANI_FLOWER_UP_RIGHT_MOVING 12007
+#define ID_ANI_FLOWER_DOWN_RIGHT_MOVING 12008
 
 class CFlower : public CGameObject
 {
@@ -25,8 +32,11 @@ class CFlower : public CGameObject
 protected:
 	float yLimit;
 	float ax;
-	float ay;
+	float ay;	
+	float ani_pow_id;
+
 	ULONGLONG loop_start;
+	
 	
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
@@ -36,6 +46,10 @@ protected:
 	virtual void OnNoCollision(DWORD dt);
 
 	virtual void OnCollisionWith(LPCOLLISIONEVENT e);
+
+	int getFlowerPosition();
+	int getMovingFlowerAniId(int flag);
+	int getStaticFlowerAniId(int flag);
 
 public:
 	CFlower(float x, float y);
