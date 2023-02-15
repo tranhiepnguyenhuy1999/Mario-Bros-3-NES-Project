@@ -129,6 +129,12 @@
     <ClCompile Include="Tail.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="GreenFlower1.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GreenFlower2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h">
@@ -252,6 +258,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Tail.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GreenFlower1.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GreenFlower2.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
