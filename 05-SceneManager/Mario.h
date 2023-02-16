@@ -152,7 +152,9 @@ class CMario : public CGameObject
 	bool isFly;
 	ULONGLONG count_start;
 	ULONGLONG readyFly_start;
-	int coin; 
+	int coin;
+	int point;
+	int life;
 
 	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
 	void OnCollisionWithParaGoomba(LPCOLLISIONEVENT e);
@@ -183,7 +185,10 @@ public:
 		readyFly_start = -1;
 		isOnPlatform = false;
 		isFly = false;
-		coin = 0;
+		coin = 33;
+		point = 0;
+		life = 3;
+
 	}
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void Render();

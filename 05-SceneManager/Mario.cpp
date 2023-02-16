@@ -19,6 +19,7 @@
 
 #include "AssetIDs.h"
 #include "Collision.h"
+#include "UserBoard.h"
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
@@ -37,6 +38,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	isOnPlatform = false;
 
 	CCollision::GetInstance()->Process(this, dt, coObjects);
+	CUserBoard::GetInstance()->SetValue(point, coin, life);
 }
 
 void CMario::OnNoCollision(DWORD dt)

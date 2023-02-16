@@ -150,6 +150,7 @@
     <ClCompile Include="CloudBrick.cpp" />
     <ClCompile Include="Coin.cpp" />
     <ClCompile Include="Collision.cpp" />
+    <ClCompile Include="CountdownTimer.cpp" />
     <ClCompile Include="debug.cpp" />
     <ClCompile Include="DownBrick.cpp" />
     <ClCompile Include="FallObject.cpp" />
@@ -193,6 +194,7 @@
     <ClInclude Include="CloudBrick.h" />
     <ClInclude Include="Coin.h" />
     <ClInclude Include="Collision.h" />
+    <ClInclude Include="CountdownTimer.h" />
     <ClInclude Include="debug.h" />
     <ClInclude Include="DownBrick.h" />
     <ClInclude Include="FallObject.h" />

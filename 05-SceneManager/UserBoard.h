@@ -3,6 +3,7 @@
 #include "GameObject.h"
 #include "Animation.h"
 #include "Animations.h"
+#include "CountdownTimer.h"
 
 #define ID_ANI_BOARD 10005
 #define ID_ANI_NUMBER0 10010
@@ -20,9 +21,21 @@
 #define ID_ANI_NUMBERP 10021
 
 class CUserBoard : public CGameObject {
+	static CUserBoard* __instance;
+	int point, coin, life;
+	vector<int> pointA;
+	vector<int> coinA;
+	vector<int> lifeA;
+	vector<int> timeA;
 public:
-	CUserBoard(float x, float y) : CGameObject(x, y) {}
+	CUserBoard(float x, float y) : CGameObject(x, y) {
+		CountdownTimer* timer = new CountdownTimer();
+	}
+	void translateNumberToSprite();
 	void Render();
 	void Update(DWORD dt) {}
 	void GetBoundingBox(float& l, float& t, float& r, float& b);
+	void SetValue(int point, int coin, int life);
+	int getAniId(int num);
+	static CUserBoard* GetInstance();
 };
