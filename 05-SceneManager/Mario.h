@@ -187,7 +187,7 @@ public:
 		isFly = false;
 		coin = 33;
 		point = 0;
-		life = 3;
+		life =2;
 
 	}
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
@@ -198,7 +198,11 @@ public:
 	{ 
 		return (state != MARIO_STATE_DIE); 
 	}
-
+	void GetProps(int &coinP, int &pointP, int &lifeP) {
+		coinP = coin;
+		pointP = point;
+		lifeP = life;
+	}
 	int IsBlocking() { return (state != MARIO_STATE_DIE && untouchable==0); }
 
 	void OnNoCollision(DWORD dt);
@@ -208,7 +212,7 @@ public:
 	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount64(); };
 	bool isFlying() { return this->isFly; };
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom);
-
+	
 	void createTailObject();
 
 };

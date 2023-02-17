@@ -22,7 +22,6 @@
 
 class CUserBoard : public CGameObject {
 	static CUserBoard* __instance;
-	int point, coin, life;
 	vector<int> pointA;
 	vector<int> coinA;
 	vector<int> lifeA;
@@ -35,7 +34,6 @@ public:
 	void Render();
 	void Update(DWORD dt) {}
 	void GetBoundingBox(float& l, float& t, float& r, float& b);
-	void SetValue(int point, int coin, int life);
 	int getAniId(int num);
 	static CUserBoard* GetInstance();
 };

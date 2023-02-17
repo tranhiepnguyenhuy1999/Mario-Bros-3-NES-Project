@@ -1,6 +1,12 @@
 #include "UserBoard.h"
 #include "debug.h"
 //8:6
+CUserBoard* CUserBoard::__instance = NULL;
+CUserBoard* CUserBoard::GetInstance()
+{
+	if (__instance == NULL) __instance = new CUserBoard(0, 0);
+	return __instance;
+}
 void CUserBoard::Render()
 {
 	translateNumberToSprite();
@@ -8,7 +14,6 @@ void CUserBoard::Render()
 	animations->Get(ID_ANI_BOARD)->Render(x, y);
 	//coin
 	for (int i = coinA.size(); i >0; i--) {
-		//DebugOut(L"coin %d \n", coinA[i]);
 		int aniId = getAniId(coinA[i-1]);
 		animations->Get(aniId)->Render(x - 78 + 134 + 4 + (coinA.size()-i)*8, y - 18 + 8 + 6);
 	}
@@ -43,23 +48,20 @@ void CUserBoard::Render()
 void CUserBoard::GetBoundingBox(float& l, float& t, float& r, float& b)
 {
 }
-void CUserBoard::SetValue(int point, int coinP, int life) {
-	//DebugOut(L"yeah coin %d \n", coinP);
-	this->coin = coinP;
-	this->point = point;
-	this->life = life;
-}
 void CUserBoard::translateNumberToSprite() {
+	int point, coin, life;
+	CGame::GetInstance()->GetCurrentScene()->getPlayerProps(coin, point, life);
 	coinA.clear();
 	timeA.clear();
 	lifeA.clear();
+	pointA.clear();
 	int tempTime;
 	CountdownTimer::GetInstance()->getCounter(tempTime);
 	//coin
 	for (int i = 0; i < 2; i++) {
 		if (i == 0) {
-			coinA.push_back(13 % 10);
-		}else coinA.push_back(13 / (10 ^ i));
+			coinA.push_back(coin % 10);
+		}else coinA.push_back(coin / (10 ^ i));
 	}
 	//time
 	for (int i = 2; i >=0; i--) {
@@ -103,12 +105,6 @@ int CUserBoard::getAniId(int num) {
 	case 9:
 		return ID_ANI_NUMBER9;
 	default:
-		break;
+		return 0;
 	}
-}
-CUserBoard* CUserBoard::__instance = NULL;
-CUserBoard* CUserBoard::GetInstance()
-{
-	if (__instance == NULL) __instance = new CUserBoard(0,0);
-	return __instance;
 }
