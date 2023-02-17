@@ -6,7 +6,7 @@
 
 #include "debug.h"
 
-#define MARIO_WALKING_SPEED		0.2f
+#define MARIO_WALKING_SPEED		0.15f
 #define MARIO_RUNNING_SPEED		0.3f
 
 #define MARIO_ACCEL_WALK_X	0.0005f
@@ -18,7 +18,7 @@
 #define MARIO_GRAVITY			0.002f
 
 #define MARIO_JUMP_DEFLECT_SPEED  0.3f
-#define MARIO_FLY_SPEED  0.2f
+#define MARIO_FLY_SPEED  0.35f
 
 #define MARIO_STATE_DIE				-10
 #define MARIO_STATE_IDLE			0
@@ -40,6 +40,7 @@
 
 #define MARIO_STATE_READYFLY	900
 #define MARIO_STATE_FLY	1000
+#define MARIO_STATE_RELEASE_FLY 1100
 
 #pragma region ANIMATION_ID
 // RACOON
@@ -152,6 +153,7 @@ class CMario : public CGameObject
 	int isFlyStak;
 	ULONGLONG count_start;
 	ULONGLONG readyFly_start;
+	ULONGLONG fly_start;
 	int coin;
 	int point;
 	int life;
@@ -212,7 +214,7 @@ public:
 	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount64(); };
 	bool isFlying() { return isFlyStak==5; };
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom);
-	
+	void checkFlyStak();
 	void createTailObject();
 
 };

@@ -534,7 +534,11 @@ void CMario::SetState(int state)
 		else
 		{
 			if (GetTickCount64() - readyFly_start > 300) {
-				if (isFlyStak != 5)
+				if (isFlyStak == 5) {
+					fly_start = GetTickCount64();
+					readyFly_start = -1;
+				}
+				else
 				{
 					isFlyStak++;
 					readyFly_start = GetTickCount64();
@@ -552,6 +556,7 @@ void CMario::SetState(int state)
 		nx = -1;
 		break;
 	case MARIO_STATE_WALKING_RIGHT:
+		checkFlyStak();
 		if (isSitting) break;
 		maxVx = MARIO_WALKING_SPEED;
 		ax = MARIO_ACCEL_WALK_X;
@@ -598,6 +603,7 @@ void CMario::SetState(int state)
 		break;
 
 	case MARIO_STATE_IDLE:
+		checkFlyStak();
 		ax = 0.0f;
 		vx = 0.0f;
 		break;
@@ -614,11 +620,12 @@ void CMario::SetState(int state)
 		vx = 0;
 		ax = 0;
 		break;
-	case MARIO_STATE_READYFLY:
-		break;
 	case MARIO_STATE_FLY:
+		fly_start = GetTickCount64();
 		vy = -MARIO_FLY_SPEED;
-		ay = 0;
+		break;
+	case MARIO_STATE_RELEASE_FLY:
+		if (vy < 0) vy += MARIO_JUMP_SPEED_Y / 2;
 		break;
 	case MARIO_STATE_RACOON_TRANSFORM:
 		count_start = GetTickCount64();
@@ -674,5 +681,23 @@ void CMario::createTailObject() {
 	{
 		CGame::GetInstance()->GetCurrentScene()->createNewObject(OBJECT_TYPE_TAIL, x + MARIO_BIG_BBOX_WIDTH / 2 + TAIL_BBOX_WIDTH / 2, y + MARIO_BIG_BBOX_HEIGHT / 2 - TAIL_BBOX_HEIGHT);
 
+	}
+}
+void CMario::checkFlyStak() {
+	if (GetTickCount64() - fly_start > 1000) {
+		if (readyFly_start == -1)	readyFly_start = GetTickCount64();
+		else
+		{
+			if (GetTickCount64() - readyFly_start > 300) {
+				if (isFlyStak == 0) {
+					readyFly_start = -1;
+				}
+				else
+				{
+					isFlyStak--;
+					readyFly_start = GetTickCount64();
+				}
+			}
+		}
 	}
 }

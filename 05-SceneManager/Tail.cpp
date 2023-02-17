@@ -53,7 +53,7 @@ void CTail::OnCollisionWithKoopaTroopa(LPCOLLISIONEVENT e)
 }
 void CTail::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	if ((state != TAIL_STATE_DIE) && (GetTickCount64() - count_start >500))
+	if ((state != TAIL_STATE_DIE) && (GetTickCount64() - count_start >700))
 	{
 		count_start = -1;
 		isDeleted = true;

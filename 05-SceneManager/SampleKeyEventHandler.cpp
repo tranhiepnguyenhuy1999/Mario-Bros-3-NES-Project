@@ -22,7 +22,7 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 		mario->SetState(MARIO_STATE_ATTACK);
 		break;
 	case DIK_S:
-		if (mario->isFlying()&& level==3)
+		if (mario->isFlying() && level==3)
 		{
 			mario->SetState(MARIO_STATE_FLY);
 		}
@@ -54,10 +54,19 @@ void CSampleKeyHandler::OnKeyUp(int KeyCode)
 	//DebugOut(L"[INFO] KeyUp: %d\n", KeyCode);
 
 	CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
+	int level;
+	mario->getLevel(level);
 	switch (KeyCode)
 	{
 	case DIK_S:
-		mario->SetState(MARIO_STATE_RELEASE_JUMP);
+		if (mario->isFlying() && level == 3)
+		{
+			mario->SetState(MARIO_STATE_RELEASE_FLY);
+		}
+		else
+		{
+			mario->SetState(MARIO_STATE_RELEASE_JUMP);
+		}
 		break;
 	case DIK_DOWN:
 		mario->SetState(MARIO_STATE_SIT_RELEASE);
