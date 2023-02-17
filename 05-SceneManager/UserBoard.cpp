@@ -1,5 +1,8 @@
 #include "UserBoard.h"
 #include "debug.h"
+#include "Mario.h"
+#include "Game.h"
+#include "PlayScene.h"
 //8:6
 CUserBoard* CUserBoard::__instance = NULL;
 CUserBoard* CUserBoard::GetInstance()
@@ -41,9 +44,16 @@ void CUserBoard::Render()
 
 	//p 
 	for (int i = 0; i < 6; i++) {
-		animations->Get(ID_ANI_NUMBERLEFT)->Render(x - 78 + 53 + 4 + i * 8, y - 18 + 8 + 6);
+		if (i <= isFLy) {
+			animations->Get(ID_ANI_NUMBER_WHITE_LEFT)->Render(x - 78 + 53 + 4 + i * 8, y - 18 + 8 + 6);
+		}
+		else
+			animations->Get(ID_ANI_NUMBER_BLACK_LEFT)->Render(x - 78 + 53 + 4 + i * 8, y - 18 + 8 + 6);
 	}
-	animations->Get(ID_ANI_NUMBERP)->Render(x - 78 + 53 + 6 + 6 * 8 +2 , y - 18 + 8 + 6);
+	if (isFLy==5)
+		animations->Get(ID_ANI_NUMBER_WHITE_P)->Render(x - 78 + 53 + 6 + 6 * 8 +2 , y - 18 + 8 + 6);
+	else
+		animations->Get(ID_ANI_NUMBER_BLACK_P)->Render(x - 78 + 53 + 6 + 6 * 8 + 2, y - 18 + 8 + 6);
 }	
 
 void CUserBoard::GetBoundingBox(float& l, float& t, float& r, float& b)
@@ -51,17 +61,18 @@ void CUserBoard::GetBoundingBox(float& l, float& t, float& r, float& b)
 }
 void CUserBoard::translateNumberToSprite() {
 	int point, coin, life;
-	CGame::GetInstance()->GetCurrentScene()->getPlayerProps(coin, point, life);
+	CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
+	mario->GetProps(coin, point, life, isFLy);
 	coinA.clear();
 	timeA.clear();
 	lifeA.clear();
 	pointA.clear();
-
+	//DebugOut(L"fly %d \n", isFlyStak);
 	if (counter >= 1)
 	{
 		if (GetTickCount64() - loop_start > 1000)
 		{
-			DebugOut(L"yeah \n");
+
 			loop_start = GetTickCount64();
 			counter--;
 		}

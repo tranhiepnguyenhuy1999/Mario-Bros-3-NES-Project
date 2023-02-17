@@ -6,18 +6,18 @@
 
 #include "debug.h"
 
-#define MARIO_WALKING_SPEED		0.1f
+#define MARIO_WALKING_SPEED		0.2f
 #define MARIO_RUNNING_SPEED		0.3f
 
 #define MARIO_ACCEL_WALK_X	0.0005f
-#define MARIO_ACCEL_RUN_X	0.001f
+#define MARIO_ACCEL_RUN_X	0.008f
 
 #define MARIO_JUMP_SPEED_Y		0.6f
 #define MARIO_JUMP_RUN_SPEED_Y	0.7f
 
 #define MARIO_GRAVITY			0.002f
 
-#define MARIO_JUMP_DEFLECT_SPEED  0.5f
+#define MARIO_JUMP_DEFLECT_SPEED  0.3f
 #define MARIO_FLY_SPEED  0.2f
 
 #define MARIO_STATE_DIE				-10
@@ -149,7 +149,7 @@ class CMario : public CGameObject
 
 	ULONGLONG untouchable_start;
 	BOOLEAN isOnPlatform;
-	bool isFly;
+	int isFlyStak;
 	ULONGLONG count_start;
 	ULONGLONG readyFly_start;
 	int coin;
@@ -177,14 +177,13 @@ public:
 		maxVx = 0.0f;
 		ax = 0.0f;
 		ay = MARIO_GRAVITY; 
-
 		level = MARIO_LEVEL_BIG;
 		untouchable = 0;
 		untouchable_start = -1;
 		count_start = -1;
 		readyFly_start = -1;
 		isOnPlatform = false;
-		isFly = false;
+		isFlyStak = 0;
 		coin = 0;
 		point = 0;
 		life =1;
@@ -198,10 +197,11 @@ public:
 	{ 
 		return (state != MARIO_STATE_DIE); 
 	}
-	void GetProps(int &coinP, int &pointP, int &lifeP) {
+	void GetProps(int &coinP, int &pointP, int &lifeP, int &isFlyStakP) {
 		coinP = coin;
 		pointP = point;
 		lifeP = life;
+		isFlyStakP = isFlyStak;
 	}
 	int IsBlocking() { return (state != MARIO_STATE_DIE && untouchable==0); }
 
@@ -210,7 +210,7 @@ public:
 
 	void SetLevel(int l);
 	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount64(); };
-	bool isFlying() { return this->isFly; };
+	bool isFlying() { return isFlyStak==5; };
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	
 	void createTailObject();

@@ -17,11 +17,13 @@
 #define ID_ANI_NUMBER8 10018
 #define ID_ANI_NUMBER9 10019
 
-#define ID_ANI_NUMBERLEFT 10020
-#define ID_ANI_NUMBERP 10021
-
+#define ID_ANI_NUMBER_BLACK_LEFT 10020
+#define ID_ANI_NUMBER_BLACK_P 10021
+#define ID_ANI_NUMBER_WHITE_LEFT 10022
+#define ID_ANI_NUMBER_WHITE_P 10023
 class CUserBoard : public CGameObject {
 	static CUserBoard* __instance;
+	int isFLy;
 	int counter = 300;
 	vector<int> pointA;
 	vector<int> coinA;
@@ -31,7 +33,6 @@ class CUserBoard : public CGameObject {
 public:
 	CUserBoard(float x, float y) : CGameObject(x, y) {
 		loop_start = GetTickCount64();
-		CountdownTimer* timer = new CountdownTimer();
 	}
 	void translateNumberToSprite();
 	void Render();

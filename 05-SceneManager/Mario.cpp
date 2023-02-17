@@ -431,7 +431,7 @@ int CMario::GetAniIdBig()
 int CMario::GetAniIdRacoon()
 {
 	int aniId = -1;
-	if (isFly) {
+	if (isFlyStak==5) {
 		aniId = ID_ANI_RACOON_FLY_RIGHT;
 	}
 	else
@@ -516,7 +516,6 @@ void CMario::Render()
 	
 	DebugOutTitle(L"Coins: %d", coin);
 }
-
 void CMario::SetState(int state)
 {
 	if ((this->state == MARIO_STATE_RACOON_TRANSFORM) && (GetTickCount64() - count_start < 500)) return;
@@ -534,8 +533,12 @@ void CMario::SetState(int state)
 		}
 		else
 		{
-			if (GetTickCount64() - readyFly_start > 1000) {
-				this->isFly = true;
+			if (GetTickCount64() - readyFly_start > 300) {
+				if (isFlyStak != 5)
+				{
+					isFlyStak++;
+					readyFly_start = GetTickCount64();
+				}
 			}
 		}
 		maxVx = MARIO_RUNNING_SPEED;
@@ -612,7 +615,6 @@ void CMario::SetState(int state)
 		ax = 0;
 		break;
 	case MARIO_STATE_READYFLY:
-		isFly = true;
 		break;
 	case MARIO_STATE_FLY:
 		vy = -MARIO_FLY_SPEED;
