@@ -22,12 +22,15 @@
 
 class CUserBoard : public CGameObject {
 	static CUserBoard* __instance;
+	int counter = 300;
 	vector<int> pointA;
 	vector<int> coinA;
 	vector<int> lifeA;
 	vector<int> timeA;
+	ULONGLONG loop_start;
 public:
 	CUserBoard(float x, float y) : CGameObject(x, y) {
+		loop_start = GetTickCount64();
 		CountdownTimer* timer = new CountdownTimer();
 	}
 	void translateNumberToSprite();

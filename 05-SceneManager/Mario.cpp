@@ -243,6 +243,8 @@ void CMario::OnCollisionWithQuestionBrick(LPCOLLISIONEVENT e)
 			if (questionBrick->getType() == 1)
 			{
 				CGame::GetInstance()->GetCurrentScene()->createNewObject(OBJECT_TYPE_SMALLCOIN, qx, qy-16);
+				coin++;
+				point += 100;
 			}
 			else
 			{
@@ -255,9 +257,15 @@ void CMario::OnCollisionWithQuestionBrick(LPCOLLISIONEVENT e)
 					qvx = 1;
 				}
 				if (level == MARIO_LEVEL_BIG)
+				{
 					CGame::GetInstance()->GetCurrentScene()->createNewObject(OBJECT_TYPE_LEAF, qx, qy);
+					point += 1000;
+				}
 				else
+				{			
 					CGame::GetInstance()->GetCurrentScene()->createNewObject(OBJECT_TYPE_MUSHROOM, qx, qy, qvx);
+					point += 1000;
+				}
 			}
 
 			questionBrick->SetState(QUESTIONBRICK_STATE_TOUCHED_1);

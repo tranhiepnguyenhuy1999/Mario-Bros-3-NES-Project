@@ -185,9 +185,9 @@ public:
 		readyFly_start = -1;
 		isOnPlatform = false;
 		isFly = false;
-		coin = 33;
+		coin = 0;
 		point = 0;
-		life =2;
+		life =1;
 
 	}
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);

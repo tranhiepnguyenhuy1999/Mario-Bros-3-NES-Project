@@ -34,8 +34,9 @@ void CUserBoard::Render()
 	}
 
 	// point
-	for (int i = 0; i < 7; i++) {
-		animations->Get(ID_ANI_NUMBER0)->Render(x - 78 + 53 + 4 +i*8, y - 18 + 16 + 6);
+	for (int i = 0; i < pointA.size(); i++) {
+		int aniId = getAniId(pointA[i]);
+		animations->Get(aniId)->Render(x - 78 + 53 + 4 +i*8, y - 18 + 16 + 6);
 	}
 
 	//p 
@@ -55,8 +56,18 @@ void CUserBoard::translateNumberToSprite() {
 	timeA.clear();
 	lifeA.clear();
 	pointA.clear();
-	int tempTime;
-	CountdownTimer::GetInstance()->getCounter(tempTime);
+
+	if (counter >= 1)
+	{
+		if (GetTickCount64() - loop_start > 1000)
+		{
+			DebugOut(L"yeah \n");
+			loop_start = GetTickCount64();
+			counter--;
+		}
+
+	}
+	int temp= this->counter;
 	//coin
 	for (int i = 0; i < 2; i++) {
 		if (i == 0) {
@@ -66,11 +77,25 @@ void CUserBoard::translateNumberToSprite() {
 	//time
 	for (int i = 2; i >=0; i--) {
 		if (i == 0) {
-			timeA.push_back(tempTime % 10);
+			timeA.push_back(temp % 10);
 		}
 		else {
-		timeA.push_back(tempTime / pow(10,i));
-		tempTime = tempTime - (tempTime / (pow(10, i))) * pow(10, i);
+			int result = temp / pow(10, i);
+			//DebugOut(L"i: %d \n", result);
+			timeA.push_back(result);
+			temp = temp - result * pow(10, i);
+		}
+	}
+	// point
+	for (int i = 6; i >= 0; i--) {
+		if (i == 0) {
+			pointA.push_back(point % 10);
+		}
+		else {
+			int result = point/pow(10, i);
+			//DebugOut(L"i: %d \n", result);
+			pointA.push_back(result);
+			point = point - result * pow(10, i);
 		}
 	}
 	//life
