@@ -4,7 +4,7 @@ void CBreakBrick::Render()
 {
 	CAnimations* animations = CAnimations::GetInstance();
 	float aniID = ID_ANI_UNTOUCHED_QUESTION_BRICK;
-	//if (this->state == QUESTIONBRICK_STATE_UNTOUCHED) aniID = ID_ANI_UNTOUCHED_QUESTION_BRICK;
+	if (this->state == QUESTIONBRICK_STATE_UNTOUCHED) aniID = ID_ANI_UNTOUCHED_QUESTION_BRICK;
 	animations->Get(aniID)->Render(x, y);
 
 	//RenderBoundingBox();

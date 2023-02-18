@@ -18,12 +18,11 @@ green-piranhaplant.txt
 # See OBJECT_TYPE constants in AssetIDs.h
 
 # MARIO
-0	1900	10
+0	50	10	
 #goomba
-
 #20	300	400
 #21	330	400
-
+22	150	352	1
 #2	330	400
 2	608	400
 

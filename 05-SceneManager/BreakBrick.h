@@ -39,4 +39,6 @@ public:
 	void GetBoundingBox(float& l, float& t, float& r, float& b);
 	virtual void SetState(int state);
 	float getType() { return this->type; };
+	//virtual int IsCollidable() { return 1; };
+	//virtual int IsBlocking() { return 0; }
 };

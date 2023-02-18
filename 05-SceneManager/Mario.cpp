@@ -20,6 +20,7 @@
 #include "AssetIDs.h"
 #include "Collision.h"
 #include "UserBoard.h"
+#include "BreakBrick.h"
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
@@ -80,8 +81,14 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithFire(e);
 	else if (dynamic_cast<CLeaf*>(e->obj))
 		OnCollisionWithLeaf(e);
+	else if (dynamic_cast<CBreakBrick*>(e->obj))
+		OnCollisionWithBreakBrick(e);
 }
-
+void CMario::OnCollisionWithBreakBrick(LPCOLLISIONEVENT e)
+{
+	CBreakBrick* brick = dynamic_cast<CBreakBrick*>(e->obj);
+	brick->SetState(QUESTIONBRICK_STATE_STATIC);
+}
 void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 {
 	CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
@@ -533,7 +540,7 @@ void CMario::SetState(int state)
 		}
 		else
 		{
-			if (GetTickCount64() - readyFly_start > 300) {
+			if (GetTickCount64() - readyFly_start > 250) {
 				if (isFlyStak == 5) {
 					fly_start = GetTickCount64();
 					readyFly_start = -1;
@@ -684,11 +691,11 @@ void CMario::createTailObject() {
 	}
 }
 void CMario::checkFlyStak() {
-	if (GetTickCount64() - fly_start > 1000) {
+	if (GetTickCount64() - fly_start > 500) {
 		if (readyFly_start == -1)	readyFly_start = GetTickCount64();
 		else
 		{
-			if (GetTickCount64() - readyFly_start > 300) {
+			if (GetTickCount64() - readyFly_start > 250) {
 				if (isFlyStak == 0) {
 					readyFly_start = -1;
 				}

@@ -17,15 +17,6 @@ void CQuestionBrick::GetBoundingBox(float& l, float& t, float& r, float& b)
 	r = l + BRICK_BBOX_WIDTH;
 	b = t + BRICK_BBOX_HEIGHT;
 }
-void CQuestionBrick::OnNoCollision(DWORD dt)
-{
-	x += vx * dt;
-	y += vy * dt;
-};
-
-void CQuestionBrick::OnCollisionWith(LPCOLLISIONEVENT e)
-{
-}
 void CQuestionBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	if (state== QUESTIONBRICK_STATE_TOUCHED_1 && (GetTickCount64() - count_start > 150))

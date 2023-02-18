@@ -2,6 +2,7 @@
 #include "Goomba.h"
 #include "ParaGoomba.h"
 #include "KoopaTroopa.h"
+#include "BreakBrick.h"
 #include "debug.h"
 
 CTail::CTail(float x, float y) :CGameObject(x, y)
@@ -20,6 +21,8 @@ void CTail::OnNoCollision(DWORD dt)
 
 void CTail::OnCollisionWith(LPCOLLISIONEVENT e)
 {
+	DebugOut(L"Tail touched!!!");
+
 	if (e->ny != 0)
 	{
 		vy = 0;
@@ -34,11 +37,18 @@ void CTail::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithParaGoomba(e);
 	else if (dynamic_cast<CKoopaTroopa*>(e->obj))
 		OnCollisionWithKoopaTroopa(e);
+	else if (dynamic_cast<CBreakBrick*>(e->obj))
+		OnCollisionWithBreakBrick(e);
 }
 void CTail::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 {
 	CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
 	goomba->SetState(GOOMBA_STATE_DIE);
+}
+void CTail::OnCollisionWithBreakBrick (LPCOLLISIONEVENT e)
+{
+	CBreakBrick* brick = dynamic_cast<CBreakBrick*>(e->obj);
+	brick->SetState(QUESTIONBRICK_STATE_STATIC);
 }
 void CTail::OnCollisionWithParaGoomba(LPCOLLISIONEVENT e)
 {
@@ -48,12 +58,12 @@ void CTail::OnCollisionWithParaGoomba(LPCOLLISIONEVENT e)
 void CTail::OnCollisionWithKoopaTroopa(LPCOLLISIONEVENT e)
 {
 	CKoopaTroopa* item = dynamic_cast<CKoopaTroopa*>(e->obj);
-	DebugOut(L"yeah");
+
 			item->SetState(KOOPATROOPA_STATE_DIE);
 }
 void CTail::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	if ((state != TAIL_STATE_DIE) && (GetTickCount64() - count_start >700))
+	if ((state != TAIL_STATE_DIE) && (GetTickCount64() - count_start >500))
 	{
 		count_start = -1;
 		isDeleted = true;
