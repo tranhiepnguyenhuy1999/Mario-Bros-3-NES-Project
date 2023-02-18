@@ -36,6 +36,7 @@ protected:
 	float ax;
 	float ay;
 	float type;
+	bool isActive;
 
 	ULONGLONG count_start;
 	ULONGLONG ready_jump_start;

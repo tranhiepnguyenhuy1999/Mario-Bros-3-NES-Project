@@ -104,6 +104,15 @@ void CKoopaTroopa::OnCollisionWithDownBrick(LPCOLLISIONEVENT e)
 }
 void CKoopaTroopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	float cx, cy;
+	CGame::GetInstance()->GetCamPos(cx, cy);
+	if (!isActive)
+	{
+		if (x > cx + CGame::GetInstance()->GetBackBufferWidth()) {
+			isActive = true;
+		}
+		return;
+	}
 	vy += ay * dt;
 	vx += ax * dt;
 	

@@ -5,8 +5,12 @@
 #include "BreakBrick.h"
 #include "debug.h"
 
-CTail::CTail(float x, float y) :CGameObject(x, y)
+CTail::CTail(float x, float y, float nx) :CGameObject(x, y)
 {
+	if (nx < 0)
+		vx = -TAIL_ATTACK_SPEED;
+	else
+		vx = TAIL_ATTACK_SPEED;
 	SetState(TAIL_STATE_RELASE);
 }
 void CTail::Render()
@@ -63,7 +67,7 @@ void CTail::OnCollisionWithKoopaTroopa(LPCOLLISIONEVENT e)
 }
 void CTail::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	if ((state != TAIL_STATE_DIE) && (GetTickCount64() - count_start >500))
+	if ((state != TAIL_STATE_DIE) && (GetTickCount64() - count_start >300))
 	{
 		count_start = -1;
 		isDeleted = true;

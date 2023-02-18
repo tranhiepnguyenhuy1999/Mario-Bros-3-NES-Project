@@ -2,9 +2,9 @@
 #include "GameObject.h"
 
 #define PARAGOOMBA_GRAVITY 0.002f
-#define PARAGOOMBA_WALKING_SPEED 0.03f
+#define PARAGOOMBA_WALKING_SPEED 0.02f
 #define PARAGOOMBA_KICKING_SPEED 0.2f
-#define PARAGOOMBA_JUMP_SPEED 0.07f
+#define PARAGOOMBA_JUMP_SPEED 0.05f
 
 #define PARAGOOMBA_MAX_Y 50
 
@@ -32,6 +32,7 @@ protected:
 	float ax;
 	float ay;
 	float type;
+	bool isActive = false;
 
 	ULONGLONG count_start;
 	ULONGLONG ready_jump_start;

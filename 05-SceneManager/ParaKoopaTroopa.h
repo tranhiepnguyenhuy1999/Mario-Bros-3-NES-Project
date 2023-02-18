@@ -2,9 +2,9 @@
 #include "GameObject.h"
 
 #define PARAPARAPARAKOOPATROOPA_GRAVITY 0.002f
-#define PARAKOOPATROOPA_WALKING_SPEED 0.03f
+#define PARAKOOPATROOPA_WALKING_SPEED 0.02f
 #define PARAKOOPATROOPA_KICKING_SPEED 0.2f
-#define PARAKOOPATROOPA_JUMP_SPEED 0.07f
+#define PARAKOOPATROOPA_JUMP_SPEED 0.05f
 
 #define PARAKOOPATROOPA_MAX_Y 50
 
@@ -34,7 +34,7 @@ protected:
 	float ax;
 	float ay;
 	float type;
-
+	bool isActive = false;
 	ULONGLONG count_start;
 	ULONGLONG ready_jump_start;
 
