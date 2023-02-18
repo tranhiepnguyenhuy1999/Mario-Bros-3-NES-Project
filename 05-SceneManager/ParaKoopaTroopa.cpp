@@ -6,12 +6,12 @@
 CParaKoopaTroopa::CParaKoopaTroopa(float x, float y) :CGameObject(x, y)
 {
 	this->ax = 0;
-	this->ay = 0;
-	vy = PARAKOOPATROOPA_JUMP_SPEED;
+	this->ay = 0.0005f;
 	ready_jump_start = -1;
-	//this->ay = PARAKOOPATROOPA_GRAVITY;
 	count_start = -1;
-	SetState(PARAKOOPATROOPA_STATE_WALKING);
+	vy = PARAKOOPATROOPA_JUMP_SPEED;
+	vx = -PARAKOOPATROOPA_WALKING_SPEED;
+	SetState(PARAKOOPATROOPA_STATE_JUMP);
 }
 
 void CParaKoopaTroopa::GetBoundingBox(float& left, float& top, float& right, float& bottom)
@@ -44,18 +44,20 @@ void CParaKoopaTroopa::OnCollisionWith(LPCOLLISIONEVENT e)
 
 	if (e->ny != 0)
 	{
-		if (e->ny < 0)
-		{
-			//if (ready_jump_start == -1)
-			//{			
-			//	ready_jump_start = GetTickCount64();
-			//	return;
-			//}
-			//if (GetTickCount64() - ready_jump_start > PARAKOOPATROOPA_JUMP_TIMEOUT)
-			//{
-			SetState(PARAKOOPATROOPA_STATE_JUMP);
-			/*			ready_jump_start = -1;
-					}*/
+		if (state == PARAKOOPATROOPA_STATE_JUMP) {
+			if (e->ny < 0)
+			{
+				if (ready_jump_start == -1)
+				{
+					ready_jump_start = GetTickCount64();
+					return;
+				}
+				if (GetTickCount64() - ready_jump_start > 300)
+				{
+					SetState(PARAKOOPATROOPA_STATE_JUMP);
+					ready_jump_start = -1;
+				}
+			}
 		}
 	}
 	else if (e->nx != 0)
@@ -109,14 +111,15 @@ void CParaKoopaTroopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 	if (!isActive)
 	{
-		if (x > cx + CGame::GetInstance()->GetBackBufferWidth()/2) {
+		if (x < cx + 1.5 * CGame::GetInstance()->GetBackBufferWidth()) {
 			isActive = true;
 		}
 		return;
 	}
+
 	vy += ay * dt;
 	vx += ax * dt;
-	//DebugOut(L"count %d", GetTickCount64() - count_start);
+
 	if ((state == PARAKOOPATROOPA_STATE_DIE) && (GetTickCount64() - count_start > PARAKOOPATROOPA_DIE_TIMEOUT))
 	{
 		SetState(PARAKOOPATROOPA_STATE_ALIVE);
@@ -127,12 +130,6 @@ void CParaKoopaTroopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		SetState(PARAKOOPATROOPA_STATE_WALKING);
 		count_start = -1;
 		y = y + (PARAKOOPATROOPA_BBOX_HEIGHT_DIE / 2) - PARAKOOPATROOPA_BBOX_HEIGHT / 2;
-		return;
-	}
-	if ((state == PARAKOOPATROOPA_STATE_JUMP) && (GetTickCount64() - count_start > PARAKOOPATROOPA_JUMP_TIMEOUT))
-	{
-		SetState(PARAKOOPATROOPA_STATE_RELEASE_JUMP);
-		count_start = -1;
 		return;
 	}
 	CGameObject::Update(dt, coObjects);
@@ -156,6 +153,7 @@ void CParaKoopaTroopa::Render()
 		aniId = ID_ANI_PARAKOOPATROOPA_KICKING;
 	}
 	CAnimations::GetInstance()->Get(aniId)->Render(x, y);
+	if(state== PARAKOOPATROOPA_STATE_JUMP ) CAnimations::GetInstance()->Get(6002)->Render(x + 6 , y-4);
 	RenderBoundingBox();
 }
 
@@ -169,13 +167,11 @@ void CParaKoopaTroopa::SetState(int state)
 		y += (PARAKOOPATROOPA_BBOX_HEIGHT - PARAKOOPATROOPA_BBOX_HEIGHT_DIE) / 2;
 		vx = 0;
 		vy = 0;
-		ay = 0;
 		break;
 	case PARAKOOPATROOPA_STATE_ALIVE:
 		count_start = GetTickCount64();
 		vx = 0;
 		vy = 0;
-		ay = 0;
 		break;
 	case PARAKOOPATROOPA_STATE_JUMP:
 		count_start = GetTickCount64();

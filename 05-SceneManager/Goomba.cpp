@@ -66,7 +66,7 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	CGame::GetInstance()->GetCamPos(cx, cy);
 	if (!isActive)
 	{
-		if (x > cx + CGame::GetInstance()->GetBackBufferWidth()) {
+		if (x < cx + 1.5*CGame::GetInstance()->GetBackBufferWidth()) {
 			isActive = true;
 		}
 	return;

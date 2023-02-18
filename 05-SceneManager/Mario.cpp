@@ -11,6 +11,7 @@
 #include "QuestionBrick.h"
 #include "DownBrick.h"
 #include "KoopaTroopa.h"
+#include "ParaKoopaTroopa.h"
 #include "Flower.h"
 #include "Fire.h"
 #include "ParaGoomba.h"
@@ -64,6 +65,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithParaGoomba(e);
 	else if (dynamic_cast<CKoopaTroopa*>(e->obj))
 		OnCollisionWithKoopaTroopa(e);
+	else if (dynamic_cast<CParaKoopaTroopa*>(e->obj))
+		OnCollisionWithParaKoopaTroopa(e);
 	else if (dynamic_cast<CCoin*>(e->obj))
 		OnCollisionWithCoin(e);
 	else if (dynamic_cast<CMushroom*>(e->obj))
@@ -209,6 +212,56 @@ void CMario::OnCollisionWithKoopaTroopa(LPCOLLISIONEVENT e)
 		}
 	}
 	else // hit by Goomba
+	{
+		if (untouchable == 0)
+		{
+			if (item->GetState() != KOOPATROOPA_STATE_DIE)
+			{
+				if (level > MARIO_LEVEL_SMALL)
+				{
+					level = MARIO_LEVEL_SMALL;
+					StartUntouchable();
+				}
+				else
+				{
+					DebugOut(L">>> Mario DIE >>> \n");
+					SetState(MARIO_STATE_DIE);
+				}
+			}
+		}
+	}
+}
+void CMario::OnCollisionWithParaKoopaTroopa(LPCOLLISIONEVENT e)
+{
+	CParaKoopaTroopa* item = dynamic_cast<CParaKoopaTroopa*>(e->obj);
+	// jump on top >> kill Goomba and deflect a bit 
+	if (item->GetState() == KOOPATROOPA_STATE_DIE || item->GetState() == KOOPATROOPA_STATE_ALIVE) {
+
+		if (e->nx > 0)
+			item->SetState(KOOPATROOPA_STATE_KICKING_RIGHT);
+		else
+			item->SetState(KOOPATROOPA_STATE_KICKING_LEFT);
+		return;
+	}
+	if (e->ny < 0)
+	{
+		// jumb state
+		if (item->GetState() == PARAKOOPATROOPA_STATE_JUMP)
+		{
+			item->SetState(PARAKOOPATROOPA_STATE_WALKING);
+		}
+		else
+		{
+			// walking state
+			if (item->GetState() == PARAKOOPATROOPA_STATE_WALKING)
+			{
+				item->SetState(KOOPATROOPA_STATE_DIE);
+			}
+		}
+		vy = -MARIO_JUMP_DEFLECT_SPEED;
+		return;
+	}
+	else 
 	{
 		if (untouchable == 0)
 		{
@@ -608,6 +661,7 @@ void CMario::SetState(int state)
 		break;
 
 	case MARIO_STATE_ATTACK:
+		if (level != 3) return;
 		count_start = GetTickCount64();
 		createTailObject();
 		ax = 0.0f;
@@ -688,7 +742,7 @@ void CMario::checkFlyStak() {
 		else
 		{
 			if (GetTickCount64() - readyFly_start > 250) {
-				if (isFlyStak == 0) {
+				if (isFlyStak == -1) {
 					readyFly_start = -1;
 				}
 				else
