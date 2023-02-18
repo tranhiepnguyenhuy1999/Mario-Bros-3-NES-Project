@@ -20,7 +20,6 @@
 #include "AssetIDs.h"
 #include "Collision.h"
 #include "UserBoard.h"
-#include "BreakBrick.h"
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
@@ -81,13 +80,6 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithFire(e);
 	else if (dynamic_cast<CLeaf*>(e->obj))
 		OnCollisionWithLeaf(e);
-	else if (dynamic_cast<CBreakBrick*>(e->obj))
-		OnCollisionWithBreakBrick(e);
-}
-void CMario::OnCollisionWithBreakBrick(LPCOLLISIONEVENT e)
-{
-	CBreakBrick* brick = dynamic_cast<CBreakBrick*>(e->obj);
-	brick->SetState(QUESTIONBRICK_STATE_STATIC);
 }
 void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 {
@@ -682,11 +674,11 @@ void CMario::SetLevel(int l)
 void CMario::createTailObject() {
 
 	if (nx < 0) {
-		CGame::GetInstance()->GetCurrentScene()->createNewObject(OBJECT_TYPE_TAIL, x - MARIO_BIG_BBOX_WIDTH / 2 - TAIL_BBOX_WIDTH / 2, y+ MARIO_BIG_BBOX_HEIGHT/2 - TAIL_BBOX_HEIGHT, -1);
+		CGame::GetInstance()->GetCurrentScene()->createNewObject(OBJECT_TYPE_TAIL, x - TAIL_BBOX_WIDTH / 2, y+ MARIO_BIG_BBOX_HEIGHT/2 - TAIL_BBOX_HEIGHT, -1);
 	}
 	else
 	{
-		CGame::GetInstance()->GetCurrentScene()->createNewObject(OBJECT_TYPE_TAIL, x + MARIO_BIG_BBOX_WIDTH / 2 + TAIL_BBOX_WIDTH / 2, y + MARIO_BIG_BBOX_HEIGHT / 2 - TAIL_BBOX_HEIGHT,1);
+		CGame::GetInstance()->GetCurrentScene()->createNewObject(OBJECT_TYPE_TAIL, x + TAIL_BBOX_WIDTH / 2, y + MARIO_BIG_BBOX_HEIGHT / 2 - TAIL_BBOX_HEIGHT,1);
 
 	}
 }

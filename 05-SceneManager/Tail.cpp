@@ -25,8 +25,6 @@ void CTail::OnNoCollision(DWORD dt)
 
 void CTail::OnCollisionWith(LPCOLLISIONEVENT e)
 {
-	DebugOut(L"Tail touched!!!");
-
 	if (e->ny != 0)
 	{
 		vy = 0;
@@ -67,7 +65,7 @@ void CTail::OnCollisionWithKoopaTroopa(LPCOLLISIONEVENT e)
 }
 void CTail::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	if ((state != TAIL_STATE_DIE) && (GetTickCount64() - count_start >300))
+	if ((state != TAIL_STATE_DIE) && (GetTickCount64() - count_start >250))
 	{
 		count_start = -1;
 		isDeleted = true;
