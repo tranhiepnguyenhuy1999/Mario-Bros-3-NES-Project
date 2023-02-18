@@ -1,10 +1,9 @@
 #include "BreakBrick.h"
-
+#include "AssetIDs.h"
 void CBreakBrick::Render()
 {
 	CAnimations* animations = CAnimations::GetInstance();
-	float aniID = ID_ANI_TOUCHED_QUESTION_BRICK;
-	if (this->state == QUESTIONBRICK_STATE_UNTOUCHED) aniID = ID_ANI_UNTOUCHED_QUESTION_BRICK;
+	int aniID = ID_ANI_UNTOUCHED_QUESTION_BRICK;
 	animations->Get(aniID)->Render(x, y);
 
 	//RenderBoundingBox();
@@ -28,9 +27,11 @@ void CBreakBrick::OnCollisionWith(LPCOLLISIONEVENT e)
 }
 void CBreakBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	if (state == QUESTIONBRICK_STATE_TOUCHED_1 && (GetTickCount64() - count_start > 150))
+	if (state == QUESTIONBRICK_STATE_STATIC)
 	{
-		SetState(QUESTIONBRICK_STATE_STATIC);
+		createRockObject();
+		isDeleted = true;
+		return;
 	}
 	CGameObject::Update(dt, coObjects);
 	CCollision::GetInstance()->Process(this, dt, coObjects);
@@ -50,4 +51,8 @@ void CBreakBrick::SetState(int state)
 		y = yLimit + 2;
 		break;
 	}
+}
+void CBreakBrick::createRockObject() {
+		CGame::GetInstance()->GetCurrentScene()->createNewObject(OBJECT_TYPE_ROCK, x, y, -1);
+		CGame::GetInstance()->GetCurrentScene()->createNewObject(OBJECT_TYPE_ROCK, x, y, 1);
 }

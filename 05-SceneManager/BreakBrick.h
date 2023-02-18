@@ -7,7 +7,7 @@
 #define QUESTIONBRICK_MOVING_SPEED 0.05f
 
 #define ID_ANI_UNTOUCHED_QUESTION_BRICK 10024
-#define ID_ANI_TOUCHED_QUESTION_BRICK 10003
+#define ID_ANI_TOUCHED_QUESTION_BRICK 10006	
 
 #define BRICK_WIDTH 16
 #define BRICK_BBOX_WIDTH 16
@@ -39,6 +39,7 @@ public:
 	void GetBoundingBox(float& l, float& t, float& r, float& b);
 	virtual void SetState(int state);
 	float getType() { return this->type; };
+	void createRockObject();
 	//virtual int IsCollidable() { return 1; };
 	//virtual int IsBlocking() { return 0; }
 };
