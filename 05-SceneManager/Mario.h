@@ -144,9 +144,9 @@ class CMario : public CGameObject
 	float ax;				// acceleration on x 
 	float ay;				// acceleration on y 
 
-	int level; 
+	int level;
 	int untouchable;
-	
+
 
 	ULONGLONG untouchable_start;
 	BOOLEAN isOnPlatform;
@@ -180,7 +180,7 @@ public:
 		isSitting = false;
 		maxVx = 0.0f;
 		ax = 0.0f;
-		ay = MARIO_GRAVITY; 
+		ay = MARIO_GRAVITY;
 		level = MARIO_LEVEL_BIG;
 		untouchable = 0;
 		untouchable_start = -1;
@@ -190,31 +190,31 @@ public:
 		isFlyStak = -1;
 		coin = 0;
 		point = 0;
-		life =1;
+		life = 1;
 
 	}
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void Render();
 	void SetState(int state);
-	void getLevel(int& level) { level=this->level; }
+	void getLevel(int& level) { level = this->level; }
 	int IsCollidable()
-	{ 
-		return (state != MARIO_STATE_DIE); 
+	{
+		return (state != MARIO_STATE_DIE);
 	}
-	void GetProps(int &coinP, int &pointP, int &lifeP, int &isFlyStakP) {
+	void GetProps(int& coinP, int& pointP, int& lifeP, int& isFlyStakP) {
 		coinP = coin;
 		pointP = point;
 		lifeP = life;
 		isFlyStakP = isFlyStak;
 	}
-	int IsBlocking() { return (state != MARIO_STATE_DIE && untouchable==0); }
+	int IsBlocking() { return (state != MARIO_STATE_DIE && untouchable == 0); }
 
 	void OnNoCollision(DWORD dt);
 	void OnCollisionWith(LPCOLLISIONEVENT e);
 
 	void SetLevel(int l);
 	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount64(); };
-	bool isFlying() { return isFlyStak==5; };
+	bool isFlying() { return isFlyStak == 5; };
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	void checkFlyStak();
 	void createTailObject();

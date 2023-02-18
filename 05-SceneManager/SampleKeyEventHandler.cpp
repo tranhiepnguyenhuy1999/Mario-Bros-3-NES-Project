@@ -4,6 +4,7 @@
 #include "Game.h"
 
 #include "Mario.h"
+#include "Mario2.h"
 #include "PlayScene.h"
 
 void CSampleKeyHandler::OnKeyDown(int KeyCode)
@@ -15,6 +16,9 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 
 	switch (KeyCode)
 	{
+	case DIK_L:
+		CGame::GetInstance()->InitiateSwitchScene(5);
+		break;
 	case DIK_DOWN:
 		mario->SetState(MARIO_STATE_SIT);
 		break;
@@ -78,8 +82,6 @@ void CSampleKeyHandler::KeyState(BYTE *states)
 {
 	LPGAME game = CGame::GetInstance();
 	CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
-	ULONGLONG count_start;
-
 	if (game->IsKeyDown(DIK_RIGHT))
 	{
 		if (game->IsKeyDown(DIK_A))
@@ -96,6 +98,13 @@ void CSampleKeyHandler::KeyState(BYTE *states)
 		else
 			mario->SetState(MARIO_STATE_WALKING_LEFT);
 	}
-	else
-		mario->SetState(MARIO_STATE_IDLE);
+	else if (game->IsKeyDown(DIK_UP))
+	{
+		mario->SetState(MARIO_STATE_WALKING_UP);
+	}
+	else if (game->IsKeyDown(DIK_DOWN)) {
+		mario->SetState(MARIO_STATE_WALKING_DOWN);
+	}
+	else mario->SetState(MARIO_STATE_IDLE);
+
 }

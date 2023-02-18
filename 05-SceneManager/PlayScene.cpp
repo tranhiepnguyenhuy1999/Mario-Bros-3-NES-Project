@@ -23,6 +23,7 @@
 #include "Tail.h"
 #include "BreakBrick.h"
 #include "Rock.h"
+#include "Mario2.h"
 
 #include "SampleKeyEventHandler.h"
 
@@ -128,6 +129,17 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		}
 		obj = new CMario(x,y); 
 		player = (CMario*)obj;  
+
+		DebugOut(L"[INFO] Player object has been created!\n");
+		break;
+	case OBJECT_TYPE_MARIO2:
+		if (player != NULL)
+		{
+			DebugOut(L"[ERROR] MARIO2 object was created before!\n");
+			return;
+		}
+		obj = new CMario2(x, y);
+		player = (CMario2*)obj;
 
 		DebugOut(L"[INFO] Player object has been created!\n");
 		break;

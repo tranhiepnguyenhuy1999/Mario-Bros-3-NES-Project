@@ -28,3 +28,4 @@ height	240
 110 	textures\main-enemies-flip.png
 120 	textures\25687.png
 130 	textures\25687-flip.png
+140	textures\world_map.png
