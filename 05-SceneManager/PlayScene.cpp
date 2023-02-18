@@ -21,6 +21,7 @@
 #include "FallObject.h"
 #include "Leaf.h"
 #include "Tail.h"
+#include "BreakBrick.h"
 
 #include "SampleKeyEventHandler.h"
 
@@ -135,6 +136,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_PARAKOOPATROOPA: obj = new CParaKoopaTroopa(x, y); break;
 	case OBJECT_TYPE_MAP: obj = new CMap(x, y); break;
 	case OBJECT_TYPE_BRICK: obj = new CBrick(x,y); break;
+	case OBJECT_TYPE_BREAKBRICK: obj = new CBreakBrick(x, y); break;
 	case OBJECT_TYPE_QUESTIONBRICK:
 	{
 		float type = (float)atof(tokens[3].c_str());
