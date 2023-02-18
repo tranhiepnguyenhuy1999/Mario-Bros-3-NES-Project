@@ -382,6 +382,7 @@ void CPlayScene::Update(DWORD dt)
 	if (cy < 0) cy = 0;
 
 	if (cy + game->GetBackBufferHeight() > 464) cy = 464 - game->GetBackBufferHeight();
+	if (cx + game->GetBackBufferWidth() > 2800) cx = 2800 - game->GetBackBufferWidth();
 
 	//CGame::GetInstance()->SetCamPos(cx, 250);
 
