@@ -13,14 +13,25 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 	CMario* mario = (CMario *)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer(); 
 	int level;
 	mario->getLevel(level);
-
+	float x, y;
 	switch (KeyCode)
 	{
 	case DIK_L:
 		CGame::GetInstance()->InitiateSwitchScene(5);
 		break;
 	case DIK_DOWN:
+
+		mario->GetPosition(x, y);
+		if (x >=2256 && x <= 2288) {
+			mario->SetPosition(2114, 544);
+		}
 		mario->SetState(MARIO_STATE_SIT);
+		break;
+	case DIK_UP:
+		mario->GetPosition(x, y);
+		if (x >= 2320 && x <= 2352) {
+			mario->SetPosition(2328, 336);
+		}
 		break;
 	case DIK_A:
 		mario->SetState(MARIO_STATE_ATTACK);
@@ -98,13 +109,13 @@ void CSampleKeyHandler::KeyState(BYTE *states)
 		else
 			mario->SetState(MARIO_STATE_WALKING_LEFT);
 	}
-	else if (game->IsKeyDown(DIK_UP))
-	{
-		mario->SetState(MARIO_STATE_WALKING_UP);
-	}
-	else if (game->IsKeyDown(DIK_DOWN)) {
-		mario->SetState(MARIO_STATE_WALKING_DOWN);
-	}
+	//else if (game->IsKeyDown(DIK_UP))
+	//{
+	//	mario->SetState(MARIO_STATE_WALKING_UP);
+	//}
+	//else if (game->IsKeyDown(DIK_DOWN)) {
+	//	mario->SetState(MARIO_STATE_WALKING_DOWN);
+	//}
 	else mario->SetState(MARIO_STATE_IDLE);
 
 }

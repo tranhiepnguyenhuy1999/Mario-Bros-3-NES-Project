@@ -24,6 +24,7 @@
 #include "BreakBrick.h"
 #include "Rock.h"
 #include "Mario2.h"
+#include "HiddenBrick.h"
 
 #include "SampleKeyEventHandler.h"
 
@@ -225,6 +226,7 @@ void CPlayScene::createNewObject(int id, float x, float y, float nx=0, float ny=
 	case OBJECT_TYPE_GOOMBA: obj = new CGoomba(x, y); break;
 	case OBJECT_TYPE_BRICK: obj = new CBrick(x, y); break;
 	case OBJECT_TYPE_QUESTIONBRICK: obj = new CQuestionBrick(x, y); break;
+	case OBJECT_TYPE_HIDDENBRICK: obj = new CHiddenBrick(x, y); break;
 	case OBJECT_TYPE_CLOUDBRICK: obj = new CCloudBrick(x, y); break;
 	case OBJECT_TYPE_MUSHROOM: obj = new CMushroom(x, y, nx); break;
 	case OBJECT_TYPE_LEAF: obj = new CLeaf(x, y); break;
@@ -397,7 +399,7 @@ void CPlayScene::Update(DWORD dt)
 	if (cx < 0) cx = 0;
 	if (cy < 0) cy = 0;
 
-	if (cy + game->GetBackBufferHeight() > 464) cy = 464 - game->GetBackBufferHeight();
+	//if (cy + game->GetBackBufferHeight() > 464) cy = 464 - game->GetBackBufferHeight();
 	if (cx + game->GetBackBufferWidth() > 2800) cx = 2800 - game->GetBackBufferWidth();
 
 	//CGame::GetInstance()->SetCamPos(cx, 250);
