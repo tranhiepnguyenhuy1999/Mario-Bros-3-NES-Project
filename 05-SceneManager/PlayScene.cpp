@@ -377,13 +377,17 @@ void CPlayScene::Update(DWORD dt)
 	CGame *game = CGame::GetInstance();
 	cx -= game->GetBackBufferWidth() / 2;
 	cy -= game->GetBackBufferHeight() / 2;
-	
+
 	if (cx < 0) cx = 0;
 	if (cy < 0) cy = 0;
-	//CGame::GetInstance()->SetCamPos(cx, 0.0f);
-	
+
+	if (cy + game->GetBackBufferHeight() > 464) cy = 464 - game->GetBackBufferHeight();
+
 	//CGame::GetInstance()->SetCamPos(cx, 250);
-		CGame::GetInstance()->SetCamPos(cx, cy);
+
+	CGame::GetInstance()->SetCamPos(cx, cy);
+	CUserBoard::GetInstance()->SetPosition(200, 432);
+
 	PurgeDeletedObjects();
 }
 

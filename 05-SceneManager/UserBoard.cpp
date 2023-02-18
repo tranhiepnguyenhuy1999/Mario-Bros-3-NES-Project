@@ -55,7 +55,11 @@ void CUserBoard::Render()
 	else
 		animations->Get(ID_ANI_NUMBER_BLACK_P)->Render(x - 78 + 53 + 6 + 6 * 8 + 2, y - 18 + 8 + 6);
 }	
+void CUserBoard::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
+{
 
+	CGameObject::Update(dt, coObjects);
+}
 void CUserBoard::GetBoundingBox(float& l, float& t, float& r, float& b)
 {
 }
