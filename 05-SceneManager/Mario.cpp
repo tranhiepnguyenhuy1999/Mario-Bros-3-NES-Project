@@ -360,9 +360,6 @@ void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)
 	CGame::GetInstance()->InitiateSwitchScene(p->GetSceneId());
 }
 
-//
-// Get animation ID for small Mario
-//
 int CMario::GetAniIdSmall()
 {
 	int aniId = -1;
@@ -420,9 +417,6 @@ int CMario::GetAniIdSmall()
 
 	return aniId;
 }
-//
-// Get animdation ID for big Mario
-//
 int CMario::GetAniIdBig()
 {
 	int aniId = -1;
@@ -541,6 +535,7 @@ int CMario::GetAniIdRacoon()
 
 	return aniId;
 }
+
 void CMario::Render()
 {
 	CAnimations* animations = CAnimations::GetInstance();
@@ -568,6 +563,7 @@ void CMario::Render()
 	
 	DebugOutTitle(L"Coins: %d", coin);
 }
+
 void CMario::SetState(int state)
 {
 	if ((this->state == MARIO_STATE_RACOON_TRANSFORM) && (GetTickCount64() - count_start < 500)) return;
@@ -622,7 +618,6 @@ void CMario::SetState(int state)
 		break;
 	case MARIO_STATE_JUMP:
 		if (isSitting) break;
-
 		if (isOnPlatform)
 		{
 			if (abs(this->vx) == MARIO_RUNNING_SPEED)
