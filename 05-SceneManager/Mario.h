@@ -181,7 +181,7 @@ public:
 		maxVx = 0.0f;
 		ax = 0.0f;
 		ay = MARIO_GRAVITY;
-		level = MARIO_LEVEL_BIG;
+		level = MARIO_LEVEL_SMALL;
 		untouchable = 0;
 		untouchable_start = -1;
 		count_start = -1;

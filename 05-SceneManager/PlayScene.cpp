@@ -217,7 +217,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 	objects.push_back(obj);
 }
-void CPlayScene::createNewObject(int id, float x, float y, float nx=0, float ny=0, LPGAMEOBJECT objSrc)
+void CPlayScene::createNewObject(int id, float x, float y, float nx=0, float ny=0, LPGAMEOBJECT objSrc) // nx, ny : can be direction and int v at the same time
 {
 	CGameObject* obj = NULL;
 	float px, py;

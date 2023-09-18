@@ -1,13 +1,16 @@
 #include "QuestionBrick.h"
 
+CQuestionBrick::CQuestionBrick(float x, float y, float type) : CGameObject(x, y) {
+
+	this->type = type;
+	range = y - QUESTIONBRICK_MOVING_BOUNCE_RANGE;
+	SetState(QUESTIONBRICK_STATE_UNACTIVE);
+}
 void CQuestionBrick::Render()
 {
 	CAnimations* animations = CAnimations::GetInstance();
-	float aniID = ID_ANI_TOUCHED_QUESTION_BRICK;
-	if (this->state == QUESTIONBRICK_STATE_UNTOUCHED) aniID = ID_ANI_UNTOUCHED_QUESTION_BRICK;
-		animations->Get(aniID)->Render(x, y);
-
-	//RenderBoundingBox();
+	float aniID = ID_ANI_UNACTIVE_QUESTION_BRICK;
+	if (this->state != QUESTIONBRICK_STATE_UNACTIVE) aniID = ID_ANI_ACTIVE_QUESTION_BRICK; animations->Get(aniID)->Render(x, y);
 }
 
 void CQuestionBrick::GetBoundingBox(float& l, float& t, float& r, float& b)
@@ -19,12 +22,22 @@ void CQuestionBrick::GetBoundingBox(float& l, float& t, float& r, float& b)
 }
 void CQuestionBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	if (state== QUESTIONBRICK_STATE_TOUCHED_1 && (GetTickCount64() - count_start > 150))
+	vy += ay * dt;
+	y += vy * dt;
+	if (state== QUESTIONBRICK_STATE_TOUCHED)
 	{
-		SetState(QUESTIONBRICK_STATE_STATIC);
+		if (y < range) {
+			y = range; 
+			ay = -ay;
+			vy = 0;
+		}
+		else if(y > range + QUESTIONBRICK_MOVING_BOUNCE_RANGE)
+		{
+			y = range + QUESTIONBRICK_MOVING_BOUNCE_RANGE;
+			SetState(QUESTIONBRICK_STATE_ACTIVE);
+		}
 	}
 	CGameObject::Update(dt, coObjects);
-	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
 void CQuestionBrick::SetState(int state)
 {
@@ -32,13 +45,16 @@ void CQuestionBrick::SetState(int state)
 
 	switch (state)
 	{
-	case  QUESTIONBRICK_STATE_TOUCHED_1:
-		count_start = GetTickCount64();
-		y = yLimit;
+	case  QUESTIONBRICK_STATE_UNACTIVE:
+		ay = 0;
+		vy = 0;
 		break;
-	case  QUESTIONBRICK_STATE_UNTOUCHED:
-	case  QUESTIONBRICK_STATE_STATIC:
-		y = yLimit + 2;
+	case  QUESTIONBRICK_STATE_TOUCHED:
+		ay = -QUESTIONBRICK_MOVING_BOUNCE;
+		break;
+	case  QUESTIONBRICK_STATE_ACTIVE:
+		ay = 0;
+		vy = 0;
 		break;
 	}
 }

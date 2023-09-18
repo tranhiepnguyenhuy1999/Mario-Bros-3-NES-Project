@@ -283,16 +283,16 @@ void CMario::OnCollisionWithParaKoopaTroopa(LPCOLLISIONEVENT e)
 }
 void CMario::OnCollisionWithQuestionBrick(LPCOLLISIONEVENT e)
 {
-	CQuestionBrick* questionBrick = dynamic_cast<CQuestionBrick*>(e->obj);
+	CQuestionBrick* obj = dynamic_cast<CQuestionBrick*>(e->obj);
+
+	if (obj->GetState() != QUESTIONBRICK_STATE_UNACTIVE) return;
 
 	if (e->ny > 0)
 	{
-		if (questionBrick->GetState() == QUESTIONBRICK_STATE_UNTOUCHED)
-		{
 			float qx, qy, qvx;
-			questionBrick->GetPosition(qx, qy);
+			obj->GetPosition(qx, qy);
 			
-			if (questionBrick->getType() == 1)
+			if (obj->getType() == 1)
 			{
 				CGame::GetInstance()->GetCurrentScene()->createNewObject(OBJECT_TYPE_SMALLCOIN, qx, qy-16);
 				coin++;
@@ -320,8 +320,7 @@ void CMario::OnCollisionWithQuestionBrick(LPCOLLISIONEVENT e)
 				}
 			}
 
-			questionBrick->SetState(QUESTIONBRICK_STATE_TOUCHED_1);
-		}
+			obj->SetState(QUESTIONBRICK_STATE_TOUCHED);
 	}
 
 }

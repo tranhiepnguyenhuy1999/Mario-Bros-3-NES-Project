@@ -78,13 +78,14 @@ void CParaKoopaTroopa::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 }
 void CParaKoopaTroopa::OnCollisionWithQuestionBrick(LPCOLLISIONEVENT e)
 {
-	CQuestionBrick* questionBrick = dynamic_cast<CQuestionBrick*>(e->obj);
-	if (questionBrick->GetState() == QUESTIONBRICK_STATE_UNTOUCHED)
+	CQuestionBrick* obj = dynamic_cast<CQuestionBrick*>(e->obj);
+
+	if (obj->GetState() == QUESTIONBRICK_STATE_UNACTIVE)
 	{
 		float qx, qy, qvx;
-		questionBrick->GetPosition(qx, qy);
+		obj->GetPosition(qx, qy);
 
-		if (questionBrick->getType() == 1)
+		if (obj->getType() == 1)
 		{
 			CGame::GetInstance()->GetCurrentScene()->createNewObject(OBJECT_TYPE_SMALLCOIN, qx, qy - 16);
 		}
@@ -100,7 +101,7 @@ void CParaKoopaTroopa::OnCollisionWithQuestionBrick(LPCOLLISIONEVENT e)
 			}
 			CGame::GetInstance()->GetCurrentScene()->createNewObject(OBJECT_TYPE_MUSHROOM, qx, qy, qvx);
 		}
-		questionBrick->SetState(QUESTIONBRICK_STATE_TOUCHED_1);
+		obj->SetState(QUESTIONBRICK_STATE_TOUCHED);
 	}
 
 }
