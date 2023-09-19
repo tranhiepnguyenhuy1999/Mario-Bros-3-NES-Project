@@ -150,7 +150,7 @@ void CGreenFlower1::SetState(int state)
 		else if (y==bot) ay = -FLOWER_Y_AXIS;
 		break;
 	}
-}
+}	
 int CGreenFlower1::getPlayerPosition() {
 	float px, py;
 	CGame::GetInstance()->GetCurrentScene()->getPlayerPosition(px, py);
