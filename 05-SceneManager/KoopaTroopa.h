@@ -3,15 +3,15 @@
 #include "FallObject.h"
 #include "AssetIDs.h"
 
-#define KOOPATROOPA_GRAVITY 0.002f
-#define KOOPATROOPA_WALKING_SPEED 0.03f
+#define KOOPATROOPA_GRAVITY 0.0005f
+#define KOOPATROOPA_WALKING_SPEED 0.035f
 #define KOOPATROOPA_KICKING_SPEED 0.2f
 
 #define KOOPATROOPA_MAX_Y 50
 
 #define KOOPATROOPA_BBOX_WIDTH 15
 #define KOOPATROOPA_BBOX_HEIGHT 26
-#define KOOPATROOPA_BBOX_HEIGHT_DIE 16
+#define KOOPATROOPA_BBOX_HEIGHT_SHELL 16
 
 #define KOOPATROOPA_DIE_TIMEOUT 3000
 #define KOOPATROOPA_ALIVE_TIMEOUT 2000
@@ -22,7 +22,7 @@
 #define KOOPATROOPA_STATE_ALIVE 300
 #define KOOPATROOPA_STATE_KICKING_LEFT 400
 #define KOOPATROOPA_STATE_KICKING_RIGHT 500
-#define KOOPATROOPA_STATE_TURNBACK 600
+#define KOOPATROOPA_STATE_TURN 600
 
 #define ID_ANI_KOOPATROOPA_WALKING_LEFT 7000
 #define ID_ANI_KOOPATROOPA_WALKING_RIGHT 7004
@@ -33,14 +33,31 @@
 class CKoopaTroopa : public CGameObject
 {
 protected:
-	float ax;
 	float ay;
 	float type;
-	bool isActive;
+
+	boolean isDie;
 
 	ULONGLONG count_start;
 	ULONGLONG ready_jump_start;
-	LPGAMEOBJECT fallObj;
+
+	CFallObject* fall_object;
+
+	void createFallObject() {
+
+		if (vx < 0) {
+			CGame::GetInstance()->GetCurrentScene()->createNewObject(OBJECT_TYPE_FALLOBJECT, x - KOOPATROOPA_BBOX_WIDTH / 2 - FALLOBJECT_BBOX_WIDTH / 2, y + (KOOPATROOPA_BBOX_HEIGHT - FALLOBJECT_BBOX_HEIGHT) / 2, 0, 0, this);
+		}
+		else
+		{
+			CGame::GetInstance()->GetCurrentScene()->createNewObject(OBJECT_TYPE_FALLOBJECT, x + KOOPATROOPA_BBOX_WIDTH / 2 + FALLOBJECT_BBOX_WIDTH / 2, y + (KOOPATROOPA_BBOX_HEIGHT - FALLOBJECT_BBOX_HEIGHT) / 2, 0, 0, this);
+
+		}
+	}
+
+public:
+	CKoopaTroopa(float x, float y);
+
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	virtual void Render();
@@ -53,20 +70,19 @@ protected:
 	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
 	void OnCollisionWithDownBrick(LPCOLLISIONEVENT e);
 
-	void createFallObject() {
-		if (vx < 0) {
-			CGame::GetInstance()->GetCurrentScene()->createNewObject(OBJECT_TYPE_FALLOBJECT, x - KOOPATROOPA_BBOX_WIDTH / 2 - FALLOBJECT_BBOX_WIDTH / 2, y, 0, 0, this);
-		}
-		else
-		{
-			CGame::GetInstance()->GetCurrentScene()->createNewObject(OBJECT_TYPE_FALLOBJECT, x + KOOPATROOPA_BBOX_WIDTH / 2 + FALLOBJECT_BBOX_WIDTH / 2, y, 0, 0, this);
-
-		}
-	}
-public:
-	CKoopaTroopa(float x, float y);
 	virtual void SetState(int state);
-	void addFallObject(LPGAMEOBJECT obj) {
-		fallObj = obj;
+
+	void addFallObject(CGameObject* obj) {
+		if (!dynamic_cast<CFallObject*>(obj)) return;
+		else if (!fall_object)
+		{
+			CFallObject* f_obj = dynamic_cast<CFallObject*>(obj);
+			fall_object = f_obj;
+		}
 	}
+	void removeFalObj() {
+		if (fall_object) fall_object->Delete();
+		fall_object = NULL;
+	};
+
 };

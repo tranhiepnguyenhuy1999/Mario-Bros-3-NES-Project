@@ -217,7 +217,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 	objects.push_back(obj);
 }
-void CPlayScene::createNewObject(int id, float x, float y, float nx=0, float ny=0, LPGAMEOBJECT objSrc) // nx, ny : can be direction and int v at the same time
+void CPlayScene::createNewObject(int id, float x, float y, float nx=0, float ny=0, LPGAMEOBJECT obj_src) // nx, ny : can be direction and int v at the same time
 {
 	CGameObject* obj = NULL;
 	float px, py;
@@ -232,7 +232,18 @@ void CPlayScene::createNewObject(int id, float x, float y, float nx=0, float ny=
 	case OBJECT_TYPE_LEAF: obj = new CLeaf(x, y); break;
 	case OBJECT_TYPE_TAIL: obj = new CTail(x, y, nx); break;
 	case OBJECT_TYPE_ROCK: obj = new CRock(x, y, nx); break;
-	case OBJECT_TYPE_FALLOBJECT: obj = new CFallObject(x, y, objSrc); break;
+	case OBJECT_TYPE_FALLOBJECT:	
+	{
+		float src_vx, src_vy;
+		obj_src->GetSpeed(src_vx, src_vy);
+		obj = new CFallObject(x, y, src_vx);
+		if (dynamic_cast<CKoopaTroopa*>(obj_src))
+		{
+			CKoopaTroopa* src = dynamic_cast<CKoopaTroopa*>(obj_src);
+			src->addFallObject(obj);
+		}
+		break;
+	}
 	case OBJECT_TYPE_SMALLCOIN: obj = new CSmallCoin(x, y); break;
 	case OBJECT_TYPE_FIRE:
 	{
