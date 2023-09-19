@@ -60,7 +60,7 @@ void CGreenFlower1::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				is_after_shooting = false;
 				SetState(FLOWER_STATE_MOVE);
 			}
-			else if(GetTickCount64() - loop_start > FLOWER_PRESHOOT_TIMEOUT)
+			else if(!is_after_shooting && GetTickCount64() - loop_start > FLOWER_PRESHOOT_TIMEOUT)
 			{
 				is_after_shooting = true;
 				loop_start = GetTickCount64();
@@ -139,13 +139,104 @@ void CGreenFlower1::SetState(int state)
 		vy = 0;
 		break;
 	case FLOWER_STATE_MOVE:
-		if (y == top) ay = FLOWER_AXIS_Y;
-		else if (y==bot) ay = -FLOWER_AXIS_Y;
+		if (y == top) ay = FLOWER_Y_AXIS;
+		else if (y==bot) ay = -FLOWER_Y_AXIS;
 		break;
 	}
 }
-void CGreenFlower1::shooting() {
+int CGreenFlower1::getPlayerPosition() {
 	float px, py;
 	CGame::GetInstance()->GetCurrentScene()->getPlayerPosition(px, py);
-	CGame::GetInstance()->GetCurrentScene()->createNewObject(OBJECT_TYPE_FIRE, x, y);
+
+	// check position base on y
+	if (px < x) {
+		if (py < y) return 1; //left-top
+		else return 2; //left-bottom
+	}
+	else
+	{
+		if (py < y) return 3; //right-top
+		else return 4; //right-bottom
+	}
+}
+void CGreenFlower1::shooting()
+{
+	float nx = 0, ny = 0;
+	float px, py;
+
+	int flag = getPlayerPosition();
+	CGame::GetInstance()->GetCurrentScene()->getPlayerPosition(px, py);
+	
+	switch (flag)
+	{
+	case 1:
+		nx = -1; ny = -1;
+		break;
+	case 2:
+		nx = -1; ny = 1;
+		break;
+	case 3:
+		nx = 1; ny = -1;
+		break;
+	case 4:
+		nx = 1; ny = 1;
+		break;
+	}
+
+	float percentX = translateToPercent(x, true);
+	float percentY = translateToPercent(y, false);
+	DebugOut(L">>> x: %f >>> \n", percentX);
+	DebugOut(L">>> y: %f >>> \n", percentY);
+	float percent = percentX / percentY;
+	float altShootingXSpeed = 1;
+	float altShootingYSpeed = 1;
+	DebugOut(L">>> percent: %f >>> \n", percent);
+	if (percent >= 4.0f)
+	{
+		altShootingYSpeed = 0.25f;
+	}
+	if (percent >= 2.0f)
+	{
+		altShootingYSpeed = 0.5f;
+	}
+	else if (percent < 1.0f)
+	{
+		altShootingXSpeed = 0.5f;
+	}
+	else if (percent < 0.5f)
+	{
+		altShootingXSpeed = 0.25f;
+	}
+
+	CGame::GetInstance()->GetCurrentScene()->createNewObject(OBJECT_TYPE_FIRE, x, y, nx * altShootingXSpeed, altShootingYSpeed * ny);
+
+	//DebugOut(L">>> percent: %f >>> \n", percent);
+	//DebugOut(L">>> altShootingSpeed: %f >>> \n", altShootingSpeed);
+
+}
+float CGreenFlower1::translateToPercent(float data, boolean isXAxis) {
+	float px, py;
+	float result = 0;
+	CGame::GetInstance()->GetCurrentScene()->getPlayerPosition(px, py);
+
+	if (isXAxis)
+	{
+		result = abs(px - data) / FLOWER_SHOOTING_RANGE;
+	}
+	else
+	{
+		result = abs(py - data) / FLOWER_SHOOTING_RANGE;
+	}
+
+
+	if (result >= 1) return 10.0f;
+	else if (result >= 0.9f) return 9.0f;
+	else if (result >= 0.8f) return 8.0f;
+	else if (result >= 0.7f) return 7.0f;
+	else if (result >= 0.6f) return 6.0f;
+	else if (result >= 0.5f) return 5.0f;
+	else if (result >= 0.4f) return 4.0f;
+	else if (result >= 0.3f) return 3.0f;
+	else if (result >= 0.2f) return 2.0f;
+	else return 1.0f;
 }

@@ -236,15 +236,6 @@ void CPlayScene::createNewObject(int id, float x, float y, float nx=0, float ny=
 	case OBJECT_TYPE_SMALLCOIN: obj = new CSmallCoin(x, y); break;
 	case OBJECT_TYPE_FIRE:
 	{
-		player->GetPosition(px, py);
-		if (px >= x) {
-			nx = 1;
-		}
-		else nx = -1;
-		if (py >= y) {
-			ny = 1;
-		}
-		else ny = -1;
 		obj = new CFire(x, y, nx, ny); break;
 	}
 	case OBJECT_TYPE_COIN: obj = new CCoin(x, y); break;

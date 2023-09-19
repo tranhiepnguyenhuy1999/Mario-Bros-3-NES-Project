@@ -1,10 +1,12 @@
 #pragma once
 #include "GameObject.h"
 
-#define FLOWER_AXIS_Y 0.0001f
+#define FLOWER_Y_AXIS 0.0001f
 
 #define FLOWER_BBOX_WIDTH 16
 #define FLOWER_BBOX_HEIGHT 32
+
+#define FLOWER_SHOOTING_RANGE 100.0f
 
 #define FLOWER_PRESHOOT_TIMEOUT 1500
 #define FLOWER_AFSHOOT_TIMEOUT 750
@@ -32,14 +34,17 @@ protected:
 	float ay;
 	float top;
 	float bot;
-	bool is_after_shooting;
+	boolean is_after_shooting;
 	float ani_pow_id;
 
 	ULONGLONG loop_start;
 
-	int getFlowerPosition();
 	int getMovingFlowerAniId(int flag);
 	int getStaticFlowerAniId(int flag);
+
+	int getFlowerPosition();
+	int getPlayerPosition();
+	float translateToPercent(float data, boolean isXAxis);
 	void shooting();
 
 public:

@@ -4,8 +4,7 @@
 #include "Animation.h"
 #include "Animations.h"
 
-#define FIRE_GRAVITY 0.05f
-#define FIRE_MOVING_SPEED 0.05f
+#define FIRE_SPEED 0.05f
 
 #define ID_ANI_FIRE 12009
 #define FIRE_WIDTH 8

@@ -2,8 +2,8 @@
 
 CFire::CFire(float x, float y, float nx, float ny ) :CGameObject(x, y)
 {
-	vx = nx*FIRE_MOVING_SPEED;
-	vy = ny * FIRE_GRAVITY;
+	vx = nx * FIRE_SPEED;
+	vy = ny * FIRE_SPEED;
 	SetState(FIRE_STATE_RELASE);
 }
 void CFire::Render()
