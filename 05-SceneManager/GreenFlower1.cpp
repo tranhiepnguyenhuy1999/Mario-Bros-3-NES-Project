@@ -9,6 +9,7 @@ CGreenFlower1::CGreenFlower1(float x, float y) :CGameObject(x, y)
 	bot = y;
 	loop_start = -1;
 	is_after_shooting = false;
+	isWorking = true;
 
 	SetState(FLOWER_STATE_STATIC);
 }
@@ -40,6 +41,11 @@ void CGreenFlower1::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	x += vx * dt;
 	y += vy * dt;
 
+	if (!isWorking) {
+		if (abs(px - x) > FLOWER_UNWORKING_RANGE) isWorking = true;
+		return;
+	}
+
 	if (y < top)
 	{
 		y = top;
@@ -47,9 +53,8 @@ void CGreenFlower1::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	}
 	else if (y > bot)
 	{
-		y= bot;
+		y = bot;
 		SetState(FLOWER_STATE_STATIC);
-	
 	}
 
 	if (state==FLOWER_STATE_STATIC)
@@ -67,6 +72,8 @@ void CGreenFlower1::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				shooting();
 			}
 		}
+		else if (y==bot && abs(px - x) < FLOWER_UNWORKING_RANGE) isWorking = false;
+
 		else if (y == bot && (GetTickCount64() - loop_start > FLOWER_LOOP_TIMEOUT))
 		{
 			SetState(FLOWER_STATE_MOVE);
@@ -185,12 +192,12 @@ void CGreenFlower1::shooting()
 
 	float percentX = translateToPercent(x, true);
 	float percentY = translateToPercent(y, false);
-	DebugOut(L">>> x: %f >>> \n", percentX);
-	DebugOut(L">>> y: %f >>> \n", percentY);
+	//DebugOut(L">>> x: %f >>> \n", percentX);
+	//DebugOut(L">>> y: %f >>> \n", percentY);
 	float percent = percentX / percentY;
 	float altShootingXSpeed = 1;
 	float altShootingYSpeed = 1;
-	DebugOut(L">>> percent: %f >>> \n", percent);
+	//DebugOut(L">>> percent: %f >>> \n", percent);
 	if (percent >= 4.0f)
 	{
 		altShootingYSpeed = 0.25f;
@@ -209,10 +216,6 @@ void CGreenFlower1::shooting()
 	}
 
 	CGame::GetInstance()->GetCurrentScene()->createNewObject(OBJECT_TYPE_FIRE, x, y, nx * altShootingXSpeed, altShootingYSpeed * ny);
-
-	//DebugOut(L">>> percent: %f >>> \n", percent);
-	//DebugOut(L">>> altShootingSpeed: %f >>> \n", altShootingSpeed);
-
 }
 float CGreenFlower1::translateToPercent(float data, boolean isXAxis) {
 	float px, py;

@@ -7,6 +7,8 @@
 #define FLOWER_BBOX_HEIGHT 32
 
 #define FLOWER_SHOOTING_RANGE 100.0f
+#define FLOWER_UNWORKING_RANGE 50.0f
+
 
 #define FLOWER_PRESHOOT_TIMEOUT 1500
 #define FLOWER_AFSHOOT_TIMEOUT 750
@@ -34,9 +36,9 @@ protected:
 	float ay;
 	float top;
 	float bot;
-	boolean is_after_shooting;
 	float ani_pow_id;
-
+	boolean is_after_shooting;
+	boolean isWorking;
 	ULONGLONG loop_start;
 
 	int getMovingFlowerAniId(int flag);
