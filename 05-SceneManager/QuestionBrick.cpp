@@ -9,7 +9,7 @@ CQuestionBrick::CQuestionBrick(float x, float y, float type) : CGameObject(x, y)
 void CQuestionBrick::Render()
 {
 	CAnimations* animations = CAnimations::GetInstance();
-	float aniID = ID_ANI_UNACTIVE_QUESTION_BRICK;
+	int aniID = ID_ANI_UNACTIVE_QUESTION_BRICK;
 	if (this->state != QUESTIONBRICK_STATE_UNACTIVE) aniID = ID_ANI_ACTIVE_QUESTION_BRICK; animations->Get(aniID)->Render(x, y);
 }
 

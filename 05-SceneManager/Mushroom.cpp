@@ -1,19 +1,15 @@
 #include "Mushroom.h"
 CMushroom::CMushroom(float x, float y, float vx) :CGameObject(x, y)
 {
-	this->ax = 0;
-	this->ay = 0;
-	SetState(MUSHROOM_STATE_RELASE);
-	yLimit = y - 16;
-	xLimit = x;
-	this->rect = vx;
+	range = y - MUSHROOM_BBOX_HEIGHT;
 
+	SetState(MUSHROOM_STATE_RELASE);
 }
 void CMushroom::Render()
 {
 	CAnimations* animations = CAnimations::GetInstance();
 	animations->Get(ID_ANI_UNTOUCHED_MUSHROOM)->Render(x, y);
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 void CMushroom::OnNoCollision(DWORD dt)
 {
@@ -37,19 +33,20 @@ void CMushroom::OnCollisionWith(LPCOLLISIONEVENT e)
 
 void CMushroom::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	if ((state == MUSHROOM_STATE_DIE))
+	vy += ay * dt;
+
+	if (state == MUSHROOM_STATE_DIE)
 	{
 		isDeleted = true;
 		return;
 	}
 
-	vy += ay * dt;
-	vx += ax * dt;
-
-	if (y < yLimit ) {
-		y = yLimit;
+	if (state == MUSHROOM_STATE_RELASE && y < range ) {
+		y = range;
 		SetState(MUSHROOM_STATE_MOVING);
+		return;
 	}
+
 	CGameObject::Update(dt, coObjects);
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
@@ -67,16 +64,14 @@ void CMushroom::SetState(int state)
 	switch (state)
 	{
 	case MUSHROOM_STATE_RELASE:
-		vy = -MUSHROOM_WALKING_SPEED;
+		ay = 0;
+		vx = 0;
+		vy = -MUSHROOM_SPEED;
 		break;
 	case MUSHROOM_STATE_MOVING:
-		vx = -MUSHROOM_WALKING_SPEED;
 		ay = MUSHROOM_GRAVITY;
+		vy = 0;
+		vx = -MUSHROOM_SPEED;
 		break;
-	case MUSHROOM_STATE_FALL:
-		vx = -MUSHROOM_WALKING_SPEED;
-		ay = MUSHROOM_GRAVITY;
-		break;
-
-}
+	}
 }
