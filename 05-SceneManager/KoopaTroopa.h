@@ -88,4 +88,7 @@ public:
 		nx = p_nx;
 		SetState(KOOPATROOPA_STATE_SHELL_MOVING);
 	}
+	void getJumpedDown(){
+		SetState(KOOPATROOPA_STATE_SHELL);
+	}
 };

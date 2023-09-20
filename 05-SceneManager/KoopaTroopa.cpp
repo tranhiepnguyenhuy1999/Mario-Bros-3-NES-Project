@@ -171,8 +171,11 @@ void CKoopaTroopa::SetState(int state)
 		break;
 	case KOOPATROOPA_STATE_SHELL:
 		removeFalObj();
-		y += (KOOPATROOPA_BBOX_HEIGHT - KOOPATROOPA_BBOX_HEIGHT_SHELL) / 2;
-		isDie = true;
+		if (!isDie)
+		{
+			y += (KOOPATROOPA_BBOX_HEIGHT - KOOPATROOPA_BBOX_HEIGHT_SHELL) / 2;
+			isDie = true;
+		}
 		count_start = GetTickCount64();
 		vx = 0;
 		break;

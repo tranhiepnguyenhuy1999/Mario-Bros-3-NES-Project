@@ -200,11 +200,8 @@ void CMario::OnCollisionWithKoopaTroopa(LPCOLLISIONEVENT e)
 	}
 	else if (e->ny < 0)
 	{
-		if (obj->GetState() != KOOPATROOPA_STATE_SHELL)
-		{
-			obj->SetState(KOOPATROOPA_STATE_SHELL);
-			vy = -MARIO_JUMP_DEFLECT_SPEED;
-		}
+		obj->getJumpedDown();
+		vy = -MARIO_JUMP_DEFLECT_SPEED;
 	}
 	//else
 	//{
