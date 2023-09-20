@@ -3,11 +3,13 @@
 #include "FallObject.h"
 #include "AssetIDs.h"
 
-#define KOOPATROOPA_GRAVITY 0.0005f
+#define KOOPATROOPA_GRAVITY 0.00035f
 #define KOOPATROOPA_SPEED 0.035f
 #define KOOPATROOPA_SHELL_SPEED 0.2f
 
 #define KOOPATROOPA_MAX_Y 50
+
+#define PARA_KOOPATROOPA_JUMP_DEFLECT_SPEED 0.15f
 
 #define KOOPATROOPA_BBOX_WIDTH 15
 #define KOOPATROOPA_BBOX_HEIGHT 26
@@ -22,6 +24,7 @@
 #define KOOPATROOPA_STATE_SHELL 300
 #define KOOPATROOPA_STATE_SHELL_MOVING 400
 #define KOOPATROOPA_STATE_TURN 500
+#define PARA_KOOPATROOPA_STATE_JUMP 600
 
 #define ID_ANI_KOOPATROOPA_WALKING_LEFT 7000
 #define ID_ANI_KOOPATROOPA_WALKING_RIGHT 7004
@@ -36,9 +39,9 @@ protected:
 	float type;
 
 	boolean isDie;
+	boolean isHaveFallObj;
 
 	ULONGLONG count_start;
-	ULONGLONG ready_jump_start;
 
 	CFallObject* fall_object;
 
@@ -53,7 +56,7 @@ protected:
 
 		}
 	}
-
+	void updateState();
 public:
 	CKoopaTroopa(float x, float y);
 

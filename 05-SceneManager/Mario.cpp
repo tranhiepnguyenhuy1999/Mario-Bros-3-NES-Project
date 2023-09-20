@@ -63,10 +63,10 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithGoomba(e);
 	else if (dynamic_cast<CParaGoomba*>(e->obj))
 		OnCollisionWithParaGoomba(e);
-	else if (dynamic_cast<CKoopaTroopa*>(e->obj))
-		OnCollisionWithKoopaTroopa(e);
 	else if (dynamic_cast<CParaKoopaTroopa*>(e->obj))
 		OnCollisionWithParaKoopaTroopa(e);
+	else if (dynamic_cast<CKoopaTroopa*>(e->obj))
+		OnCollisionWithKoopaTroopa(e);
 	else if (dynamic_cast<CCoin*>(e->obj))
 		OnCollisionWithCoin(e);
 	else if (dynamic_cast<CMushroom*>(e->obj))
@@ -230,15 +230,15 @@ void CMario::OnCollisionWithParaKoopaTroopa(LPCOLLISIONEVENT e)
 	}
 	else if (e->ny < 0)
 	{
-		// jumb state
-		if (obj->GetState() == PARAKOOPATROOPA_STATE_JUMP)
+		// parakoopatroopa
+		if (obj->GetState() == PARA_KOOPATROOPA_STATE_JUMP)
 		{
-			obj->SetState(PARAKOOPATROOPA_STATE_WALKING);
+			obj->SetState(KOOPATROOPA_STATE_MOVING);
 		}
 		else
 		{
 			// walking state
-			if (obj->GetState() == PARAKOOPATROOPA_STATE_WALKING)
+			if (obj->GetState() == KOOPATROOPA_STATE_MOVING)
 			{
 				obj->SetState(KOOPATROOPA_STATE_SHELL);
 			}
@@ -246,25 +246,25 @@ void CMario::OnCollisionWithParaKoopaTroopa(LPCOLLISIONEVENT e)
 		vy = -MARIO_JUMP_DEFLECT_SPEED;
 		return;
 	}
-	else 
-	{
-		if (untouchable == 0)
-		{
-			if (obj->GetState() != KOOPATROOPA_STATE_SHELL)
-			{
-				if (level > MARIO_LEVEL_SMALL)
-				{
-					level = MARIO_LEVEL_SMALL;
-					StartUntouchable();
-				}
-				else
-				{
-					DebugOut(L">>> Mario DIE >>> \n");
-					SetState(MARIO_STATE_DIE);
-				}
-			}
-		}
-	}
+	//else 
+	//{
+	//	if (untouchable == 0)
+	//	{
+	//		if (obj->GetState() != KOOPATROOPA_STATE_SHELL)
+	//		{
+	//			if (level > MARIO_LEVEL_SMALL)
+	//			{
+	//				level = MARIO_LEVEL_SMALL;
+	//				StartUntouchable();
+	//			}
+	//			else
+	//			{
+	//				DebugOut(L">>> Mario DIE >>> \n");
+	//				SetState(MARIO_STATE_DIE);
+	//			}
+	//		}
+	//	}
+	//}
 }
 void CMario::OnCollisionWithQuestionBrick(LPCOLLISIONEVENT e)
 {
