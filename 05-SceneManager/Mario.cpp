@@ -195,7 +195,7 @@ void CMario::OnCollisionWithKoopaTroopa(LPCOLLISIONEVENT e)
 {
 	CKoopaTroopa* item = dynamic_cast<CKoopaTroopa*>(e->obj);
 	// jump on top >> kill Goomba and deflect a bit 
-	if (item->GetState() == KOOPATROOPA_STATE_DIE || item->GetState() == KOOPATROOPA_STATE_ALIVE) {
+	if (item->GetState() == KOOPATROOPA_STATE_SHELL || item->GetState() == KOOPATROOPA_STATE_ALIVE) {
 		
 		if(e->nx > 0)
 			item->SetState(KOOPATROOPA_STATE_KICKING_RIGHT);
@@ -205,37 +205,36 @@ void CMario::OnCollisionWithKoopaTroopa(LPCOLLISIONEVENT e)
 	}
 	if (e->ny < 0)
 	{
-		if (item->GetState() != KOOPATROOPA_STATE_DIE)
+		if (item->GetState() != KOOPATROOPA_STATE_SHELL)
 		{
-			item->SetState(KOOPATROOPA_STATE_DIE);
+			item->SetState(KOOPATROOPA_STATE_SHELL);
 			vy = -MARIO_JUMP_DEFLECT_SPEED;
 		}
 	}
-	else // hit by Goomba
-	{
-		if (untouchable == 0)
-		{
-			if (item->GetState() != KOOPATROOPA_STATE_DIE)
-			{
-				if (level > MARIO_LEVEL_SMALL)
-				{
-					level = MARIO_LEVEL_SMALL;
-					StartUntouchable();
-				}
-				else
-				{
-					DebugOut(L">>> Mario DIE >>> \n");
-					SetState(MARIO_STATE_DIE);
-				}
-			}
-		}
-	}
+	//else
+	//{
+	//	if (untouchable == 0)
+	//	{
+	//		if (item->GetState() != KOOPATROOPA_STATE_SHELL)
+	//		{
+	//			if (level > MARIO_LEVEL_SMALL)
+	//			{
+	//				level = MARIO_LEVEL_SMALL;
+	//				StartUntouchable();
+	//			}
+	//			else
+	//			{
+	//				SetState(MARIO_STATE_DIE);
+	//			}
+	//		}
+	//	}
+	//}
 }
 void CMario::OnCollisionWithParaKoopaTroopa(LPCOLLISIONEVENT e)
 {
 	CParaKoopaTroopa* item = dynamic_cast<CParaKoopaTroopa*>(e->obj);
 	// jump on top >> kill Goomba and deflect a bit 
-	if (item->GetState() == KOOPATROOPA_STATE_DIE || item->GetState() == KOOPATROOPA_STATE_ALIVE) {
+	if (item->GetState() == KOOPATROOPA_STATE_SHELL || item->GetState() == KOOPATROOPA_STATE_ALIVE) {
 
 		if (e->nx > 0)
 			item->SetState(KOOPATROOPA_STATE_KICKING_RIGHT);
@@ -255,7 +254,7 @@ void CMario::OnCollisionWithParaKoopaTroopa(LPCOLLISIONEVENT e)
 			// walking state
 			if (item->GetState() == PARAKOOPATROOPA_STATE_WALKING)
 			{
-				item->SetState(KOOPATROOPA_STATE_DIE);
+				item->SetState(KOOPATROOPA_STATE_SHELL);
 			}
 		}
 		vy = -MARIO_JUMP_DEFLECT_SPEED;
@@ -265,7 +264,7 @@ void CMario::OnCollisionWithParaKoopaTroopa(LPCOLLISIONEVENT e)
 	{
 		if (untouchable == 0)
 		{
-			if (item->GetState() != KOOPATROOPA_STATE_DIE)
+			if (item->GetState() != KOOPATROOPA_STATE_SHELL)
 			{
 				if (level > MARIO_LEVEL_SMALL)
 				{

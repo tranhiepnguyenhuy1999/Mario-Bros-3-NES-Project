@@ -61,7 +61,7 @@ void CTail::OnCollisionWithKoopaTroopa(LPCOLLISIONEVENT e)
 {
 	CKoopaTroopa* item = dynamic_cast<CKoopaTroopa*>(e->obj);
 
-			item->SetState(KOOPATROOPA_STATE_DIE);
+			item->SetState(KOOPATROOPA_STATE_SHELL);
 }
 void CTail::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {

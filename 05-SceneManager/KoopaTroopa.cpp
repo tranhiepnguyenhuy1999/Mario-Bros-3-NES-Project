@@ -10,11 +10,10 @@ CKoopaTroopa::CKoopaTroopa(float x, float y) :CGameObject(x, y)
 	ready_jump_start = -1;
 	count_start = -1;
 	vx = -KOOPATROOPA_WALKING_SPEED;
+	nx = -1;
 	isDie = false;
 	fall_object = NULL;
-	
-	SetState(KOOPATROOPA_STATE_WALKING);
-	
+	SetState(KOOPATROOPA_STATE_MOVING);
 }
 
 void CKoopaTroopa::GetBoundingBox(float& left, float& top, float& right, float& bottom)
@@ -121,24 +120,23 @@ void CKoopaTroopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			if (fall_object->isFalling())
 			{
 				SetState(KOOPATROOPA_STATE_TURN);
+				SetState(KOOPATROOPA_STATE_MOVING);
 				return;
 			}
 		}
 	}
-	//DebugOut(L"count %d", GetTickCount64() - count_start);
-	if (state == KOOPATROOPA_STATE_DIE && (GetTickCount64() - count_start > KOOPATROOPA_DIE_TIMEOUT))
+
+	if (state == KOOPATROOPA_STATE_SHELL && (GetTickCount64() - count_start > KOOPATROOPA_DIE_TIMEOUT))
 	{
 		SetState(KOOPATROOPA_STATE_ALIVE);
 		return;
 	}
 	else if (state == KOOPATROOPA_STATE_ALIVE && (GetTickCount64() - count_start > KOOPATROOPA_ALIVE_TIMEOUT))
 	{
-		SetState(KOOPATROOPA_STATE_WALKING);
 		count_start = -1;
-		vx = -KOOPATROOPA_WALKING_SPEED;
-		ay = KOOPATROOPA_GRAVITY;
-		createFallObject();
-		y = y + (KOOPATROOPA_BBOX_HEIGHT_SHELL/2) - KOOPATROOPA_BBOX_HEIGHT/2 ;
+		y -= (KOOPATROOPA_BBOX_HEIGHT - KOOPATROOPA_BBOX_HEIGHT_SHELL) / 2;
+		vx = nx*KOOPATROOPA_WALKING_SPEED;
+		SetState(KOOPATROOPA_STATE_MOVING);
 		return;
 	}
 	CGameObject::Update(dt, coObjects);
@@ -152,7 +150,7 @@ void CKoopaTroopa::Render()
 	if (vx > 0) {
 		aniId = ID_ANI_KOOPATROOPA_WALKING_RIGHT;
 	}
-	if (state == KOOPATROOPA_STATE_DIE)
+	if (state == KOOPATROOPA_STATE_SHELL)
 	{
 		aniId = ID_ANI_KOOPATROOPA_DIE;
 	}
@@ -173,40 +171,30 @@ void CKoopaTroopa::SetState(int state)
 	CGameObject::SetState(state);
 	switch (state)
 	{
-	case KOOPATROOPA_STATE_DIE:
-		y += (KOOPATROOPA_BBOX_HEIGHT - KOOPATROOPA_BBOX_HEIGHT_SHELL) / 2;
-		
+	case KOOPATROOPA_STATE_MOVING:
+		isDie = false;
+		break;
+	case KOOPATROOPA_STATE_SHELL:
 		removeFalObj();
-
+		y += (KOOPATROOPA_BBOX_HEIGHT - KOOPATROOPA_BBOX_HEIGHT_SHELL) / 2;
 		isDie = true;
 		count_start = GetTickCount64();
-		
 		vx = 0;
-		vy = 0;
-		ay = 0;
 		break;
 	case KOOPATROOPA_STATE_ALIVE:
-		isDie = false;
 		count_start = GetTickCount64();
-
-		vx = 0;
-		vy = 0;
-		ay = 0;
 		break;
 	case KOOPATROOPA_STATE_KICKING_LEFT:
-		ay = KOOPATROOPA_GRAVITY;
 		vx = KOOPATROOPA_KICKING_SPEED;
 		break;
 	case KOOPATROOPA_STATE_KICKING_RIGHT:
-		ay = KOOPATROOPA_GRAVITY;
 		vx = -KOOPATROOPA_KICKING_SPEED;
 		break;
 	case KOOPATROOPA_STATE_TURN:
-		count_start = GetTickCount64();
-	
 		removeFalObj();
-
+		count_start = GetTickCount64();
 		vx = -vx;
+		nx = -nx;
 		break;
 	}
 }
