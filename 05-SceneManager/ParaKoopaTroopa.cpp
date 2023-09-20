@@ -14,7 +14,7 @@ CParaKoopaTroopa::CParaKoopaTroopa(float x, float y) :CKoopaTroopa(x, y)
 void CParaKoopaTroopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	vy += ay * dt;
-	
+
 	if (state == PARA_KOOPATROOPA_STATE_JUMP) {
 		if (isOnFlatform) {
 			vy -= PARA_KOOPATROOPA_JUMP_DEFLECT_SPEED;
@@ -22,7 +22,7 @@ void CParaKoopaTroopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		}
 	}
 	else {
-		CKoopaTroopa::Update(dt, coObjects);
+		CKoopaTroopa::updateState();
 	}
 
 	CGameObject::Update(dt, coObjects);
@@ -51,9 +51,4 @@ void CParaKoopaTroopa::Render()
 void CParaKoopaTroopa::SetState(int state)
 {
 	CKoopaTroopa::SetState(state);
-
-	//switch (state)
-	//{
-
-	//}
 }

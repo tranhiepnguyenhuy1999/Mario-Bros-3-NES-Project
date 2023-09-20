@@ -237,7 +237,6 @@ void CMario::OnCollisionWithParaKoopaTroopa(LPCOLLISIONEVENT e)
 		}
 		else
 		{
-			// walking state
 			if (obj->GetState() == KOOPATROOPA_STATE_MOVING)
 			{
 				obj->SetState(KOOPATROOPA_STATE_SHELL);
