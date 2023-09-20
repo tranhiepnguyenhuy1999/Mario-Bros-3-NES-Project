@@ -38,6 +38,7 @@ HOW TO INSTALL Microsoft.DXSDK.D3DX
 #include "Goomba.h"
 #include "Coin.h"
 #include "Platform.h"
+#include "Camera.h"
 
 #include "SampleKeyEventHandler.h"
 
@@ -199,6 +200,9 @@ int WINAPI WinMain(
 	game->Init(hWnd, hInstance);
 	game->InitKeyboard();
 
+	Camera* cam = Camera::GetInstance();
+	cam->setCamWidth(game->GetBackBufferWidth());
+	cam->setCamHeight(game->GetBackBufferHeight());
 
 	//IMPORTANT: this is the only place where a hardcoded file name is allowed ! 
 	game->Load(L"mario-sample.txt");  
