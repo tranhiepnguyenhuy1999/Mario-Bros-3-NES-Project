@@ -9,7 +9,7 @@ CKoopaTroopa::CKoopaTroopa(float x, float y) :CGameObject(x, y)
 	this->ay = KOOPATROOPA_GRAVITY;
 	ready_jump_start = -1;
 	count_start = -1;
-	vx = -KOOPATROOPA_WALKING_SPEED;
+	vx = -KOOPATROOPA_SPEED;
 	nx = -1;
 	isDie = false;
 	fall_object = NULL;
@@ -135,7 +135,7 @@ void CKoopaTroopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	{
 		count_start = -1;
 		y -= (KOOPATROOPA_BBOX_HEIGHT - KOOPATROOPA_BBOX_HEIGHT_SHELL) / 2;
-		vx = nx*KOOPATROOPA_WALKING_SPEED;
+		vx = nx*KOOPATROOPA_SPEED;
 		SetState(KOOPATROOPA_STATE_MOVING);
 		return;
 	}
@@ -147,23 +147,20 @@ void CKoopaTroopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 void CKoopaTroopa::Render()
 {
 	int aniId = ID_ANI_KOOPATROOPA_WALKING_LEFT;
-	if (vx > 0) {
+	if (isDie)
+	{
+		if (state == KOOPATROOPA_STATE_SHELL) aniId = ID_ANI_KOOPATROOPA_SHELL;
+		else aniId = ID_ANI_KOOPATROOPA_KICKING;
+	}
+	else if (vx > 0) {
 		aniId = ID_ANI_KOOPATROOPA_WALKING_RIGHT;
 	}
-	if (state == KOOPATROOPA_STATE_SHELL)
-	{
-		aniId = ID_ANI_KOOPATROOPA_DIE;
-	}
-	if (state == KOOPATROOPA_STATE_ALIVE)
+	else if (state == KOOPATROOPA_STATE_ALIVE)
 	{
 		aniId = ID_ANI_KOOPATROOPA_ALIVE;
 	}
-	if (state == KOOPATROOPA_STATE_KICKING_LEFT || state == KOOPATROOPA_STATE_KICKING_RIGHT)
-	{
-		aniId = ID_ANI_KOOPATROOPA_KICKING;
-	}
 	CAnimations::GetInstance()->Get(aniId)->Render(x, y);
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 
 void CKoopaTroopa::SetState(int state)
@@ -181,14 +178,10 @@ void CKoopaTroopa::SetState(int state)
 		count_start = GetTickCount64();
 		vx = 0;
 		break;
+	case KOOPATROOPA_STATE_SHELL_MOVING:
+		break;
 	case KOOPATROOPA_STATE_ALIVE:
 		count_start = GetTickCount64();
-		break;
-	case KOOPATROOPA_STATE_KICKING_LEFT:
-		vx = KOOPATROOPA_KICKING_SPEED;
-		break;
-	case KOOPATROOPA_STATE_KICKING_RIGHT:
-		vx = -KOOPATROOPA_KICKING_SPEED;
 		break;
 	case KOOPATROOPA_STATE_TURN:
 		removeFalObj();
