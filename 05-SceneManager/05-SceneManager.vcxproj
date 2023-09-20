@@ -149,6 +149,7 @@
     <ClCompile Include="Animations.cpp" />
     <ClCompile Include="BreakBrick.cpp" />
     <ClCompile Include="Brick.cpp" />
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CloudBrick.cpp" />
     <ClCompile Include="Coin.cpp" />
     <ClCompile Include="Collision.cpp" />
@@ -196,6 +197,7 @@
     <ClInclude Include="AssetIDs.h" />
     <ClInclude Include="BreakBrick.h" />
     <ClInclude Include="Brick.h" />
+    <ClInclude Include="Camera.h" />
     <ClInclude Include="CloudBrick.h" />
     <ClInclude Include="Coin.h" />
     <ClInclude Include="Collision.h" />

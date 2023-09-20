@@ -25,6 +25,7 @@
 #include "Rock.h"
 #include "Mario2.h"
 #include "HiddenBrick.h"
+#include "Camera.h"
 
 #include "SampleKeyEventHandler.h"
 
@@ -71,7 +72,6 @@ void CPlayScene::_ParseSection_SPRITES(string line)
 
 	CSprites::GetInstance()->Add(ID, l, t, r, b, tex);
 }
-
 void CPlayScene::_ParseSection_ASSETS(string line)
 {
 	vector<string> tokens = split(line);
@@ -82,7 +82,6 @@ void CPlayScene::_ParseSection_ASSETS(string line)
 	
 	LoadAssets(path.c_str());
 }
-
 void CPlayScene::_ParseSection_ANIMATIONS(string line)
 {
 	vector<string> tokens = split(line);
@@ -103,7 +102,6 @@ void CPlayScene::_ParseSection_ANIMATIONS(string line)
 
 	CAnimations::GetInstance()->Add(ani_id, ani);
 }
-
 /*
 	Parse a line in section [OBJECTS] 
 */
@@ -333,7 +331,6 @@ void CPlayScene::LoadAssets(LPCWSTR assetFile)
 
 	DebugOut(L"[INFO] Done loading assets from %s\n", assetFile);
 }
-
 void CPlayScene::Load()
 {
 	DebugOut(L"[INFO] Start loading scene from : %s \n", sceneFilePath);
@@ -370,7 +367,6 @@ void CPlayScene::Load()
 
 	DebugOut(L"[INFO] Done loading scene  %s\n", sceneFilePath);
 }
-
 void CPlayScene::Update(DWORD dt)
 {
 	// We know that Mario is the first object in the list hence we won't add him into the colliable object list
@@ -391,27 +387,15 @@ void CPlayScene::Update(DWORD dt)
 	if (player == NULL) return; 
 
 	// Update camera to follow mario
-	float cx, cy;
-	player->GetPosition(cx, cy);
+	float px, py;
+	player->GetPosition(px, py);
 
-	CGame *game = CGame::GetInstance();
-	cx -= game->GetBackBufferWidth() / 2;
-	cy -= game->GetBackBufferHeight() / 2;
+	Camera::GetInstance()->setCamPosition(px,py);
 
-	if (cx < 0) cx = 0;
-	if (cy < 0) cy = 0;
-
-	//if (cy + game->GetBackBufferHeight() > 464) cy = 464 - game->GetBackBufferHeight();
-	if (cx + game->GetBackBufferWidth() > 2800) cx = 2800 - game->GetBackBufferWidth();
-
-	//CGame::GetInstance()->SetCamPos(cx, 250);
-
-	CGame::GetInstance()->SetCamPos(cx, cy);
 	CUserBoard::GetInstance()->SetPosition(200, 432);
 
 	PurgeDeletedObjects();
 }
-
 void CPlayScene::Render()
 {
 	float cx, cy;
@@ -433,7 +417,6 @@ void CPlayScene::Render()
 	for (int i = 0; i < objects.size(); i++)
 		objects[i]->Render();
 }
-
 /*
 *	Clear all objects from this scene
 */
@@ -446,7 +429,6 @@ void CPlayScene::Clear()
 	}
 	objects.clear();
 }
-
 /*
 	Unload scene
 
@@ -463,9 +445,7 @@ void CPlayScene::Unload()
 
 	DebugOut(L"[INFO] Scene %d unloaded! \n", id);
 }
-
 bool CPlayScene::IsGameObjectDeleted(const LPGAMEOBJECT& o) { return o == NULL; }
-
 void CPlayScene::PurgeDeletedObjects()
 {
 	vector<LPGAMEOBJECT>::iterator it;
