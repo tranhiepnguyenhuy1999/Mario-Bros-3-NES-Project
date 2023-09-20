@@ -42,13 +42,11 @@ void CKoopaTroopa::OnNoCollision(DWORD dt)
 
 void CKoopaTroopa::OnCollisionWith(LPCOLLISIONEVENT e)
 {
-	if (dynamic_cast<CKoopaTroopa*>(e->obj)) return;
-
-	if (e->ny != 0)
+	if (e->ny != 0 && e->obj->IsBlocking())
 	{
 		vy = 0;
 	}
-	else if (e->nx != 0 && !dynamic_cast<CDownBrick*>(e->obj))
+	else if (e->nx != 0 && e->obj->IsBlocking() && !dynamic_cast<CDownBrick*>(e->obj))
 	{
 		vx = -vx;
 	}
