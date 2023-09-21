@@ -59,7 +59,7 @@ public:
 		cy = t;
 	}
 	bool isCamContain(float objl, float objt, float objr, float objb) {
-		return !(objr < l || objl > r || objt < b || objb > t);
+		return !(objr < l || objl > r || objt > b || objb < t);
 	}
 	void checkIsCameraOver(vector<LPGAMEOBJECT>& objects) {
 		//for (size_t i = 0; i < objects.size(); i++)

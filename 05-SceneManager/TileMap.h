@@ -5,12 +5,18 @@
 #include "Animations.h"
 
 class CTileMap : public CGameObject {
+	static CTileMap* __instance;
+	
 	vector<vector<string>> tileMap;
+
 public:
-	CTileMap(float x, float y, vector<vector<string>> content) : CGameObject(x, y) {
+	CTileMap(float x, float y) : CGameObject(x, y) {};
+	void createTileMap(vector<vector<string>> content) {
 		tileMap = content;
 	}
 	void Render();
 	void Update(DWORD dt) {}
-	void GetBoundingBox(float& l, float& t, float& r, float& b);
+	void GetBoundingBox(float& l, float& t, float& r, float& b){};
+
+	static CTileMap* GetInstance();
 };

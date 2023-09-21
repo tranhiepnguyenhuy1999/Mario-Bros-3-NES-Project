@@ -115,8 +115,8 @@ void CPlayScene::_ParseSection_TILESET(string line)
 	int width = atoi(tokens[0].c_str());
 	int height = atoi(tokens[1].c_str());
 	int maxTiles = atoi(tokens[2].c_str());
-	int lengthTilesX = atoi(tokens[3].c_str());
-	int lengthTilesY = atoi(tokens[4].c_str());
+	int	sizeTilesX = atoi(tokens[3].c_str());
+	int sizeTilesY = atoi(tokens[4].c_str());
 	int frameTime = atoi(tokens[5].c_str());
 	int texID = atoi(tokens[6].c_str());
 
@@ -128,13 +128,13 @@ void CPlayScene::_ParseSection_TILESET(string line)
 		return;
 	}
 
-	for (int i = 0; i < lengthTilesX + 1; i++)
+	for (int i = 0; i < sizeTilesX; i++)
 	{
-		for (int j = 0; j < lengthTilesY + 1; j++)
+		for (int j = 0; j < sizeTilesY; j++)
 		{
-			if (i * (lengthTilesY + 1) + j > maxTiles) continue;
+			if (i * sizeTilesY + (j+1) > maxTiles) continue;
 			// load sprite
-			int ID = 1000 + i * (lengthTilesY + 1) + j;
+			int ID = 1000 + i * sizeTilesY + j;
 			int l = j * width;
 			int r = l + width - 1;
 			int t = i * height;
@@ -143,7 +143,7 @@ void CPlayScene::_ParseSection_TILESET(string line)
 
 			// load animation
 			LPANIMATION ani = new CAnimation();
-			int ani_id = i * (lengthTilesY + 1) + j;
+			int ani_id = i * sizeTilesY + j;
 			int sprite_id = ID;
 			int frame_time = frameTime;
 			ani->Add(sprite_id, frame_time);
@@ -165,7 +165,8 @@ void CPlayScene::_ParseSection_TILEDMAP(string line)
 	vector<string> row;
 	string fline, word;
 
-	fstream file(fname, ios::in);
+	fstream file("map1_map.csv", ios::in);
+
 	if (file.is_open())
 	{
 		while (getline(file, fline))
@@ -180,9 +181,9 @@ void CPlayScene::_ParseSection_TILEDMAP(string line)
 		}
 	}
 	else
-		DebugOut(L"[INFO] Could not open the file\n");
+		DebugOut(L"[INFO] Could not open the tilemap file\n");
 
-	obj = new CTileMap(0, 0, content);
+	CTileMap::GetInstance()->createTileMap(content);
 }
 /*
 	Parse a line in section [OBJECTS] 
@@ -445,20 +446,8 @@ void CPlayScene::Update(DWORD dt)
 }
 void CPlayScene::Render()
 {
-	float cx, cy;
-	CGame* game = CGame::GetInstance();
-	game->GetCamPos(cx, cy);
-	float l, t;
-
-	// tilemap render
-	for (int i = 0; i < tiledMapObjects.size(); i++)
-	{
-		tiledMapObjects[i]->GetPosition(l, t);
-		if (l >= cx-16 && l<=cx + game->GetBackBufferWidth()+16 && t>=cy-16 && t <= cy + game->GetBackBufferHeight())
-		{
-		tiledMapObjects[i]->Render();
-		}
-	}
+	//tilemap
+	CTileMap::GetInstance()->Render();
 
 	// obj render
 	for (int i = 0; i < objects.size(); i++)

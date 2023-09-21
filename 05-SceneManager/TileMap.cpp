@@ -2,9 +2,13 @@
 #include "debug.h"
 #include "Camera.h"
 
+CTileMap* CTileMap::__instance = NULL;
+
 void CTileMap::Render()
 {
+
 	float cx, cy;
+
 	Camera* cam = Camera::GetInstance();
 	cam->getCamPosition(cx, cy);
 
@@ -12,26 +16,29 @@ void CTileMap::Render()
 
 	int lengthY = tileMap.size();
 
-	for (int i = lengthY; i > 0; i--)
+	//DebugOut(L"chekc %d", lengthY);
+
+	for (int i = 0; i < lengthY; i++)
 	{
-		for (float j = 0; j < tileMap[i - 1].size(); j++)
+		for (float j = 0; j < tileMap[i].size(); j++)
 		{
+			// check tile x y 
 			float l, t, r, b;
 			l = j * 16;
-			t = (lengthY - i) * 16;
+			t = i * 16;
 			r = l + 16;
-			b = t - 16;
+			b = t + 16;
 
 			if (cam->isCamContain(l, t, r, b))
 			{
-				animations->Get(stoi(tileMap[i - 1][j]))->Render(l + 8, t);
-				//animations->Get(stoi(tileMap[i-1][j]))->Render(l + 8, t);
+				animations->Get(stoi(tileMap[i][j]))->Render(l, t);
 			}
 		}
 	}
-
 }
-void CTileMap::GetBoundingBox(float& l, float& t, float& r, float& b)
+
+CTileMap* CTileMap::GetInstance()
 {
-	//
+	if (__instance == NULL) __instance = new CTileMap(0,0);
+	return __instance;
 }

@@ -1,6 +1,5 @@
 # list of object assets to load in this scene
 [ASSETS]
-tileSets.txt
 mario.txt
 coin.txt
 cloud.txt
@@ -11,13 +10,12 @@ piranhaplant.txt
 green-piranhaplant.txt
 
 [TILESET]
-# width|height|maxTiles|lengthTileX|lengthTileY|frame_time|textID
+# width|height|maxTiles|sizeTileX|sizeTileY|frame_time|textID
 16	16	116	11	11	10000	500
 
 [TILEDMAP]
 # load tile map
 map1_map.csv
-
 
 [OBJECTS]
 # type	x	y	extra_settings per object type
@@ -31,12 +29,12 @@ map1_map.csv
 
 #goomba
 #2	330	400
-2	608	400
+#2	608	400
 
 #2	928	352
 #2	960	352
 #para goomba
-15	1072	352
+#15	1072	352
 
 #koopatroopa
 #14	592	352
@@ -45,7 +43,7 @@ map1_map.csv
 
 #parakoopatropa
 
-16	1360	288
+#16	1360	288
 #16	1392	288
 #16	1424	288
 
