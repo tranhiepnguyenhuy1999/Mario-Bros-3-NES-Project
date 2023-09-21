@@ -31,7 +31,10 @@ protected:
 
 	void _ParseSection_ASSETS(string line);
 	void _ParseSection_OBJECTS(string line);
-	void _ParseSection_TILEDMAP();
+	
+	void _ParseSection_TILEDMAP(string line);
+	void _ParseSection_TILESET(string line);
+
 	void LoadAssets(LPCWSTR assetFile);
 	
 public: 

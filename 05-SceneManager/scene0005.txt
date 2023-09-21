@@ -9,8 +9,15 @@ goomba.txt
 koopatroopa.txt
 piranhaplant.txt
 green-piranhaplant.txt
+
+[TILESET]
+# width|height|maxTiles|lengthTileX|lengthTileY|frame_time|textID
+16	16	116	11	11	10000	500
+
 [TILEDMAP]
-# apply tiled map editor
+# load tile map
+map1_map.csv
+
 
 [OBJECTS]
 # type	x	y	extra_settings per object type

@@ -186,6 +186,7 @@
     <ClCompile Include="Sprites.cpp" />
     <ClCompile Include="Tail.cpp" />
     <ClCompile Include="Textures.cpp" />
+    <ClCompile Include="TileMap.cpp" />
     <ClCompile Include="TileSet.cpp" />
     <ClCompile Include="UserBoard.cpp" />
     <ClCompile Include="Utils.cpp" />
@@ -237,6 +238,7 @@
     <ClInclude Include="Tail.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Textures.h" />
+    <ClInclude Include="TileMap.h" />
     <ClInclude Include="TileSet.h" />
     <ClInclude Include="UserBoard.h" />
     <ClInclude Include="Utils.h" />

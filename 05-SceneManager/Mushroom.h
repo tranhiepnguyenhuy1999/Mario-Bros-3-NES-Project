@@ -4,7 +4,7 @@
 #include "Animation.h"
 #include "Animations.h"
 
-#define MUSHROOM_GRAVITY 0.001f
+#define MUSHROOM_GRAVITY 0.005f
 #define MUSHROOM_SPEED 0.045f
 #define MUSHROOM_BOUNCE_SPEED 0.05f
 
