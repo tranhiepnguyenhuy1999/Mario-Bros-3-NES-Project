@@ -9,6 +9,7 @@ CParaGoomba::CParaGoomba(float x, float y) :CGameObject(x, y)
 	isOnFlatform = false;
 	count_start = -1;
 	count = 0;
+	level = PARAGOOMBA_LEVEL_FLY;
 	SetState(PARAGOOMBA_STATE_MOVING);
 }
 
@@ -55,10 +56,14 @@ void CParaGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	vy += ay * dt;
 
-	if (state == PARAGOOMBA_STATE_DIE && (GetTickCount64() - count_start > PARAGOOMBA_LOOP_TIMEOUT))
+	if (state == PARAGOOMBA_STATE_DIE)
 	{
+		if(GetTickCount64() - count_start > PARAGOOMBA_LOOP_TIMEOUT)
 		this->isDeleted = true;
-		return;
+	}
+	else if (level == PARAGOOMBA_LEVEL_NORMAL)
+	{
+		SetState(PARAGOOMBA_STATE_MOVING);
 	}
 	else if (state == PARAGOOMBA_STATE_MOVING && (GetTickCount64() - count_start > PARAGOOMBA_LOOP_TIMEOUT))
 	{
@@ -96,13 +101,13 @@ void CParaGoomba::Render()
 	{
 		aniId = ID_ANI_PARAGOOMBA_DIE;
 	}
-		CAnimations::GetInstance()->Get(aniId)->Render(x, y);
-	if (state != PARAGOOMBA_STATE_MOVING && state != PARAGOOMBA_STATE_DIE)
+	CAnimations::GetInstance()->Get(aniId)->Render(x, y);
+	if (level==PARAGOOMBA_LEVEL_FLY)
 	{
 		CAnimations::GetInstance()->Get(ID_ANI_PARAGOOMBA_WINNG_RIGHT)->Render(x + PARAGOOMBA_BBOX_WIDTH/2, y-PARAGOOMBA_BBOX_HEIGHT/2);
 		CAnimations::GetInstance()->Get(ID_ANI_PARAGOOMBA_WINNG_LEFT)->Render(x - PARAGOOMBA_BBOX_WIDTH / 2, y - PARAGOOMBA_BBOX_HEIGHT / 2);
 	}
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 
 void CParaGoomba::SetState(int state)
@@ -110,7 +115,6 @@ void CParaGoomba::SetState(int state)
 	CGameObject::SetState(state);
 	switch (state)
 	{
-	
 	case PARAGOOMBA_STATE_DIE:
 		count_start = GetTickCount64();
 		y += (PARAGOOMBA_BBOX_HEIGHT - PARAGOOMBA_BBOX_HEIGHT_DIE) / 2;

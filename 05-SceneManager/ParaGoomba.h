@@ -24,15 +24,24 @@
 #define ID_ANI_PARAGOOMBA_DIE 6001
 #define ID_ANI_PARAGOOMBA_WINNG_RIGHT 6002
 #define ID_ANI_PARAGOOMBA_WINNG_LEFT 6003
+
+#define	PARAGOOMBA_LEVEL_FLY	2
+#define	PARAGOOMBA_LEVEL_NORMAL	1
+
+
 class CParaGoomba : public CGameObject
 {
 protected:
 	float ay;
 	int count;
+	int level;
 
 	boolean isOnFlatform;
 
 	ULONGLONG count_start;
+
+public:
+	CParaGoomba(float x, float y);
 
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
@@ -42,7 +51,10 @@ protected:
 	virtual int IsBlocking() { return 0; }
 	virtual void OnNoCollision(DWORD dt);
 	virtual void OnCollisionWith(LPCOLLISIONEVENT e);
-public:
-	CParaGoomba(float x, float y);
+
 	virtual void SetState(int state);
+
+	int getLevel() { return level; }
+	void setLevel(int new_level) { level=new_level; }
+
 };
