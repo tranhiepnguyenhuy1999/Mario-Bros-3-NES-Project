@@ -33,13 +33,9 @@ HOW TO INSTALL Microsoft.DXSDK.D3DX
 #include "Animation.h"
 #include "Animations.h"
 
-#include "Mario.h"
-#include "Brick.h"
-#include "Goomba.h"
-#include "Coin.h"
-#include "Platform.h"
 #include "Camera.h"
 #include "TileMap.h"
+#include "UserBoard.h"
 
 #include "SampleKeyEventHandler.h"
 
@@ -206,6 +202,7 @@ int WINAPI WinMain(
 	cam->setCamHeight(game->GetBackBufferHeight());
 
 	CTileMap::GetInstance();
+	CUserBoard::GetInstance();
 
 	//IMPORTANT: this is the only place where a hardcoded file name is allowed ! 
 	game->Load(L"mario-sample.txt");  

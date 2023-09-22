@@ -30,14 +30,18 @@ class CUserBoard : public CGameObject {
 	vector<int> lifeA;
 	vector<int> timeA;
 	ULONGLONG loop_start;
-public:
+	
+	int getAniId(int num);
+	void translateNumberToSprite();
+
+public:	
 	CUserBoard(float x, float y) : CGameObject(x, y) {
 		loop_start = GetTickCount64();
 	}
-	void translateNumberToSprite();
 	void Render();
-	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
-	void GetBoundingBox(float& l, float& t, float& r, float& b);
-	int getAniId(int num);
+
+	void RenderBoundingBox();
+	void GetBoundingBox(float& l, float& t, float& r, float& b) {};
+
 	static CUserBoard* GetInstance();
 };

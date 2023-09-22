@@ -208,9 +208,9 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			DebugOut(L"[ERROR] MARIO object was created before!\n");
 			return;
 		}
-		obj = new CMario(x,y); 
-		player = (CMario*)obj;  
-
+		obj = new CMario(x, y);
+		player = (CMario*)obj;
+		Camera::GetInstance()->setCamPosition(x, y);
 		DebugOut(L"[INFO] Player object has been created!\n");
 		break;
 	case OBJECT_TYPE_MARIO2:
@@ -281,14 +281,8 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		float b = (float)atof(tokens[4].c_str());
 		int scene_id = atoi(tokens[5].c_str());
 		obj = new CPortal(x, y, r, b, scene_id);
+		break;
 	}
-	break;
-
-	case OBJECT_TYPE_USERBOARD:
-	{
-		obj = new CUserBoard(x, y); break;
-	}
-	break;
 	default:
 		DebugOut(L"[ERROR] Invalid object type: %d\n", object_type);
 		return;
@@ -456,6 +450,8 @@ void CPlayScene::Render()
 	{
 		if(Camera::GetInstance()->isCamContainObject(objects[i])) objects[i]->Render();
 	}
+	
+	CUserBoard::GetInstance()->Render();
 }
 /*
 *	Clear all objects from this scene

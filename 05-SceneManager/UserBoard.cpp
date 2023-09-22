@@ -3,6 +3,7 @@
 #include "Mario.h"
 #include "Game.h"
 #include "PlayScene.h"
+#include "Camera.h"
 //8:6
 CUserBoard* CUserBoard::__instance = NULL;
 CUserBoard* CUserBoard::GetInstance()
@@ -13,6 +14,15 @@ CUserBoard* CUserBoard::GetInstance()
 void CUserBoard::Render()
 {
 	translateNumberToSprite();
+	
+	int cHeight;
+	float cx, cy;
+	Camera::GetInstance()->getCamPosition(cx, cy);
+	Camera::GetInstance()->getCamHeight(cHeight);
+
+	x = cx + 80.0f;
+	y = cy  + cHeight - 35/2;
+
 	CAnimations* animations = CAnimations::GetInstance();
 	animations->Get(ID_ANI_BOARD)->Render(x, y);
 	//coin
@@ -55,14 +65,6 @@ void CUserBoard::Render()
 	else
 		animations->Get(ID_ANI_NUMBER_BLACK_P)->Render(x - 78 + 53 + 6 + 6 * 8 + 2, y - 18 + 8 + 6);
 }	
-void CUserBoard::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
-{
-
-	CGameObject::Update(dt, coObjects);
-}
-void CUserBoard::GetBoundingBox(float& l, float& t, float& r, float& b)
-{
-}
 void CUserBoard::translateNumberToSprite() {
 	int point, coin, life;
 	CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
@@ -120,6 +122,7 @@ void CUserBoard::translateNumberToSprite() {
 		}
 		else lifeA.push_back(life / pow(10, i));
 	}
+	RenderBoundingBox();
 }
 int CUserBoard::getAniId(int num) {
 	switch (num)
@@ -147,4 +150,32 @@ int CUserBoard::getAniId(int num) {
 	default:
 		return 0;
 	}
+}
+void CUserBoard::RenderBoundingBox()
+{
+	D3DXVECTOR3 p(x, y, 0);
+	RECT rect;
+
+	LPTEXTURE bbox = CTextures::GetInstance()->Get(ID_TEX_BBOX);
+
+	int cWidth, cHeight;
+	float l, t, r, b;
+	float cx, cy;
+	
+	Camera::GetInstance()->getCamPosition(cx, cy);
+	Camera::GetInstance()->getCamWidth(cWidth);
+	Camera::GetInstance()->getCamHeight(cHeight);
+
+	l = cx;
+	t = cy + cHeight*0.75f - 35/2;
+	r = l + cWidth;
+	b = t + 35;
+
+	rect.left = 0;
+	rect.top = 0;
+	rect.right = (int)r - (int)l;
+	rect.bottom = (int)b - (int)t;
+
+
+	CGame::GetInstance()->Draw(cWidth/2, cHeight - 35/2, bbox, nullptr, 1.0f, rect.right - 1, rect.bottom - 1);
 }

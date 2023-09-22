@@ -209,7 +209,7 @@ void CGame::Draw(float x, float y, LPTEXTURE tex, RECT* rect, float alpha, int s
 
 	// The color to apply to this sprite, full color applies white.
 	//sprite.ColorModulate = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
-	sprite.ColorModulate = D3DXCOLOR(1.0f, 1.0f, 1.0f, alpha);
+	sprite.ColorModulate = D3DXCOLOR(0, 0, 0, alpha);
 
 
 	//
