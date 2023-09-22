@@ -61,6 +61,11 @@ public:
 	bool isCamContain(float objl, float objt, float objr, float objb) {
 		return !(objr < l || objl > r || objt > b || objb < t);
 	}
+	bool isCamContainObject(LPGAMEOBJECT obj) {
+		float o_l, o_t, o_r , o_b;
+		obj->GetBoundingBox(o_l, o_t, o_r, o_b);
+		return !(o_r < l || o_l > r || o_t > b || o_b < t);
+	}
 	void checkIsCameraOver(vector<LPGAMEOBJECT>& objects) {
 		//for (size_t i = 0; i < objects.size(); i++)
 		//{

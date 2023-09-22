@@ -451,7 +451,9 @@ void CPlayScene::Render()
 
 	// obj render
 	for (int i = 0; i < objects.size(); i++)
-		objects[i]->Render();
+	{
+		if(Camera::GetInstance()->isCamContainObject(objects[i])) objects[i]->Render();
+	}
 }
 /*
 *	Clear all objects from this scene
