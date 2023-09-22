@@ -5,21 +5,17 @@
 #include "BreakBrick.h"
 #include "debug.h"
 
-CRock::CRock(float x, float y, float nx) :CGameObject(x, y)
+CRock::CRock(float x, float y, float nx, float ny) :CGameObject(x, y)
 {
-	if (nx < 0)
-		vx = -ROCK_MOVING_SPEED;
-	else
-		vx = ROCK_MOVING_SPEED;
-	vy = -ROCK_FLYING_SPEED;
-	SetState(TAIL_STATE_RELASE);
-	ax = 0;
-	ay = MARIO_GRAVITY;
+	vx = nx*ROCK_SPEED;
+	vy = ny*ROCK_BOUNCE_SPEED;
+	ay = ROCK_GRAVITY;
+	isOnGround = false;
 }
 void CRock::Render()
 {
 	CAnimations::GetInstance()->Get(ID_ANI_ROCK)->Render(x, y);
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 void CRock::OnNoCollision(DWORD dt)
 {
@@ -29,25 +25,22 @@ void CRock::OnNoCollision(DWORD dt)
 
 void CRock::OnCollisionWith(LPCOLLISIONEVENT e)
 {
-	//if (e->ny != 0)
-	//{
-	//	vy = 0;
-	//}
-	//else if (e->nx != 0)
-	//{
-	//	vx = -vx;
-	//}
+	if (e->ny != 0 && e->obj->IsBlocking())
+	{
+		vy = 0;
+		isOnGround = true;
+	}
 }
 void CRock::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	vy += ay * dt;
-	vx += ax * dt;
-	if ((state != TAIL_STATE_DIE) && (GetTickCount64() - count_start > 500))
+
+	if (isOnGround)
 	{
-		count_start = -1;
 		isDeleted = true;
 		return;
 	}
+
 	CGameObject::Update(dt, coObjects);
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
@@ -61,10 +54,4 @@ void CRock::GetBoundingBox(float& l, float& t, float& r, float& b)
 void CRock::SetState(int state)
 {
 	CGameObject::SetState(state);
-	switch (state)
-	{
-	case TAIL_STATE_RELASE:
-		count_start = GetTickCount64();
-		break;
-	}
 }

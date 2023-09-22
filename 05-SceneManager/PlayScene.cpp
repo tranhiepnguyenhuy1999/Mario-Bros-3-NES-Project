@@ -308,7 +308,7 @@ void CPlayScene::createNewObject(int id, float x, float y, float nx=0, float ny=
 	case OBJECT_TYPE_MUSHROOM: obj = new CMushroom(x, y, nx); break;
 	case OBJECT_TYPE_LEAF: obj = new CLeaf(x, y); break;
 	case OBJECT_TYPE_TAIL: obj = new CTail(x, y, nx); break;
-	case OBJECT_TYPE_ROCK: obj = new CRock(x, y, nx); break;
+	case OBJECT_TYPE_ROCK: obj = new CRock(x, y, nx, ny); break;
 	case OBJECT_TYPE_FALLOBJECT:	
 	{
 		float src_vx, src_vy;

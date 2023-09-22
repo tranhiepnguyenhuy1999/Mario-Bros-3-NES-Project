@@ -5,7 +5,7 @@ using namespace std;
 #include <Windows.h>
 
 #define MAX_MAP_WIDTH 3328
-#define MAX_MAP_HEIGHT 432
+#define MAX_MAP_HEIGHT 464
 
 class Camera
 {

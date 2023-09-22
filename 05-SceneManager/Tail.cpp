@@ -50,7 +50,7 @@ void CTail::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 void CTail::OnCollisionWithBreakBrick (LPCOLLISIONEVENT e)
 {
 	CBreakBrick* brick = dynamic_cast<CBreakBrick*>(e->obj);
-	brick->SetState(QUESTIONBRICK_STATE_STATIC);
+	brick->SetState(BREAK_BRICK_STATE_TOUCHED);
 }
 void CTail::OnCollisionWithParaGoomba(LPCOLLISIONEVENT e)
 {
