@@ -158,11 +158,9 @@
     <ClCompile Include="DownBrick.cpp" />
     <ClCompile Include="FallObject.cpp" />
     <ClCompile Include="Fire.cpp" />
-    <ClCompile Include="Flower.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Goomba.cpp" />
-    <ClCompile Include="GreenFlower1.cpp" />
     <ClCompile Include="GreenFlower2.cpp" />
     <ClCompile Include="HiddenBrick.cpp" />
     <ClCompile Include="KoopaTroopa.cpp" />
@@ -181,6 +179,7 @@
     <ClCompile Include="QuestionBrick.cpp" />
     <ClCompile Include="Rock.cpp" />
     <ClCompile Include="SampleKeyEventHandler.cpp" />
+    <ClCompile Include="ShootingFlower.cpp" />
     <ClCompile Include="SmallCoin.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="Sprites.cpp" />
@@ -207,11 +206,9 @@
     <ClInclude Include="DownBrick.h" />
     <ClInclude Include="FallObject.h" />
     <ClInclude Include="Fire.h" />
-    <ClInclude Include="Flower.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="Goomba.h" />
-    <ClInclude Include="GreenFlower1.h" />
     <ClInclude Include="GreenFlower2.h" />
     <ClInclude Include="HiddenBrick.h" />
     <ClInclude Include="KeyEventHandler.h" />
@@ -232,6 +229,7 @@
     <ClInclude Include="Rock.h" />
     <ClInclude Include="SampleKeyEventHandler.h" />
     <ClInclude Include="Scene.h" />
+    <ClInclude Include="ShootingFlower.h" />
     <ClInclude Include="SmallCoin.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="Sprites.h" />

@@ -12,11 +12,11 @@
 #include "DownBrick.h"
 #include "KoopaTroopa.h"
 #include "ParaKoopaTroopa.h"
-#include "Flower.h"
 #include "Fire.h"
 #include "ParaGoomba.h"
 #include "Leaf.h"
 #include "Tail.h"
+#include "ShootingFlower.h"
 
 #include "AssetIDs.h"
 #include "Collision.h"
@@ -77,10 +77,10 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithQuestionBrick(e);
 	else if (dynamic_cast<CDownBrick*>(e->obj))
 		OnCollisionWithDownBrick(e);
-	else if (dynamic_cast<CFlower*>(e->obj))
+	else if (dynamic_cast<CShootingFlower*>(e->obj))
 		OnCollisionWithFlower(e);
-	else if (dynamic_cast<CFire*>(e->obj))
-		OnCollisionWithFire(e);
+	//else if (dynamic_cast<CFire*>(e->obj))
+	//	OnCollisionWithFire(e);
 	else if (dynamic_cast<CLeaf*>(e->obj))
 		OnCollisionWithLeaf(e);
 }

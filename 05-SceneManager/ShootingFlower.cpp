@@ -1,8 +1,8 @@
-#include "GreenFlower1.h"
+#include "ShootingFlower.h"
 #include "AssetIDs.h"
 #include "Pile.h"
 #include "debug.h"
-CGreenFlower1::CGreenFlower1(float x, float y) :CGameObject(x, y)
+CShootingFlower::CShootingFlower(float x, float y, float type) :CGameObject(x, y)
 {
 	ay = 0;
 	top = y - FLOWER_BBOX_HEIGHT;
@@ -10,11 +10,11 @@ CGreenFlower1::CGreenFlower1(float x, float y) :CGameObject(x, y)
 	loop_start = -1;
 	is_after_shooting = false;
 	isWorking = true;
-
+	this->type = type;
 	SetState(FLOWER_STATE_STATIC);
 }
 
-void CGreenFlower1::GetBoundingBox(float& left, float& top, float& right, float& bottom)
+void CShootingFlower::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
 	left = x - FLOWER_BBOX_WIDTH / 2;
 	top = y - (FLOWER_BBOX_HEIGHT / 2);
@@ -22,16 +22,16 @@ void CGreenFlower1::GetBoundingBox(float& left, float& top, float& right, float&
 	bottom = top + FLOWER_BBOX_HEIGHT;
 }
 
-void CGreenFlower1::OnNoCollision(DWORD dt)
+void CShootingFlower::OnNoCollision(DWORD dt)
 {
 	y += vy * dt;
 };
 
-void CGreenFlower1::OnCollisionWith(LPCOLLISIONEVENT e)
+void CShootingFlower::OnCollisionWith(LPCOLLISIONEVENT e)
 {
 }
 
-void CGreenFlower1::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
+void CShootingFlower::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	float px, py;
 	CGame::GetInstance()->GetCurrentScene()->getPlayerPosition(px, py);
@@ -57,7 +57,7 @@ void CGreenFlower1::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		SetState(FLOWER_STATE_STATIC);
 	}
 
-	if (state==FLOWER_STATE_STATIC)
+	if (state == FLOWER_STATE_STATIC)
 	{
 		if (y == top)
 		{
@@ -65,14 +65,14 @@ void CGreenFlower1::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				is_after_shooting = false;
 				SetState(FLOWER_STATE_MOVE);
 			}
-			else if(!is_after_shooting && GetTickCount64() - loop_start > FLOWER_PRESHOOT_TIMEOUT)
+			else if (!is_after_shooting && GetTickCount64() - loop_start > FLOWER_PRESHOOT_TIMEOUT)
 			{
 				is_after_shooting = true;
 				loop_start = GetTickCount64();
 				shooting();
 			}
 		}
-		else if (y==bot && abs(px - x) < FLOWER_UNWORKING_RANGE) isWorking = false;
+		else if (y == bot && abs(px - x) < FLOWER_UNWORKING_RANGE) isWorking = false;
 
 		else if (y == bot && (GetTickCount64() - loop_start > FLOWER_LOOP_TIMEOUT))
 		{
@@ -82,7 +82,7 @@ void CGreenFlower1::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 	CGameObject::Update(dt, coObjects);
 }
-int CGreenFlower1::getMovingFlowerAniId(int flag) {
+int CShootingFlower::getMovingFlowerAniId(int flag) {
 	switch (flag)
 	{
 	case 1:
@@ -96,7 +96,7 @@ int CGreenFlower1::getMovingFlowerAniId(int flag) {
 	}
 
 };
-int CGreenFlower1::getStaticFlowerAniId(int flag) {
+int CShootingFlower::getStaticFlowerAniId(int flag) {
 	switch (flag)
 	{
 	case 1:
@@ -109,7 +109,34 @@ int CGreenFlower1::getStaticFlowerAniId(int flag) {
 		return ID_ANI_FLOWER_DOWN_RIGHT_IDLE;
 	}
 };
-int CGreenFlower1::getFlowerPosition() {
+int CShootingFlower::getMovingFlowerType2AniId(int flag) {
+	switch (flag)
+	{
+	case 1:
+		return ID_ANI_FLOWER2_UP_LEFT_MOVING;
+	case 2:
+		return ID_ANI_FLOWER2_DOWN_LEFT_MOVING;
+	case 3:
+		return ID_ANI_FLOWER2_UP_RIGHT_MOVING;
+	case 4:
+		return ID_ANI_FLOWER2_DOWN_RIGHT_MOVING;
+	}
+
+};
+int CShootingFlower::getStaticFlowerType2AniId(int flag) {
+	switch (flag)
+	{
+	case 1:
+		return ID_ANI_FLOWER2_UP_LEFT_IDLE;
+	case 2:
+		return ID_ANI_FLOWER2_DOWN_LEFT_IDLE;
+	case 3:
+		return ID_ANI_FLOWER2_UP_RIGHT_IDLE;
+	case 4:
+		return ID_ANI_FLOWER2_DOWN_RIGHT_IDLE;
+	}
+};
+int CShootingFlower::getFlowerPosition() {
 	float px, py;
 	CGame::GetInstance()->GetCurrentScene()->getPlayerPosition(px, py);
 	if (px < x) {
@@ -122,20 +149,37 @@ int CGreenFlower1::getFlowerPosition() {
 		else return 4; // bot-right
 	}
 }
-void CGreenFlower1::Render()
+void CShootingFlower::Render()
 {
 	int flag = getFlowerPosition();
 	int aniId;
+
 	if (this->state == FLOWER_STATE_STATIC) {
-		aniId = getStaticFlowerAniId(flag);
+		switch ((int)this->type)
+		{
+		case FLOWER_TYPE_GREEN:
+			aniId = getStaticFlowerAniId(flag);
+			break;
+		case FLOWER_TYPE_RED:
+			aniId = getStaticFlowerType2AniId(flag);
+			break;
+		}
 	}
 	else {
-		aniId = getMovingFlowerAniId(flag);
+		switch ((int)this->type)
+		{
+		case FLOWER_TYPE_GREEN:
+			aniId = getMovingFlowerAniId(flag);
+			break;
+		case FLOWER_TYPE_RED:
+			aniId = getMovingFlowerType2AniId(flag);
+			break;
+		}
 	}
 	CAnimations::GetInstance()->Get(aniId)->Render(x, y);
 	RenderBoundingBox();
 }
-void CGreenFlower1::SetState(int state)
+void CShootingFlower::SetState(int state)
 {
 	CGameObject::SetState(state);
 	switch (state)
@@ -147,11 +191,11 @@ void CGreenFlower1::SetState(int state)
 		break;
 	case FLOWER_STATE_MOVE:
 		if (y == top) ay = FLOWER_Y_AXIS;
-		else if (y==bot) ay = -FLOWER_Y_AXIS;
+		else if (y == bot) ay = -FLOWER_Y_AXIS;
 		break;
 	}
-}	
-int CGreenFlower1::getPlayerPosition() {
+}
+int CShootingFlower::getPlayerPosition() {
 	float px, py;
 	CGame::GetInstance()->GetCurrentScene()->getPlayerPosition(px, py);
 
@@ -166,14 +210,14 @@ int CGreenFlower1::getPlayerPosition() {
 		else return 4; //right-bottom
 	}
 }
-void CGreenFlower1::shooting()
+void CShootingFlower::shooting()
 {
 	float nx = 0, ny = 0;
 	float px, py;
 
 	int flag = getPlayerPosition();
 	CGame::GetInstance()->GetCurrentScene()->getPlayerPosition(px, py);
-	
+
 	switch (flag)
 	{
 	case 1:
@@ -217,7 +261,7 @@ void CGreenFlower1::shooting()
 
 	CGame::GetInstance()->GetCurrentScene()->createNewObject(OBJECT_TYPE_FIRE, x, y, nx * altShootingXSpeed, altShootingYSpeed * ny);
 }
-float CGreenFlower1::translateToPercent(float data, boolean isXAxis) {
+float CShootingFlower::translateToPercent(float data, boolean isXAxis) {
 	float px, py;
 	float result = 0;
 	CGame::GetInstance()->GetCurrentScene()->getPlayerPosition(px, py);
