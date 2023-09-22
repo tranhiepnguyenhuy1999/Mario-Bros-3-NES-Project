@@ -10,8 +10,8 @@
 #include "Coin.h"
 #include "Platform.h"
 #include "Pile.h"
+#include "Flower.h"
 #include "ShootingFlower.h"
-#include "GreenFlower2.h"
 #include "Fire.h"
 #include "SmallCoin.h"
 #include "KoopaTroopa.h"
@@ -249,7 +249,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	}
 	case OBJECT_TYPE_CLOUDBRICK: obj = new CCloudBrick(x, y); break;
 	case OBJECT_TYPE_SMALLCOIN: obj = new CSmallCoin(x, y); break;
-	//case OBJECT_TYPE_FLOWER: obj = new CFlower(x, y); break;
+	case OBJECT_TYPE_FLOWER: obj = new CFlower(x, y); break;
 	case OBJECT_TYPE_SHOOTING_FLOWER:
 	{
 		float type = (float)atof(tokens[3].c_str());

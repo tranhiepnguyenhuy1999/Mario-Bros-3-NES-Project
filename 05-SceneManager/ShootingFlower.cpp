@@ -5,21 +5,21 @@
 CShootingFlower::CShootingFlower(float x, float y, float type) :CGameObject(x, y)
 {
 	ay = 0;
-	top = y - FLOWER_BBOX_HEIGHT;
+	top = y - SHOOTING_FLOWER_BBOX_HEIGHT;
 	bot = y;
 	loop_start = -1;
 	is_after_shooting = false;
 	isWorking = true;
 	this->type = type;
-	SetState(FLOWER_STATE_STATIC);
+	SetState(SHOOTING_FLOWER_STATE_STATIC);
 }
 
 void CShootingFlower::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
-	left = x - FLOWER_BBOX_WIDTH / 2;
-	top = y - (FLOWER_BBOX_HEIGHT / 2);
-	right = left + FLOWER_BBOX_WIDTH;
-	bottom = top + FLOWER_BBOX_HEIGHT;
+	left = x - SHOOTING_FLOWER_BBOX_WIDTH / 2;
+	top = y - (SHOOTING_FLOWER_BBOX_HEIGHT / 2);
+	right = left + SHOOTING_FLOWER_BBOX_WIDTH;
+	bottom = top + SHOOTING_FLOWER_BBOX_HEIGHT;
 }
 
 void CShootingFlower::OnNoCollision(DWORD dt)
@@ -42,41 +42,41 @@ void CShootingFlower::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	y += vy * dt;
 
 	if (!isWorking) {
-		if (abs(px - x) > FLOWER_UNWORKING_RANGE) isWorking = true;
+		if (abs(px - x) > SHOOTING_FLOWER_UNWORKING_RANGE) isWorking = true;
 		return;
 	}
 
 	if (y < top)
 	{
 		y = top;
-		SetState(FLOWER_STATE_STATIC);
+		SetState(SHOOTING_FLOWER_STATE_STATIC);
 	}
 	else if (y > bot)
 	{
 		y = bot;
-		SetState(FLOWER_STATE_STATIC);
+		SetState(SHOOTING_FLOWER_STATE_STATIC);
 	}
 
-	if (state == FLOWER_STATE_STATIC)
+	if (state == SHOOTING_FLOWER_STATE_STATIC)
 	{
 		if (y == top)
 		{
-			if (is_after_shooting && (GetTickCount64() - loop_start > FLOWER_AFSHOOT_TIMEOUT)) {
+			if (is_after_shooting && (GetTickCount64() - loop_start > SHOOTING_FLOWER_AFSHOOT_TIMEOUT)) {
 				is_after_shooting = false;
-				SetState(FLOWER_STATE_MOVE);
+				SetState(SHOOTING_FLOWER_STATE_MOVE);
 			}
-			else if (!is_after_shooting && GetTickCount64() - loop_start > FLOWER_PRESHOOT_TIMEOUT)
+			else if (!is_after_shooting && GetTickCount64() - loop_start > SHOOTING_FLOWER_PRESHOOT_TIMEOUT)
 			{
 				is_after_shooting = true;
 				loop_start = GetTickCount64();
 				shooting();
 			}
 		}
-		else if (y == bot && abs(px - x) < FLOWER_UNWORKING_RANGE) isWorking = false;
+		else if (y == bot && abs(px - x) < SHOOTING_FLOWER_UNWORKING_RANGE) isWorking = false;
 
-		else if (y == bot && (GetTickCount64() - loop_start > FLOWER_LOOP_TIMEOUT))
+		else if (y == bot && (GetTickCount64() - loop_start > SHOOTING_FLOWER_LOOP_TIMEOUT))
 		{
-			SetState(FLOWER_STATE_MOVE);
+			SetState(SHOOTING_FLOWER_STATE_MOVE);
 		}
 	}
 
@@ -86,13 +86,13 @@ int CShootingFlower::getMovingFlowerAniId(int flag) {
 	switch (flag)
 	{
 	case 1:
-		return ID_ANI_FLOWER_UP_LEFT_MOVING;
+		return ID_ANI_SHOOTING_FLOWER_UP_LEFT_MOVING;
 	case 2:
-		return ID_ANI_FLOWER_DOWN_LEFT_MOVING;
+		return ID_ANI_SHOOTING_FLOWER_DOWN_LEFT_MOVING;
 	case 3:
-		return ID_ANI_FLOWER_UP_RIGHT_MOVING;
+		return ID_ANI_SHOOTING_FLOWER_UP_RIGHT_MOVING;
 	case 4:
-		return ID_ANI_FLOWER_DOWN_RIGHT_MOVING;
+		return ID_ANI_SHOOTING_FLOWER_DOWN_RIGHT_MOVING;
 	}
 
 };
@@ -100,26 +100,26 @@ int CShootingFlower::getStaticFlowerAniId(int flag) {
 	switch (flag)
 	{
 	case 1:
-		return ID_ANI_FLOWER_UP_LEFT_IDLE;
+		return ID_ANI_SHOOTING_FLOWER_UP_LEFT_IDLE;
 	case 2:
-		return ID_ANI_FLOWER_DOWN_LEFT_IDLE;
+		return ID_ANI_SHOOTING_FLOWER_DOWN_LEFT_IDLE;
 	case 3:
-		return ID_ANI_FLOWER_UP_RIGHT_IDLE;
+		return ID_ANI_SHOOTING_FLOWER_UP_RIGHT_IDLE;
 	case 4:
-		return ID_ANI_FLOWER_DOWN_RIGHT_IDLE;
+		return ID_ANI_SHOOTING_FLOWER_DOWN_RIGHT_IDLE;
 	}
 };
 int CShootingFlower::getMovingFlowerType2AniId(int flag) {
 	switch (flag)
 	{
 	case 1:
-		return ID_ANI_FLOWER2_UP_LEFT_MOVING;
+		return ID_ANI_SHOOTING_FLOWER2_UP_LEFT_MOVING;
 	case 2:
-		return ID_ANI_FLOWER2_DOWN_LEFT_MOVING;
+		return ID_ANI_SHOOTING_FLOWER2_DOWN_LEFT_MOVING;
 	case 3:
-		return ID_ANI_FLOWER2_UP_RIGHT_MOVING;
+		return ID_ANI_SHOOTING_FLOWER2_UP_RIGHT_MOVING;
 	case 4:
-		return ID_ANI_FLOWER2_DOWN_RIGHT_MOVING;
+		return ID_ANI_SHOOTING_FLOWER2_DOWN_RIGHT_MOVING;
 	}
 
 };
@@ -127,13 +127,13 @@ int CShootingFlower::getStaticFlowerType2AniId(int flag) {
 	switch (flag)
 	{
 	case 1:
-		return ID_ANI_FLOWER2_UP_LEFT_IDLE;
+		return ID_ANI_SHOOTING_FLOWER2_UP_LEFT_IDLE;
 	case 2:
-		return ID_ANI_FLOWER2_DOWN_LEFT_IDLE;
+		return ID_ANI_SHOOTING_FLOWER2_DOWN_LEFT_IDLE;
 	case 3:
-		return ID_ANI_FLOWER2_UP_RIGHT_IDLE;
+		return ID_ANI_SHOOTING_FLOWER2_UP_RIGHT_IDLE;
 	case 4:
-		return ID_ANI_FLOWER2_DOWN_RIGHT_IDLE;
+		return ID_ANI_SHOOTING_FLOWER2_DOWN_RIGHT_IDLE;
 	}
 };
 int CShootingFlower::getFlowerPosition() {
@@ -154,13 +154,13 @@ void CShootingFlower::Render()
 	int flag = getFlowerPosition();
 	int aniId;
 
-	if (this->state == FLOWER_STATE_STATIC) {
+	if (this->state == SHOOTING_FLOWER_STATE_STATIC) {
 		switch ((int)this->type)
 		{
-		case FLOWER_TYPE_GREEN:
+		case SHOOTING_FLOWER_TYPE_GREEN:
 			aniId = getStaticFlowerAniId(flag);
 			break;
-		case FLOWER_TYPE_RED:
+		case SHOOTING_FLOWER_TYPE_RED:
 			aniId = getStaticFlowerType2AniId(flag);
 			break;
 		}
@@ -168,10 +168,10 @@ void CShootingFlower::Render()
 	else {
 		switch ((int)this->type)
 		{
-		case FLOWER_TYPE_GREEN:
+		case SHOOTING_FLOWER_TYPE_GREEN:
 			aniId = getMovingFlowerAniId(flag);
 			break;
-		case FLOWER_TYPE_RED:
+		case SHOOTING_FLOWER_TYPE_RED:
 			aniId = getMovingFlowerType2AniId(flag);
 			break;
 		}
@@ -184,14 +184,14 @@ void CShootingFlower::SetState(int state)
 	CGameObject::SetState(state);
 	switch (state)
 	{
-	case FLOWER_STATE_STATIC:
+	case SHOOTING_FLOWER_STATE_STATIC:
 		loop_start = GetTickCount64();
 		ay = 0;
 		vy = 0;
 		break;
-	case FLOWER_STATE_MOVE:
-		if (y == top) ay = FLOWER_Y_AXIS;
-		else if (y == bot) ay = -FLOWER_Y_AXIS;
+	case SHOOTING_FLOWER_STATE_MOVE:
+		if (y == top) ay = SHOOTING_FLOWER_Y_AXIS;
+		else if (y == bot) ay = -SHOOTING_FLOWER_Y_AXIS;
 		break;
 	}
 }
@@ -268,11 +268,11 @@ float CShootingFlower::translateToPercent(float data, boolean isXAxis) {
 
 	if (isXAxis)
 	{
-		result = abs(px - data) / FLOWER_SHOOTING_RANGE;
+		result = abs(px - data) / SHOOTING_FLOWER_SHOOTING_RANGE;
 	}
 	else
 	{
-		result = abs(py - data) / FLOWER_SHOOTING_RANGE;
+		result = abs(py - data) / SHOOTING_FLOWER_SHOOTING_RANGE;
 	}
 
 
