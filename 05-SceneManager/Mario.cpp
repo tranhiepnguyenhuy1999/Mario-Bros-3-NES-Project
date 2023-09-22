@@ -127,9 +127,9 @@ void CMario::OnCollisionWithParaGoomba(LPCOLLISIONEVENT e)
 
 		if (goomba->GetState() != GOOMBA_STATE_DIE)
 		{
-			if (goomba->GetState() != PARAGOOMBA_STATE_WALKING)
+			if (goomba->GetState() != PARAGOOMBA_STATE_MOVING)
 			{
-				goomba->SetState(PARAGOOMBA_STATE_WALKING);
+				goomba->SetState(PARAGOOMBA_STATE_MOVING);
 				vy = -MARIO_JUMP_DEFLECT_SPEED;
 			}
 			else
@@ -139,25 +139,25 @@ void CMario::OnCollisionWithParaGoomba(LPCOLLISIONEVENT e)
 			}
 		}
 	}
-	else // hit by Goomba
-	{
-		if (untouchable == 0)
-		{
-			if (goomba->GetState() != GOOMBA_STATE_DIE)
-			{
-				if (level > MARIO_LEVEL_SMALL)
-				{
-					level = MARIO_LEVEL_SMALL;
-					StartUntouchable();
-				}
-				else
-				{
-					DebugOut(L">>> Mario DIE >>> \n");
-					SetState(MARIO_STATE_DIE);
-				}
-			}
-		}
-	}
+	//else // hit by Goomba
+	//{
+	//	if (untouchable == 0)
+	//	{
+	//		if (goomba->GetState() != GOOMBA_STATE_DIE)
+	//		{
+	//			if (level > MARIO_LEVEL_SMALL)
+	//			{
+	//				level = MARIO_LEVEL_SMALL;
+	//				StartUntouchable();
+	//			}
+	//			else
+	//			{
+	//				DebugOut(L">>> Mario DIE >>> \n");
+	//				SetState(MARIO_STATE_DIE);
+	//			}
+	//		}
+	//	}
+	//}
 }
 void CMario::OnCollisionWithFlower(LPCOLLISIONEVENT e)
 {

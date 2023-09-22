@@ -4,12 +4,12 @@
 
 CParaGoomba::CParaGoomba(float x, float y) :CGameObject(x, y)
 {
-	this->ax = 0;
-	this->ay = 0;
-	ready_jump_start = -1;
-	//this->ay = PARAGOOMBA_GRAVITY;
+	this->ay = PARAGOOMBA_GRAVITY;
+	vx = -PARAGOOMBA_SPEED;
+	isOnFlatform = false;
 	count_start = -1;
-	SetState(PARAGOOMBA_STATE_FLYING);
+	count = 0;
+	SetState(PARAGOOMBA_STATE_MOVING);
 }
 
 void CParaGoomba::GetBoundingBox(float& left, float& top, float& right, float& bottom)
@@ -39,26 +39,11 @@ void CParaGoomba::OnNoCollision(DWORD dt)
 void CParaGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
 {
 	if (!e->obj->IsBlocking()) return;
-	if (dynamic_cast<CParaGoomba*>(e->obj)) return;
 
-	if (e->ny != 0)
+	if (e->ny != 0 && e->obj->IsBlocking())
 	{
-		if (state != PARAGOOMBA_STATE_WALKING) {
-			if (e->ny < 0)
-			{
-				if (ready_jump_start == -1)
-				{
-					ready_jump_start = GetTickCount64();
-					return;
-				}
-				if (GetTickCount64() - ready_jump_start > PARAGOOMBA_JUMP_TIMEOUT)
-				{
-					SetState(PARAGOOMBA_STATE_JUMP);
-					ready_jump_start = -1;
-				}
-			}
-		}
-		else vy = 0;
+		vy = 0;
+		if (!isOnFlatform) isOnFlatform = true;
 	}
 	else if (e->nx != 0)
 	{
@@ -68,29 +53,36 @@ void CParaGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
 
 void CParaGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	float cx, cy;
-	CGame::GetInstance()->GetCamPos(cx, cy);
-	if (!isActive)
-	{
-		if (x < cx + 1.5 * CGame::GetInstance()->GetBackBufferWidth()) {
-			isActive = true;
-		}
-		return;
-	}
-
 	vy += ay * dt;
-	vx += ax * dt;
-	//DebugOut(L"count %d", GetTickCount64() - count_start);
-	if ((state == PARAGOOMBA_STATE_DIE) && (GetTickCount64() - count_start > PARAGOOMBA_DIE_TIMEOUT))
+
+	if (state == PARAGOOMBA_STATE_DIE && (GetTickCount64() - count_start > PARAGOOMBA_LOOP_TIMEOUT))
 	{
 		this->isDeleted = true;
 		return;
 	}
-	if ((state == PARAGOOMBA_STATE_JUMP) && (GetTickCount64() - count_start > PARAGOOMBA_JUMP_TIMEOUT))
+	else if (state == PARAGOOMBA_STATE_MOVING && (GetTickCount64() - count_start > PARAGOOMBA_LOOP_TIMEOUT))
 	{
-		SetState(PARAGOOMBA_STATE_RELEASE_JUMP);
-		count_start = -1;
-		return;
+		SetState(PARAGOOMBA_STATE_JUMP);
+	}
+	else if (state == PARAGOOMBA_STATE_JUMP)
+	{
+		if(isOnFlatform) SetState(PARAGOOMBA_STATE_SMALL_JUMP);
+	}
+	else if (state == PARAGOOMBA_STATE_SMALL_JUMP)
+	{
+		if (count < PARAGOOMBA_SMALL_JUMP_TIMES)
+		{
+			if (isOnFlatform)
+			{
+				vy -= PARAGOOMBA_SMALL_JUMP_DEFLECT_SPEED;
+				isOnFlatform = false;
+				count++;
+			}
+		}
+		else
+		{
+			SetState(PARAGOOMBA_STATE_MOVING);
+		}
 	}
 	CGameObject::Update(dt, coObjects);
 	CCollision::GetInstance()->Process(this, dt, coObjects);
@@ -105,10 +97,10 @@ void CParaGoomba::Render()
 		aniId = ID_ANI_PARAGOOMBA_DIE;
 	}
 		CAnimations::GetInstance()->Get(aniId)->Render(x, y);
-	if (state != PARAGOOMBA_STATE_WALKING && state != PARAGOOMBA_STATE_DIE)
+	if (state != PARAGOOMBA_STATE_MOVING && state != PARAGOOMBA_STATE_DIE)
 	{
-		CAnimations::GetInstance()->Get(ID_ANI_PARAGOOMBA_WINNGS_RIGHT)->Render(x + PARAGOOMBA_BBOX_WIDTH/2, y-PARAGOOMBA_BBOX_HEIGHT/2);
-		CAnimations::GetInstance()->Get(ID_ANI_PARAGOOMBA_WINNGS_LEFT)->Render(x - PARAGOOMBA_BBOX_WIDTH / 2, y - PARAGOOMBA_BBOX_HEIGHT / 2);
+		CAnimations::GetInstance()->Get(ID_ANI_PARAGOOMBA_WINNG_RIGHT)->Render(x + PARAGOOMBA_BBOX_WIDTH/2, y-PARAGOOMBA_BBOX_HEIGHT/2);
+		CAnimations::GetInstance()->Get(ID_ANI_PARAGOOMBA_WINNG_LEFT)->Render(x - PARAGOOMBA_BBOX_WIDTH / 2, y - PARAGOOMBA_BBOX_HEIGHT / 2);
 	}
 	RenderBoundingBox();
 }
@@ -127,19 +119,14 @@ void CParaGoomba::SetState(int state)
 		ay = 0;
 		break;
 	case PARAGOOMBA_STATE_JUMP:
+		isOnFlatform = false;
+		vy -= PARAGOOMBA_JUMP_DEFLECT_SPEED;
+		break;
+	case PARAGOOMBA_STATE_MOVING:
+		count = 0;
 		count_start = GetTickCount64();
-		vy = -PARAGOOMBA_JUMP_SPEED;
 		break;
-	case PARAGOOMBA_STATE_RELEASE_JUMP:
-		vy = PARAGOOMBA_JUMP_SPEED;
-		break;
-	case PARAGOOMBA_STATE_WALKING:
-		vy = PARAGOOMBA_JUMP_SPEED;
-		vx = -PARAGOOMBA_WALKING_SPEED;
-		break;
-	case PARAGOOMBA_STATE_FLYING:
-		vy = PARAGOOMBA_JUMP_SPEED;
-		vx = -PARAGOOMBA_WALKING_SPEED;
+	case PARAGOOMBA_STATE_SMALL_JUMP:
 		break;
 	}
 }
