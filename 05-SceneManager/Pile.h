@@ -3,11 +3,13 @@
 #include "Animation.h"
 #include "Animations.h"
 
-#define ID_ANI_PILE_HEAD_FIRST 8
-#define ID_ANI_PILE_HEAD_LAST 9
-#define ID_ANI_PILE_BODY_FIRST 11
-#define ID_ANI_PILE_BODY_LAST 12
+#define ID_ANI_PILE_HEAD_FIRST 7
+#define ID_ANI_PILE_HEAD_LAST 8
+#define ID_ANI_PILE_BODY_FIRST 10
+#define ID_ANI_PILE_BODY_LAST 11
+
 #define PILE_WIDTH 32
+
 #define PILE_BBOX_WIDTH 16
 #define PILE_BBOX_HEIGHT 16
 
