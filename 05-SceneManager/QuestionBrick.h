@@ -19,6 +19,7 @@
 #define QUESTIONBRICK_STATE_UNACTIVE 100
 #define QUESTIONBRICK_STATE_TOUCHED 200
 #define QUESTIONBRICK_STATE_ACTIVE 300
+
 class CQuestionBrick : public CGameObject {
 	float type;
 	float range;

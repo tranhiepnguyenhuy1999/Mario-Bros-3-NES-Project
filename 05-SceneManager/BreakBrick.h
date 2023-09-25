@@ -6,15 +6,15 @@
 
 #define BREAK_BRICK_MOVING_SPEED 0.05f
 
-#define ID_ANI_UNTOUCHED_QUESTION_BRICK 10024
-#define ID_ANI_TOUCHED_QUESTION_BRICK 10006	
+#define ID_ANI_BREAK_BRICK_UNTOUCHED 10024
+#define ID_ANI_BREAK_BRICK_TYPE2_TOUCHED 10003
 
-#define BRICK_WIDTH 16
-#define BRICK_BBOX_WIDTH 16
-#define BRICK_BBOX_HEIGHT 16
 
-#define QUESTION_BRICK_TYPE_NORMAL 1
-#define QUESTION_BRICK_TYPE_SPECIAL 2
+#define BREAK_BRICK_BBOX_WIDTH 16
+#define BREAK_BRICK_BBOX_HEIGHT 16
+
+#define BREAK_BRICK_TYPE_NORMAL 1
+#define BREAK_BRICK_TYPE_SPECIAL 2
 
 #define BREAK_BRICK_STATE_TOUCHED 100
 
@@ -22,7 +22,7 @@ class CBreakBrick : public CGameObject {
 	float type;
 
 public:
-	CBreakBrick(float x, float y, float type = 1) : CGameObject(x, y) {
+	CBreakBrick(float x, float y, float type = BREAK_BRICK_TYPE_NORMAL) : CGameObject(x, y) {
 		this->type = type;
 	};
 
