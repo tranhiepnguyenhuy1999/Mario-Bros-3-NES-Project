@@ -24,7 +24,6 @@ protected:
 	LPGAMEOBJECT player;					
 
 	vector<LPGAMEOBJECT> objects;
-	vector<LPGAMEOBJECT> tiledMapObjects;
 
 	void _ParseSection_SPRITES(string line);
 	void _ParseSection_ANIMATIONS(string line);
@@ -39,13 +38,14 @@ protected:
 	
 public: 
 	CPlayScene(int id, LPCWSTR filePath);
+	
 	virtual void createNewObject(int id, float x, float y, float nx, float ny, LPGAMEOBJECT objSrc = NULL);
-	virtual void getPlayerPosition(float& x, float& y) {
-		player->GetPosition(x, y);
-	};
+	virtual void playerTouchedButtonP();
+
 	virtual void getPlayerLevel(int& level) {
 		player->getLevel(level);
 	};
+
 	virtual void Load();
 	virtual void Update(DWORD dt);
 	virtual void Render();

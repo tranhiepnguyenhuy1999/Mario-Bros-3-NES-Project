@@ -1,6 +1,7 @@
 #include "ShootingFlower.h"
 #include "AssetIDs.h"
 #include "Pile.h"
+#include "Camera.h"
 #include "debug.h"
 CShootingFlower::CShootingFlower(float x, float y, float type) :CGameObject(x, y)
 {
@@ -34,7 +35,7 @@ void CShootingFlower::OnCollisionWith(LPCOLLISIONEVENT e)
 void CShootingFlower::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	float px, py;
-	CGame::GetInstance()->GetCurrentScene()->getPlayerPosition(px, py);
+	Camera::GetInstance()->getPlayerPosition(px, py);
 
 	vy += ay * dt;
 
@@ -138,7 +139,8 @@ int CShootingFlower::getStaticFlowerType2AniId(int flag) {
 };
 int CShootingFlower::getFlowerPosition() {
 	float px, py;
-	CGame::GetInstance()->GetCurrentScene()->getPlayerPosition(px, py);
+	Camera::GetInstance()->getPlayerPosition(px, py);
+
 	if (px < x) {
 		if (py < y) return 1; //top-left
 		else return 2; //bot-left
@@ -197,7 +199,7 @@ void CShootingFlower::SetState(int state)
 }
 int CShootingFlower::getPlayerPosition() {
 	float px, py;
-	CGame::GetInstance()->GetCurrentScene()->getPlayerPosition(px, py);
+	Camera::GetInstance()->getPlayerPosition(px, py);
 
 	// check position base on y
 	if (px < x) {
@@ -216,7 +218,7 @@ void CShootingFlower::shooting()
 	float px, py;
 
 	int flag = getPlayerPosition();
-	CGame::GetInstance()->GetCurrentScene()->getPlayerPosition(px, py);
+	Camera::GetInstance()->getPlayerPosition(px, py);
 
 	switch (flag)
 	{
@@ -264,7 +266,7 @@ void CShootingFlower::shooting()
 float CShootingFlower::translateToPercent(float data, boolean isXAxis) {
 	float px, py;
 	float result = 0;
-	CGame::GetInstance()->GetCurrentScene()->getPlayerPosition(px, py);
+	Camera::GetInstance()->getPlayerPosition(px, py);
 
 	if (isXAxis)
 	{

@@ -23,7 +23,12 @@ void CBreakBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	{
 		createRockObject();
 		isDeleted = true;
-		return;
+	}
+	else if (state == BREAK_BRICK_STATE_TRANSFORM_TO_COIN && type != BREAK_BRICK_TYPE_SPECIAL)
+	{
+		CGame::GetInstance()->GetCurrentScene()->createNewObject(OBJECT_TYPE_STATIC_COIN, x, y);
+		isDeleted = true;
+
 	}
 }
 void CBreakBrick::SetState(int state)

@@ -1,7 +1,9 @@
 #include "Flower.h"
 #include "AssetIDs.h"
 #include "Pile.h"
+#include "Camera.h"
 #include "debug.h"
+
 CFlower::CFlower(float x, float y) :CGameObject(x, y)
 {
 	ay = 0;
@@ -32,7 +34,7 @@ void CFlower::OnCollisionWith(LPCOLLISIONEVENT e)
 void CFlower::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	float px, py;
-	CGame::GetInstance()->GetCurrentScene()->getPlayerPosition(px, py);
+	Camera::GetInstance()->getPlayerPosition(px, py);
 
 	vy += ay * dt;
 

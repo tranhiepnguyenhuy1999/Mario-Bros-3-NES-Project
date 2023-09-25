@@ -3,9 +3,10 @@
 void CCoin::Render()
 {
 	CAnimations* animations = CAnimations::GetInstance();
-	animations->Get(ID_ANI_COIN)->Render(x, y);
-
-	//RenderBoundingBox();
+	int ani_id = ID_ANI_COIN;
+	if (type == COIN_TYPE_STATIC)
+		ani_id = ID_ANI_COIN_STATIC;
+	animations->Get(ani_id)->Render(x, y);
 }
 
 void CCoin::GetBoundingBox(float& l, float& t, float& r, float& b)

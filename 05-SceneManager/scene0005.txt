@@ -1,7 +1,6 @@
 # list of object assets to load in this scene
 [ASSETS]
 mario.txt
-coin.txt
 cloud.txt
 small-object.txt
 goomba.txt

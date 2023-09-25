@@ -316,6 +316,7 @@ void CPlayScene::createNewObject(int id, float x, float y, float nx=0, float ny=
 	case OBJECT_TYPE_TAIL: obj = new CTail(x, y, nx); break;
 	case OBJECT_TYPE_ROCK: obj = new CRock(x, y, nx, ny); break;
 	case OBJECT_TYPE_BUTTON: obj = new CButton(x, y); break;
+	case OBJECT_TYPE_STATIC_COIN: obj = new CCoin(x, y, COIN_TYPE_STATIC); break;
 	case OBJECT_TYPE_FALLOBJECT:	
 	{
 		float src_vx, src_vy;
@@ -333,8 +334,6 @@ void CPlayScene::createNewObject(int id, float x, float y, float nx=0, float ny=
 	{
 		obj = new CFire(x, y, nx, ny); break;
 	}
-	case OBJECT_TYPE_COIN: obj = new CCoin(x, y); break;
-		//
 	default:
 		DebugOut(L"[ERROR] Invalid object type: %d\n", id);
 		return;
@@ -345,6 +344,16 @@ void CPlayScene::createNewObject(int id, float x, float y, float nx=0, float ny=
 
 
 	objects.push_back(obj);
+}
+void CPlayScene::playerTouchedButtonP()
+{
+	for (int i = 0; i < objects.size(); i++)
+	{
+		if (dynamic_cast<CBreakBrick*>(objects[i]))
+		{
+			objects[i]->SetState(BREAK_BRICK_STATE_TRANSFORM_TO_COIN);
+		}
+	}
 }
 void CPlayScene::LoadAssets(LPCWSTR assetFile)
 {

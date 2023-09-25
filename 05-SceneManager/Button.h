@@ -18,6 +18,14 @@ public:
 	CButton(float x, float y) : CGameObject(x, y) {}
 	void Render();
 	void Update(DWORD dt) {}
+	void SetState(int state) {
+		CGameObject::SetState(state);
+		if (state == BUTTON_STATE_ACTIVE)
+		{
+			CGame::GetInstance()->GetCurrentScene()->playerTouchedButtonP();
+		}
+	}
+
 	void GetBoundingBox(float& l, float& t, float& r, float& b);
 	int IsBlocking() { return 0; }
 };

@@ -341,7 +341,7 @@ void CMario::OnCollisionWithCoin(LPCOLLISIONEVENT e)
 void CMario::OnCollisionWithButton(LPCOLLISIONEVENT e)
 {
 	CButton* obj = dynamic_cast<CButton*>(e->obj);
-	obj->SetState(BUTTON_STATE_ACTIVE);
+	if(obj->GetState() != BUTTON_STATE_ACTIVE) obj->SetState(BUTTON_STATE_ACTIVE);
 }
 void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)
 {

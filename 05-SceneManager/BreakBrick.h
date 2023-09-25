@@ -17,6 +17,8 @@
 #define BREAK_BRICK_TYPE_SPECIAL 2
 
 #define BREAK_BRICK_STATE_TOUCHED 100
+#define BREAK_BRICK_STATE_TRANSFORM_TO_COIN 200
+
 
 class CBreakBrick : public CGameObject {
 	float type;

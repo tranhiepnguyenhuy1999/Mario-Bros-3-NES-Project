@@ -28,9 +28,10 @@ public:
 	virtual void Unload() = 0;
 	virtual void Update(DWORD dt) = 0;
 	virtual void Render() = 0;
-	virtual void getPlayerPosition(float &x, float &y) = 0;
 	virtual void getPlayerLevel(int& level) = 0;
 	virtual void createNewObject(int id, float x, float y, float nx=0, float ny=0, LPGAMEOBJECT objSrc = NULL)=0;
+	virtual void playerTouchedButtonP() = 0;
+
 };
 typedef CScene * LPSCENE;
 
