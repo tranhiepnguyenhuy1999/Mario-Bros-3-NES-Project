@@ -14,6 +14,12 @@
 #define TAIL_STATE_DIE 200
 class CTail : public CGameObject {
 	ULONGLONG count_start;
+
+	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
+	void OnCollisionWithBreakBrick(LPCOLLISIONEVENT e);
+	void OnCollisionWithParaGoomba(LPCOLLISIONEVENT e);
+	void OnCollisionWithKoopaTroopa(LPCOLLISIONEVENT e);
+
 public:
 	CTail(float x, float y, float nx);
 
@@ -22,14 +28,9 @@ public:
 	virtual void Render();
 
 	virtual int IsCollidable() { return 1; };
+
 	virtual void OnNoCollision(DWORD dt);
-
 	virtual void OnCollisionWith(LPCOLLISIONEVENT e);
-
-	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
-	void OnCollisionWithBreakBrick(LPCOLLISIONEVENT e);
-	void OnCollisionWithParaGoomba(LPCOLLISIONEVENT e);
-	void OnCollisionWithKoopaTroopa(LPCOLLISIONEVENT e);
 
 	virtual void SetState(int state);
 };

@@ -95,7 +95,7 @@
 #define ID_ANI_MARIO_DIE 999
 
 // SMALL MARIO
-#define ID_ANI_MARIO_SMALL_IDLE_RIGHT 1100
+#define ID_ANI_MARIO_SMALL_IDLE_RIGHT 10026
 #define ID_ANI_MARIO_SMALL_IDLE_LEFT 1102
 
 #define ID_ANI_MARIO_SMALL_WALKING_RIGHT 1200
@@ -171,6 +171,8 @@ class CMario : public CGameObject
 	void OnCollisionWithDownBrick(LPCOLLISIONEVENT e);
 	void OnCollisionWithPortal(LPCOLLISIONEVENT e);
 	void OnCollisionWithParaKoopaTroopa(LPCOLLISIONEVENT e);
+	void OnCollisionWithButton(LPCOLLISIONEVENT e);
+
 	int GetAniIdBig();
 	int GetAniIdSmall();
 	int GetAniIdRacoon();

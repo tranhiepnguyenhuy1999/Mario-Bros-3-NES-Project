@@ -17,6 +17,7 @@
 #include "Leaf.h"
 #include "Tail.h"
 #include "ShootingFlower.h"
+#include "Button.h"
 
 #include "AssetIDs.h"
 #include "Collision.h"
@@ -83,6 +84,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 	//	OnCollisionWithFire(e);
 	else if (dynamic_cast<CLeaf*>(e->obj))
 		OnCollisionWithLeaf(e);
+	else if (dynamic_cast<CButton*>(e->obj))
+		OnCollisionWithButton(e);
 }
 void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 {
@@ -309,7 +312,6 @@ void CMario::OnCollisionWithQuestionBrick(LPCOLLISIONEVENT e)
 }
 void CMario::OnCollisionWithDownBrick(LPCOLLISIONEVENT e)
 {
-
 	CDownBrick* downBrick = dynamic_cast<CDownBrick*>(e->obj);
 	if (e->ny < 0)
 	{
@@ -335,6 +337,11 @@ void CMario::OnCollisionWithCoin(LPCOLLISIONEVENT e)
 {
 	e->obj->Delete();
 	coin++;
+}
+void CMario::OnCollisionWithButton(LPCOLLISIONEVENT e)
+{
+	CButton* obj = dynamic_cast<CButton*>(e->obj);
+	obj->SetState(BUTTON_STATE_ACTIVE);
 }
 void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)
 {

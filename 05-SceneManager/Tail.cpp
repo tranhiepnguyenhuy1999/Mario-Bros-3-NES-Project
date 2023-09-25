@@ -3,6 +3,8 @@
 #include "ParaGoomba.h"
 #include "KoopaTroopa.h"
 #include "BreakBrick.h"
+#include "Button.h"
+
 #include "debug.h"
 
 CTail::CTail(float x, float y, float nx) :CGameObject(x, y)
@@ -49,8 +51,9 @@ void CTail::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 }
 void CTail::OnCollisionWithBreakBrick (LPCOLLISIONEVENT e)
 {
-	CBreakBrick* brick = dynamic_cast<CBreakBrick*>(e->obj);
-	brick->SetState(BREAK_BRICK_STATE_TOUCHED);
+	CBreakBrick* obj = dynamic_cast<CBreakBrick*>(e->obj);
+
+	if(obj->GetState() != BREAK_BRICK_STATE_TOUCHED)	obj->SetState(BREAK_BRICK_STATE_TOUCHED);
 }
 void CTail::OnCollisionWithParaGoomba(LPCOLLISIONEVENT e)
 {

@@ -3,7 +3,7 @@
 mario.txt
 coin.txt
 cloud.txt
-brick.txt
+small-object.txt
 goomba.txt
 koopatroopa.txt
 piranhaplant.txt

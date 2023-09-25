@@ -28,6 +28,11 @@ void CBreakBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 }
 void CBreakBrick::SetState(int state)
 {
+	if (state == BREAK_BRICK_STATE_TOUCHED && type == BREAK_BRICK_TYPE_SPECIAL)
+	{
+		CGame::GetInstance()->GetCurrentScene()->createNewObject(OBJECT_TYPE_BUTTON, x, y - BREAK_BRICK_BBOX_HEIGHT);
+	}
+
 	CGameObject::SetState(state);
 }
 void CBreakBrick::createRockObject() {
