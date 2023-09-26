@@ -19,6 +19,8 @@ class Camera
 	float px; // player x
 	float py; // player y
 
+	boolean isFixed;
+
 public:
 	Camera() {
 		l = 0; t = 256.f; r = 0; b = 0;
@@ -37,11 +39,21 @@ public:
 	void getPlayerPosition(float& x, float& y) { x = px; y = py; };
 
 	void getCamBoundingBox(float& cl, float& ct, float& cr, float& cb) { cl = l; ct = t; cr = r; cb = b; };
+	
+	void setInitialCamProps(float cl, float ct, boolean isCameraFixed) {
+		l = cl;
+		r = l + cWidth;
+		t = ct;
+		b = t + cHeight;
+		isFixed = isCameraFixed;
+	}
 
 	void setCamPosition(float px, float py) {
 	
 		this->px = px;
 		this->py = py;
+
+		if (isFixed) return;
 
 		l = px - cWidth/2;
 		r = l + cWidth;

@@ -281,8 +281,8 @@ void CMario::OnCollisionWithQuestionBrick(LPCOLLISIONEVENT e)
 			if (obj->getType() == 1)
 			{
 				CGame::GetInstance()->GetCurrentScene()->createNewObject(OBJECT_TYPE_SMALLCOIN, qx, qy-16);
-				coin++;
-				point += 100;
+				CUserBoard::GetInstance()->updateProps(ID_PROP_COIN, +1);
+				CUserBoard::GetInstance()->updateProps(ID_PROP_POINT, +100);
 			}
 			else
 			{
@@ -297,12 +297,12 @@ void CMario::OnCollisionWithQuestionBrick(LPCOLLISIONEVENT e)
 				if (level == MARIO_LEVEL_BIG)
 				{
 					CGame::GetInstance()->GetCurrentScene()->createNewObject(OBJECT_TYPE_LEAF, qx, qy);
-					point += 1000;
+					CUserBoard::GetInstance()->updateProps(ID_PROP_POINT, +1000);
 				}
 				else
 				{			
 					CGame::GetInstance()->GetCurrentScene()->createNewObject(OBJECT_TYPE_MUSHROOM, qx, qy, qvx);
-					point += 1000;
+					CUserBoard::GetInstance()->updateProps(ID_PROP_POINT, +1000);
 				}
 			}
 
@@ -336,7 +336,7 @@ void CMario::OnCollisionWithLeaf(LPCOLLISIONEVENT e)
 void CMario::OnCollisionWithCoin(LPCOLLISIONEVENT e)
 {
 	e->obj->Delete();
-	coin++;
+	CUserBoard::GetInstance()->updateProps(ID_PROP_COIN, +1);
 }
 void CMario::OnCollisionWithButton(LPCOLLISIONEVENT e)
 {
@@ -550,7 +550,7 @@ void CMario::Render()
 
 	//RenderBoundingBox();
 	
-	DebugOutTitle(L"Coins: %d", coin);
+	//DebugOutTitle(L"Coins: %d", coin);
 }
 
 void CMario::SetState(int state)

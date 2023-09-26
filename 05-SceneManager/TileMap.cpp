@@ -14,11 +14,11 @@ void CTileMap::Render()
 
 	CAnimations* animations = CAnimations::GetInstance();
 
-	int lengthY = tileMap.size();
+	int max_rows = tileMap.size();
 
 	//DebugOut(L"chekc %d", lengthY);
 
-	for (int i = 0; i < lengthY; i++)
+	for (int i = 0; i < max_rows; i++)
 	{
 		for (float j = 0; j < tileMap[i].size(); j++)
 		{

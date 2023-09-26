@@ -46,6 +46,8 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath):
 #define SCENE_SECTION_OBJECTS	2
 #define SCENE_SECTION_TILESET	3
 #define SCENE_SECTION_TILEMAP	4
+#define SCENE_SECTION_CAMERA	5
+
 
 #define ASSETS_SECTION_UNKNOWN -1
 #define ASSETS_SECTION_SPRITES 1
@@ -153,19 +155,33 @@ void CPlayScene::_ParseSection_TILESET(string line)
 	}
 
 }
+void CPlayScene::_ParseSection_CAMERA(string line)
+{
+	vector<string> tokens = split(line);
+	// skip flag line
+	if (tokens.size() < 3) return;
+	else DebugOut(L"Start setting camera!\n");
+
+	int cleft = atoi(tokens[0].c_str());
+	int ctop = atoi(tokens[1].c_str());
+	bool isFixed = atoi(tokens[2].c_str());
+	
+	Camera::GetInstance()->setInitialCamProps(cleft, ctop, isFixed);
+}
 void CPlayScene::_ParseSection_TILEDMAP(string line)
 {
 	vector<string> tokens = split(line);
 
 	if (tokens.size() < 1) return;
 	CGameObject* obj = NULL;
-	string fname;
-	fname = tokens[0];
+
+	wstring fname = ToWSTR(tokens[0]);
+
 	vector<vector<string>> content;
 	vector<string> row;
 	string fline, word;
-
-	fstream file("map1_map.csv", ios::in);
+	DebugOut(L"check: %s \n", fname.c_str());
+	fstream file(fname, ios::in);
 
 	if (file.is_open())
 	{
@@ -408,6 +424,7 @@ void CPlayScene::Load()
 		if (line == "[ASSETS]") { section = SCENE_SECTION_ASSETS; continue; };
 		if (line == "[TILESET]") { section = SCENE_SECTION_TILESET; continue; };
 		if (line == "[TILEDMAP]") { section = SCENE_SECTION_TILEMAP; continue; };
+		if (line == "[CAMERA]") { section = SCENE_SECTION_CAMERA; continue; };
 		if (line == "[OBJECTS]") { section = SCENE_SECTION_OBJECTS; continue; };
 		if (line[0] == '[') { section = SCENE_SECTION_UNKNOWN; continue; }
 
@@ -419,6 +436,7 @@ void CPlayScene::Load()
 		case SCENE_SECTION_ASSETS: _ParseSection_ASSETS(line); break;
 		case SCENE_SECTION_TILESET: _ParseSection_TILESET(line); break;
 		case SCENE_SECTION_TILEMAP: _ParseSection_TILEDMAP(line); break;
+		case SCENE_SECTION_CAMERA: _ParseSection_CAMERA(line); break;
 		case SCENE_SECTION_OBJECTS: _ParseSection_OBJECTS(line); break;
 		}
 	}

@@ -15,7 +15,8 @@
 #define MARIO_JUMP_SPEED_Y		0.3f
 #define MARIO_JUMP_RUN_SPEED_Y	0.45f
 
-#define MARIO_GRAVITY	0.00075f
+//#define MARIO_GRAVITY	0.00075f
+#define MARIO_GRAVITY	0.0
 
 #define MARIO_JUMP_DEFLECT_SPEED  0.2f
 #define MARIO_FLY_SPEED  0.4f
@@ -44,7 +45,9 @@
 
 #pragma region ANIMATION_ID
 // RACOON
-#define	ID_ANI_RACOON_TRANSFORM 10009
+//#define	ID_ANI_RACOON_TRANSFORM 10009
+#define	ID_ANI_RACOON_TRANSFORM 1700
+
 
 #define ID_ANI_RACOON_IDLE_RIGHT 1700
 #define ID_ANI_RACOON_IDLE_LEFT 1701
@@ -95,7 +98,7 @@
 #define ID_ANI_MARIO_DIE 999
 
 // SMALL MARIO
-#define ID_ANI_MARIO_SMALL_IDLE_RIGHT 10026
+#define ID_ANI_MARIO_SMALL_IDLE_RIGHT 1101
 #define ID_ANI_MARIO_SMALL_IDLE_LEFT 1102
 
 #define ID_ANI_MARIO_SMALL_WALKING_RIGHT 1200
@@ -154,9 +157,6 @@ class CMario : public CGameObject
 	ULONGLONG count_start;
 	ULONGLONG readyFly_start;
 	ULONGLONG fly_start;
-	int coin;
-	int point;
-	int life;
 
 	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
 	void OnCollisionWithBreakBrick(LPCOLLISIONEVENT e);
@@ -188,12 +188,9 @@ public:
 		untouchable_start = -1;
 		count_start = -1;
 		readyFly_start = -1;
+		fly_start = -1;
 		isOnPlatform = false;
 		isFlyStak = -1;
-		coin = 0;
-		point = 0;
-		life = 1;
-
 	}
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void Render();
@@ -202,12 +199,6 @@ public:
 	int IsCollidable()
 	{
 		return (state != MARIO_STATE_DIE);
-	}
-	void GetProps(int& coinP, int& pointP, int& lifeP, int& isFlyStakP) {
-		coinP = coin;
-		pointP = point;
-		lifeP = life;
-		isFlyStakP = isFlyStak;
 	}
 	int IsBlocking() { return (state != MARIO_STATE_DIE && untouchable == 0); }
 

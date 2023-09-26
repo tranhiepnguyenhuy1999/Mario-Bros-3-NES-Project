@@ -26,101 +26,98 @@ void CUserBoard::Render()
 	CAnimations* animations = CAnimations::GetInstance();
 	animations->Get(ID_ANI_BOARD)->Render(x, y);
 	//coin
-	for (int i = coinA.size(); i >0; i--) {
-		int aniId = getAniId(coinA[i-1]);
-		animations->Get(aniId)->Render(x - 78 + 134 + 4 + (coinA.size()-i)*8, y - 18 + 8 + 6);
+	for (int i = vcoin.size(); i >0; i--) {
+		int aniId = getAniId(vcoin[i-1]);
+		animations->Get(aniId)->Render(x - 78 + 134 + 4 + (vcoin.size()-i)*8, y - 18 + 8 + 6);
 	}
 
 	//life
-	for (int i = lifeA.size(); i > 0; i--) {
-		int aniId = getAniId(lifeA[i - 1]);
-		animations->Get(aniId)->Render(x - 78 + 30 + 4 + (lifeA.size() - i) * 8, y - 18 + 16 + 6);
+	for (int i = vlife.size(); i > 0; i--) {
+		int aniId = getAniId(vlife[i - 1]);
+		animations->Get(aniId)->Render(x - 78 + 30 + 4 + (vlife.size() - i) * 8, y - 18 + 16 + 6);
 	}
 
 	// world point
 	animations->Get(ID_ANI_NUMBER1)->Render(x - 78 +38 + 6, y -18 +8 + 6 );
 
 	// time
-	for (int i = 0; i < timeA.size(); i++) {
-		int aniId = getAniId(timeA[i]);
+	for (int i = 0; i < vtime.size(); i++) {
+		int aniId = getAniId(vtime[i]);
 		animations->Get(aniId)->Render(x - 78 + 126 + 4 + i * 8, y - 18 + 16 + 6);
 	}
 
 	// point
-	for (int i = 0; i < pointA.size(); i++) {
-		int aniId = getAniId(pointA[i]);
+	for (int i = 0; i < vpoint.size(); i++) {
+		int aniId = getAniId(vpoint[i]);
 		animations->Get(aniId)->Render(x - 78 + 53 + 4 +i*8, y - 18 + 16 + 6);
 	}
 
 	//p 
 	for (int i = 0; i < 6; i++) {
-		if (i <= isFLy) {
+		if (i <= fly_mark) {
 			animations->Get(ID_ANI_NUMBER_WHITE_LEFT)->Render(x - 78 + 53 + 4 + i * 8, y - 18 + 8 + 6);
 		}
 		else
 			animations->Get(ID_ANI_NUMBER_BLACK_LEFT)->Render(x - 78 + 53 + 4 + i * 8, y - 18 + 8 + 6);
 	}
-	if (isFLy==5)
+	if (fly_mark ==5)
 		animations->Get(ID_ANI_NUMBER_WHITE_P)->Render(x - 78 + 53 + 6 + 6 * 8 +2 , y - 18 + 8 + 6);
 	else
 		animations->Get(ID_ANI_NUMBER_BLACK_P)->Render(x - 78 + 53 + 6 + 6 * 8 + 2, y - 18 + 8 + 6);
 }	
 void CUserBoard::translateNumberToSprite() {
-	int point, coin, life;
-	CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
-	mario->GetProps(coin, point, life, isFLy);
-	coinA.clear();
-	timeA.clear();
-	lifeA.clear();
-	pointA.clear();
+	vcoin.clear();
+	vtime.clear();
+	vlife.clear();
+	vpoint.clear();
 	//DebugOut(L"fly %d \n", isFlyStak);
-	if (counter >= 1)
+	if (countdown >= 1 && loop_start != -1)
 	{
 		if (GetTickCount64() - loop_start > 1000)
 		{
 
 			loop_start = GetTickCount64();
-			counter--;
+			countdown--;
 		}
 
 	}
-	int temp= this->counter;
+	int temp= this->countdown;
 	//coin
 	for (int i = 0; i < 2; i++) {
 		if (i == 0) {
-			coinA.push_back(coin % 10);
-		}else coinA.push_back(coin / (10 ^ i));
+			vcoin.push_back(coin % 10);
+		}else vcoin.push_back(coin / (10 ^ i));
 	}
 	//time
 	for (int i = 2; i >=0; i--) {
 		if (i == 0) {
-			timeA.push_back(temp % 10);
+			vtime.push_back(temp % 10);
 		}
 		else {
 			int result = temp / pow(10, i);
 			//DebugOut(L"i: %d \n", result);
-			timeA.push_back(result);
+			vtime.push_back(result);
 			temp = temp - result * pow(10, i);
 		}
 	}
 	// point
 	for (int i = 6; i >= 0; i--) {
 		if (i == 0) {
-			pointA.push_back(point % 10);
+			vpoint.push_back((int)point % 10);
 		}
 		else {
 			int result = point/pow(10, i);
 			//DebugOut(L"i: %d \n", result);
-			pointA.push_back(result);
+			vpoint.push_back(result);
 			point = point - result * pow(10, i);
 		}
 	}
 	//life
 	for (int i = 0; i < 2; i++) {
 		if (i == 0) {
-			lifeA.push_back(life % 10);
+			vlife.push_back(life % 10);
 		}
-		else lifeA.push_back(life / pow(10, i));
+		else vlife.push_back(life / pow(10, i));
 	}
 	RenderBoundingBox();
 }
