@@ -54,7 +54,7 @@ public:
 		loop_start = GetTickCount64();
 	}
 	void updateProps(int key, int val) { 
-		switch (key)
+		switch (key)	
 		{
 		case ID_PROP_POINT:
 			point += val;

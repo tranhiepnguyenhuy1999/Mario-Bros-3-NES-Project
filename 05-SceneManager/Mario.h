@@ -120,12 +120,12 @@
 
 #define GROUND_Y 160.0f
 
-
-
-
 #define	MARIO_LEVEL_SMALL	1
 #define	MARIO_LEVEL_BIG		2
 #define	MARIO_LEVEL_RACOON	3
+
+#define	MARIO_TYPE_MAIN	1
+#define	MARIO_TYPE_WORLDMAP		2
 
 #define MARIO_BIG_BBOX_WIDTH  14
 #define MARIO_BIG_BBOX_HEIGHT 28
@@ -149,7 +149,7 @@ class CMario : public CGameObject
 
 	int level;
 	int untouchable;
-
+	int type;
 
 	ULONGLONG untouchable_start;
 	BOOLEAN isOnPlatform;
@@ -159,7 +159,6 @@ class CMario : public CGameObject
 	ULONGLONG fly_start;
 
 	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
-	void OnCollisionWithBreakBrick(LPCOLLISIONEVENT e);
 	void OnCollisionWithParaGoomba(LPCOLLISIONEVENT e);
 	void OnCollisionWithKoopaTroopa(LPCOLLISIONEVENT e);
 	void OnCollisionWithFlower(LPCOLLISIONEVENT e);
@@ -176,6 +175,13 @@ class CMario : public CGameObject
 	int GetAniIdBig();
 	int GetAniIdSmall();
 	int GetAniIdRacoon();
+
+	void onKeyUpOfWorldmapMario(int KeyCode);
+	void onKeyDownOfWorldmapMario(int KeyCode);
+
+	void onKeyUpOfMainMario(int KeyCode);
+	void onKeyDownOfMainMario(int KeyCode);
+	void keyStateOfMainMario();
 public:
 	CMario(float x, float y) : CGameObject(x, y)
 	{
@@ -191,6 +197,7 @@ public:
 		fly_start = -1;
 		isOnPlatform = false;
 		isFlyStak = -1;
+		type = MARIO_TYPE_WORLDMAP;
 	}
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void Render();
@@ -211,5 +218,6 @@ public:
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	void checkFlyStak();
 	void createTailObject();
+	void handleKeyEvent(int flag, int KeyCode);
 
 };

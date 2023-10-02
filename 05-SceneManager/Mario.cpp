@@ -1,8 +1,10 @@
 #include <algorithm>
 #include "debug.h"
 
-#include "Mario.h"
 #include "Game.h"
+#include "SampleKeyEventHandler.h"
+
+#include "Mario.h"
 
 #include "Goomba.h"
 #include "Coin.h"
@@ -742,5 +744,111 @@ void CMario::checkFlyStak() {
 				}
 			}
 		}
+	}
+}
+void CMario::onKeyUpOfWorldmapMario(int KeyCode) {
+};
+void CMario::onKeyDownOfWorldmapMario(int KeyCode) {
+};
+void CMario::onKeyUpOfMainMario(int KeyCode) {
+	
+	switch (KeyCode)
+	{
+	case DIK_DOWN:
+		//mario->GetPosition(x, y);
+		//if (x >= 2256 && x <= 2288) {
+		//	mario->SetPosition(2114, 544);
+		//}
+		SetState(MARIO_STATE_SIT);
+		break;
+	case DIK_UP:
+		break;
+	case DIK_A:
+		SetState(MARIO_STATE_ATTACK);
+		break;
+	case DIK_S:
+		if (isFlying() && level == 3)
+		{
+			SetState(MARIO_STATE_FLY);
+		}
+		else
+		{
+			SetState(MARIO_STATE_JUMP);
+		}
+		break;
+	case DIK_1:
+		SetLevel(MARIO_LEVEL_SMALL);
+		break;
+	case DIK_2:
+		SetLevel(MARIO_LEVEL_BIG);
+		break;
+	case DIK_3:
+		SetLevel(MARIO_LEVEL_RACOON);
+		break;
+	case DIK_0:
+		SetState(MARIO_STATE_DIE);
+		break;
+	case DIK_R: // reset
+		//Reload();
+		break;
+	}
+};
+void CMario::onKeyDownOfMainMario(int KeyCode) {
+	switch (KeyCode)
+	{
+	case DIK_S:
+		if (isFlying() && level == 3)
+		{
+			SetState(MARIO_STATE_RELEASE_FLY);
+		}
+		else
+		{
+			SetState(MARIO_STATE_RELEASE_JUMP);
+		}
+		break;
+	case DIK_DOWN:
+		SetState(MARIO_STATE_SIT_RELEASE);
+		break;
+	}
+};
+void CMario::keyStateOfMainMario() {
+	LPGAME game = CGame::GetInstance();
+	if (game->IsKeyDown(DIK_RIGHT))
+	{
+		if (game->IsKeyDown(DIK_A))
+		{
+			SetState(MARIO_STATE_RUNNING_RIGHT);
+		}
+		else
+			SetState(MARIO_STATE_WALKING_RIGHT);
+	}
+	else if (game->IsKeyDown(DIK_LEFT))
+	{
+		if (game->IsKeyDown(DIK_A))
+			SetState(MARIO_STATE_RUNNING_LEFT);
+		else
+			SetState(MARIO_STATE_WALKING_LEFT);
+	}
+	else SetState(MARIO_STATE_IDLE);
+};
+void CMario::handleKeyEvent(int flag, int KeyCode) {
+	switch (this->type)
+	{
+	case MARIO_TYPE_MAIN:
+		switch (flag)
+		{
+		case KEYEVENT_KEY_UP:
+			onKeyUpOfMainMario(KeyCode);
+			break;
+		case KEYEVENT_KEY_DOWN:
+			onKeyUpOfMainMario(KeyCode);
+			break;
+		case KEYEVENT_KEY_STATE:
+			keyStateOfMainMario();
+			break;
+		}
+		break;
+	case MARIO_TYPE_WORLDMAP:
+		break;
 	}
 }
