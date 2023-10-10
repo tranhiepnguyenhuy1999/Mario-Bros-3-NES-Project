@@ -7,19 +7,20 @@
 #include "debug.h"
 
 #define MARIO_WALKING_SPEED		0.075f
-#define MARIO_RUNNING_SPEED		0.15f
+#define MARIO_RUNNING_SPEED		0.2f
 
 #define MARIO_ACCEL_WALK_X	0.0005f
-#define MARIO_ACCEL_RUN_X	0.008f
+#define MARIO_ACCEL_RUN_X	0.0001f
 
-#define MARIO_JUMP_SPEED_Y		0.3f
+#define MARIO_JUMP_SPEED_Y		0.35f
+#define MARIO_JUMP_DEFLECT_SPEED  0.2f
 #define MARIO_JUMP_RUN_SPEED_Y	0.45f
 
-//#define MARIO_GRAVITY	0.00075f
-#define MARIO_GRAVITY	0.0
+#define MARIO_GRAVITY	0.00115f
+//#define MARIO_GRAVITY	0.0
 
-#define MARIO_JUMP_DEFLECT_SPEED  0.2f
-#define MARIO_FLY_SPEED  0.4f
+#define MARIO_FLY_SPEED  0.05f
+
 
 #define MARIO_STATE_DIE				-10
 #define MARIO_STATE_IDLE			0
@@ -39,7 +40,7 @@
 
 #define MARIO_STATE_RACOON_TRANSFORM	800
 
-#define MARIO_STATE_READYFLY	900
+#define MARIO_STATE_START_FLY	900
 #define MARIO_STATE_FLY	1000
 #define MARIO_STATE_RELEASE_FLY 1100
 
@@ -98,7 +99,7 @@
 #define ID_ANI_MARIO_DIE 999
 
 // SMALL MARIO
-#define ID_ANI_MARIO_SMALL_IDLE_RIGHT 1101
+#define ID_ANI_MARIO_SMALL_IDLE_RIGHT 1100
 #define ID_ANI_MARIO_SMALL_IDLE_LEFT 1102
 
 #define ID_ANI_MARIO_SMALL_WALKING_RIGHT 1200
@@ -139,6 +140,9 @@
 
 
 #define MARIO_UNTOUCHABLE_TIME 2500
+#define MARIO_FLY_TIME 3000
+#define MARIO_FLY_REMAIN_TIME 500
+
 
 class CMario : public CGameObject
 {
@@ -150,13 +154,17 @@ class CMario : public CGameObject
 	int level;
 	int untouchable;
 	int type;
+	int pre_fly_mark;
+
+	BOOLEAN isOnPlatform;
+	BOOLEAN isFly;
 
 	ULONGLONG untouchable_start;
-	BOOLEAN isOnPlatform;
-	int isFlyStak;
 	ULONGLONG count_start;
-	ULONGLONG readyFly_start;
+	ULONGLONG next_pre_fly_mark_count_start;
 	ULONGLONG fly_start;
+	ULONGLONG fly_remain_start;
+
 
 	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
 	void OnCollisionWithParaGoomba(LPCOLLISIONEVENT e);
@@ -193,11 +201,12 @@ public:
 		untouchable = 0;
 		untouchable_start = -1;
 		count_start = -1;
-		readyFly_start = -1;
+		next_pre_fly_mark_count_start = -1;
 		fly_start = -1;
 		isOnPlatform = false;
-		isFlyStak = -1;
-		type = MARIO_TYPE_WORLDMAP;
+		pre_fly_mark = -1;
+		type = MARIO_TYPE_MAIN;
+		isFly = false;
 	}
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void Render();
@@ -214,9 +223,7 @@ public:
 
 	void SetLevel(int l);
 	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount64(); };
-	bool isFlying() { return isFlyStak == 5; };
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom);
-	void checkFlyStak();
 	void createTailObject();
 	void handleKeyEvent(int flag, int KeyCode);
 

@@ -33,7 +33,20 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	if (abs(vx) > abs(maxVx)) vx = maxVx;
 
 	// reset untouchable timer if untouchable time has passed
-	if ( GetTickCount64() - untouchable_start > MARIO_UNTOUCHABLE_TIME) 
+	if (isFly)
+	{
+		if (GetTickCount64() - fly_start > MARIO_FLY_TIME)
+		{
+			isFly = false;
+		}
+		// check player is keep pressing S button
+		else if (GetTickCount64() - fly_remain_start > MARIO_FLY_REMAIN_TIME)
+		{
+			ay = MARIO_GRAVITY;
+			vx = 0;
+		}
+	}
+	else if ( GetTickCount64() - untouchable_start > MARIO_UNTOUCHABLE_TIME) 
 	{
 		untouchable_start = 0;
 		untouchable = 0;
@@ -468,7 +481,7 @@ int CMario::GetAniIdBig()
 int CMario::GetAniIdRacoon()
 {
 	int aniId = -1;
-	if (isFlyStak==5) {
+	if (isFly) {
 		aniId = ID_ANI_RACOON_FLY_RIGHT;
 	}
 	else
@@ -566,23 +579,15 @@ void CMario::SetState(int state)
 	{
 	case MARIO_STATE_RUNNING_RIGHT:
 		if (isSitting) break;
-		if(readyFly_start==-1)
-		{
-			readyFly_start = GetTickCount64();
-		}
-		else
-		{
-			if (GetTickCount64() - readyFly_start > 250) {
-				if (isFlyStak == 5) {
-					fly_start = GetTickCount64();
-					readyFly_start = -1;
-				}
-				else
-				{
-					isFlyStak++;
-					readyFly_start = GetTickCount64();
-				}
+
+		if (!isFly && GetTickCount64() - next_pre_fly_mark_count_start > 250) {
+			pre_fly_mark++;
+			
+			if (pre_fly_mark == 5) {
+				SetState(MARIO_STATE_START_FLY);
+				next_pre_fly_mark_count_start = -1;
 			}
+			else next_pre_fly_mark_count_start = GetTickCount64();
 		}
 		maxVx = MARIO_RUNNING_SPEED;
 		ax = MARIO_ACCEL_RUN_X;
@@ -595,7 +600,6 @@ void CMario::SetState(int state)
 		nx = -1;
 		break;
 	case MARIO_STATE_WALKING_RIGHT:
-		checkFlyStak();
 		if (isSitting) break;
 		maxVx = MARIO_WALKING_SPEED;
 		ax = MARIO_ACCEL_WALK_X;
@@ -645,13 +649,11 @@ void CMario::SetState(int state)
 			y -= MARIO_SIT_HEIGHT_ADJUST;
 		}
 		break;
-
 	case MARIO_STATE_IDLE:
-		checkFlyStak();
+		if (isFly) break;
 		ax = 0.0f;
 		vx = 0.0f;
 		break;
-
 	case MARIO_STATE_ATTACK:
 		if (level != 3) return;
 		count_start = GetTickCount64();
@@ -659,18 +661,22 @@ void CMario::SetState(int state)
 		ax = 0.0f;
 		vx = 0.0f;
 		break;
-
 	case MARIO_STATE_DIE:
 		vy = -MARIO_JUMP_DEFLECT_SPEED;
 		vx = 0;
 		ax = 0;
 		break;
-	case MARIO_STATE_FLY:
+	case MARIO_STATE_START_FLY:
+		isFly = true;
+		ay = 0;
+		vy = 0;
 		fly_start = GetTickCount64();
+		break;
+	case MARIO_STATE_FLY:
+		fly_remain_start = GetTickCount64();
 		vy = -MARIO_FLY_SPEED;
 		break;
 	case MARIO_STATE_RELEASE_FLY:
-		if (vy < 0) vy += MARIO_JUMP_SPEED_Y / 2;
 		break;
 	case MARIO_STATE_RACOON_TRANSFORM:
 		count_start = GetTickCount64();
@@ -716,7 +722,6 @@ void CMario::SetLevel(int l)
 	}
 	level = l;
 }
-
 void CMario::createTailObject() {
 
 	if (nx < 0) {
@@ -728,28 +733,9 @@ void CMario::createTailObject() {
 
 	}
 }
-void CMario::checkFlyStak() {
-	if (GetTickCount64() - fly_start > 500) {
-		if (readyFly_start == -1)	readyFly_start = GetTickCount64();
-		else
-		{
-			if (GetTickCount64() - readyFly_start > 250) {
-				if (isFlyStak == -1) {
-					readyFly_start = -1;
-				}
-				else
-				{
-					isFlyStak--;
-					readyFly_start = GetTickCount64();
-				}
-			}
-		}
-	}
-}
 void CMario::onKeyUpOfWorldmapMario(int KeyCode) {
 };
-void CMario::onKeyDownOfWorldmapMario(int KeyCode) {
-};
+void CMario::onKeyDownOfWorldmapMario(int KeyCode) {};
 void CMario::onKeyUpOfMainMario(int KeyCode) {
 	
 	switch (KeyCode)
@@ -767,14 +753,8 @@ void CMario::onKeyUpOfMainMario(int KeyCode) {
 		SetState(MARIO_STATE_ATTACK);
 		break;
 	case DIK_S:
-		if (isFlying() && level == 3)
-		{
-			SetState(MARIO_STATE_FLY);
-		}
-		else
-		{
-			SetState(MARIO_STATE_JUMP);
-		}
+		if (isFly && level == 3) SetState(MARIO_STATE_FLY);
+		else SetState(MARIO_STATE_JUMP);
 		break;
 	case DIK_1:
 		SetLevel(MARIO_LEVEL_SMALL);
@@ -797,7 +777,7 @@ void CMario::onKeyDownOfMainMario(int KeyCode) {
 	switch (KeyCode)
 	{
 	case DIK_S:
-		if (isFlying() && level == 3)
+		if (isFly && level == 3)
 		{
 			SetState(MARIO_STATE_RELEASE_FLY);
 		}
@@ -813,6 +793,7 @@ void CMario::onKeyDownOfMainMario(int KeyCode) {
 };
 void CMario::keyStateOfMainMario() {
 	LPGAME game = CGame::GetInstance();
+
 	if (game->IsKeyDown(DIK_RIGHT))
 	{
 		if (game->IsKeyDown(DIK_A))
@@ -835,6 +816,7 @@ void CMario::handleKeyEvent(int flag, int KeyCode) {
 	switch (this->type)
 	{
 	case MARIO_TYPE_MAIN:
+	{
 		switch (flag)
 		{
 		case KEYEVENT_KEY_UP:
@@ -848,6 +830,7 @@ void CMario::handleKeyEvent(int flag, int KeyCode) {
 			break;
 		}
 		break;
+	}
 	case MARIO_TYPE_WORLDMAP:
 		break;
 	}

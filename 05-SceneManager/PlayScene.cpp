@@ -177,10 +177,11 @@ void CPlayScene::_ParseSection_TILEDMAP(string line)
 
 	wstring fname = ToWSTR(tokens[0]);
 
+	DebugOut(L"Tile map file: %s \n", fname.c_str());
+
 	vector<vector<string>> content;
 	vector<string> row;
 	string fline, word;
-	DebugOut(L"check: %s \n", fname.c_str());
 	fstream file(fname, ios::in);
 
 	if (file.is_open())
@@ -427,7 +428,6 @@ void CPlayScene::Load()
 		if (line == "[CAMERA]") { section = SCENE_SECTION_CAMERA; continue; };
 		if (line == "[OBJECTS]") { section = SCENE_SECTION_OBJECTS; continue; };
 		if (line[0] == '[') { section = SCENE_SECTION_UNKNOWN; continue; }
-
 		//
 		// data section
 		//
@@ -476,7 +476,6 @@ void CPlayScene::Update(DWORD dt)
 }
 void CPlayScene::Render()
 {
-	//tilemap
 	CTileMap::GetInstance()->Render();
 
 	// obj render
