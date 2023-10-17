@@ -19,7 +19,7 @@
 #define MARIO_GRAVITY	0.00115f
 //#define MARIO_GRAVITY	0.0
 
-#define MARIO_FLY_SPEED  0.05f
+#define MARIO_FLY_SPEED  0.075f
 
 
 #define MARIO_STATE_DIE				-10
@@ -43,6 +43,7 @@
 #define MARIO_STATE_START_FLY	900
 #define MARIO_STATE_FLY	1000
 #define MARIO_STATE_RELEASE_FLY 1100
+#define MARIO_STATE_END_FLY	1200
 
 #pragma region ANIMATION_ID
 // RACOON
@@ -140,8 +141,8 @@
 
 
 #define MARIO_UNTOUCHABLE_TIME 2500
-#define MARIO_FLY_TIME 3000
-#define MARIO_FLY_REMAIN_TIME 500
+#define MARIO_FLY_TIME 15000
+#define MARIO_FLY_REMAIN_TIME 250
 
 
 class CMario : public CGameObject
@@ -154,14 +155,15 @@ class CMario : public CGameObject
 	int level;
 	int untouchable;
 	int type;
-	int pre_fly_mark;
+	int ready_to_fly_mark;
 
 	BOOLEAN isOnPlatform;
-	BOOLEAN isFly;
+	BOOLEAN isReadyToFly;
+	BOOLEAN isFlying;
 
 	ULONGLONG untouchable_start;
 	ULONGLONG count_start;
-	ULONGLONG next_pre_fly_mark_count_start;
+	ULONGLONG next_ready_to_fly_mark_count_start;
 	ULONGLONG fly_start;
 	ULONGLONG fly_remain_start;
 
@@ -194,19 +196,21 @@ public:
 	CMario(float x, float y) : CGameObject(x, y)
 	{
 		isSitting = false;
+		isOnPlatform = false;
+		isReadyToFly = false;
+		isFlying = false;
 		maxVx = 0.0f;
 		ax = 0.0f;
 		ay = MARIO_GRAVITY;
+		ready_to_fly_mark = 0;
 		level = MARIO_LEVEL_SMALL;
+		type = MARIO_TYPE_MAIN;
 		untouchable = 0;
 		untouchable_start = -1;
 		count_start = -1;
-		next_pre_fly_mark_count_start = -1;
 		fly_start = -1;
-		isOnPlatform = false;
-		pre_fly_mark = -1;
-		type = MARIO_TYPE_MAIN;
-		isFly = false;
+		next_ready_to_fly_mark_count_start = -1;
+		fly_remain_start = -1;
 	}
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void Render();

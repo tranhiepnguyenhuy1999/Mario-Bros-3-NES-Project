@@ -33,17 +33,16 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	if (abs(vx) > abs(maxVx)) vx = maxVx;
 
 	// reset untouchable timer if untouchable time has passed
-	if (isFly)
+	if (isFlying)
 	{
 		if (GetTickCount64() - fly_start > MARIO_FLY_TIME)
 		{
-			isFly = false;
+			SetState(MARIO_STATE_END_FLY);
 		}
 		// check player is keep pressing S button
 		else if (GetTickCount64() - fly_remain_start > MARIO_FLY_REMAIN_TIME)
 		{
-			ay = MARIO_GRAVITY;
-			vx = 0;
+			SetState(MARIO_STATE_RELEASE_FLY);
 		}
 	}
 	else if ( GetTickCount64() - untouchable_start > MARIO_UNTOUCHABLE_TIME) 
@@ -51,7 +50,6 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		untouchable_start = 0;
 		untouchable = 0;
 	}
-
 	isOnPlatform = false;
 
 	CCollision::GetInstance()->Process(this, dt, coObjects);
@@ -481,7 +479,7 @@ int CMario::GetAniIdBig()
 int CMario::GetAniIdRacoon()
 {
 	int aniId = -1;
-	if (isFly) {
+	if (isFlying) {
 		aniId = ID_ANI_RACOON_FLY_RIGHT;
 	}
 	else
@@ -579,15 +577,13 @@ void CMario::SetState(int state)
 	{
 	case MARIO_STATE_RUNNING_RIGHT:
 		if (isSitting) break;
-
-		if (!isFly && GetTickCount64() - next_pre_fly_mark_count_start > 250) {
-			pre_fly_mark++;
-			
-			if (pre_fly_mark == 5) {
+		if (!isReadyToFly && GetTickCount64() - next_ready_to_fly_mark_count_start > 500) {
+			ready_to_fly_mark++;
+			if (ready_to_fly_mark > 4) {
 				SetState(MARIO_STATE_START_FLY);
-				next_pre_fly_mark_count_start = -1;
+				next_ready_to_fly_mark_count_start = -1;
 			}
-			else next_pre_fly_mark_count_start = GetTickCount64();
+			else next_ready_to_fly_mark_count_start = GetTickCount64();
 		}
 		maxVx = MARIO_RUNNING_SPEED;
 		ax = MARIO_ACCEL_RUN_X;
@@ -620,11 +616,6 @@ void CMario::SetState(int state)
 			else
 				vy = -MARIO_JUMP_SPEED_Y;
 		}
-		else {
-			if (level == 3) {
-				vy = -0.15f;
-			}
-		}
 		break;
 
 	case MARIO_STATE_RELEASE_JUMP:
@@ -650,9 +641,9 @@ void CMario::SetState(int state)
 		}
 		break;
 	case MARIO_STATE_IDLE:
-		if (isFly) break;
+		if (isFlying && !isOnPlatform) break;
 		ax = 0.0f;
-		vx = 0.0f;
+		vx = 0.0f;	
 		break;
 	case MARIO_STATE_ATTACK:
 		if (level != 3) return;
@@ -667,19 +658,29 @@ void CMario::SetState(int state)
 		ax = 0;
 		break;
 	case MARIO_STATE_START_FLY:
-		isFly = true;
-		ay = 0;
+		isReadyToFly = true;
 		vy = 0;
+		ay = 0;
 		fly_start = GetTickCount64();
 		break;
 	case MARIO_STATE_FLY:
-		fly_remain_start = GetTickCount64();
+		isFlying = true;
+		ay = 0;
 		vy = -MARIO_FLY_SPEED;
+		fly_remain_start = GetTickCount64();
+		break;
+	case MARIO_STATE_END_FLY:
+		isFlying = false;
+		isReadyToFly = false;
+		ready_to_fly_mark = 0;
+		ay = MARIO_GRAVITY;
 		break;
 	case MARIO_STATE_RELEASE_FLY:
+		ay = MARIO_GRAVITY;
 		break;
 	case MARIO_STATE_RACOON_TRANSFORM:
 		count_start = GetTickCount64();
+		break;
 	}
 
 	CGameObject::SetState(state);
@@ -712,7 +713,6 @@ void CMario::GetBoundingBox(float &left, float &top, float &right, float &bottom
 		bottom = top + MARIO_SMALL_BBOX_HEIGHT;
 	}
 }
-
 void CMario::SetLevel(int l)
 {
 	// Adjust position to avoid falling off platform
@@ -753,8 +753,7 @@ void CMario::onKeyUpOfMainMario(int KeyCode) {
 		SetState(MARIO_STATE_ATTACK);
 		break;
 	case DIK_S:
-		if (isFly && level == 3) SetState(MARIO_STATE_FLY);
-		else SetState(MARIO_STATE_JUMP);
+		if (isReadyToFly && level == MARIO_LEVEL_RACOON) SetState(MARIO_STATE_FLY); else SetState(MARIO_STATE_JUMP);
 		break;
 	case DIK_1:
 		SetLevel(MARIO_LEVEL_SMALL);
@@ -777,14 +776,8 @@ void CMario::onKeyDownOfMainMario(int KeyCode) {
 	switch (KeyCode)
 	{
 	case DIK_S:
-		if (isFly && level == 3)
-		{
-			SetState(MARIO_STATE_RELEASE_FLY);
-		}
-		else
-		{
-			SetState(MARIO_STATE_RELEASE_JUMP);
-		}
+		if (isReadyToFly) break;
+		SetState(MARIO_STATE_RELEASE_JUMP);	
 		break;
 	case DIK_DOWN:
 		SetState(MARIO_STATE_SIT_RELEASE);
@@ -812,6 +805,7 @@ void CMario::keyStateOfMainMario() {
 	}
 	else SetState(MARIO_STATE_IDLE);
 };
+
 void CMario::handleKeyEvent(int flag, int KeyCode) {
 	switch (this->type)
 	{
