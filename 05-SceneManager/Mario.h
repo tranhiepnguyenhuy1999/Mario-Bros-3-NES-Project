@@ -6,17 +6,20 @@
 
 #include "debug.h"
 
+#include "KoopaTroopa.h"
+
 #define MARIO_WALKING_SPEED		0.075f
 #define MARIO_RUNNING_SPEED		0.2f
 
 #define MARIO_ACCEL_WALK_X	0.0005f
 #define MARIO_ACCEL_RUN_X	0.0001f
 
-#define MARIO_JUMP_SPEED_Y		0.35f
+#define MARIO_JUMP_SPEED_Y		0.265f
+#define MARIO_MAX_JUMP_SPEED_Y		0.4f
 #define MARIO_JUMP_DEFLECT_SPEED  0.2f
 #define MARIO_JUMP_RUN_SPEED_Y	0.45f
 
-#define MARIO_GRAVITY	0.00115f
+#define MARIO_GRAVITY	0.0005f
 //#define MARIO_GRAVITY	0.0
 
 #define MARIO_FLY_SPEED  0.075f
@@ -160,6 +163,7 @@ class CMario : public CGameObject
 	BOOLEAN isOnPlatform;
 	BOOLEAN isReadyToFly;
 	BOOLEAN isFlying;
+	BOOLEAN	isRuning;
 
 	ULONGLONG untouchable_start;
 	ULONGLONG count_start;
@@ -167,6 +171,7 @@ class CMario : public CGameObject
 	ULONGLONG fly_start;
 	ULONGLONG fly_remain_start;
 
+	CKoopaTroopa* pickup_shell;
 
 	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
 	void OnCollisionWithParaGoomba(LPCOLLISIONEVENT e);
@@ -199,6 +204,8 @@ public:
 		isOnPlatform = false;
 		isReadyToFly = false;
 		isFlying = false;
+		isRuning = false;
+		
 		maxVx = 0.0f;
 		ax = 0.0f;
 		ay = MARIO_GRAVITY;
@@ -206,11 +213,14 @@ public:
 		level = MARIO_LEVEL_SMALL;
 		type = MARIO_TYPE_MAIN;
 		untouchable = 0;
+		
 		untouchable_start = -1;
 		count_start = -1;
 		fly_start = -1;
 		next_ready_to_fly_mark_count_start = -1;
 		fly_remain_start = -1;
+
+		pickup_shell = NULL;
 	}
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void Render();

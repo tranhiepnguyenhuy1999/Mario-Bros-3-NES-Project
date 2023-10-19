@@ -33,6 +33,11 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	if (abs(vx) > abs(maxVx)) vx = maxVx;
 
 	// reset untouchable timer if untouchable time has passed
+
+	if (pickup_shell) {
+		pickup_shell->getPickUp(vx);
+	}
+
 	if (isFlying)
 	{
 		if (GetTickCount64() - fly_start > MARIO_FLY_TIME)
@@ -211,7 +216,11 @@ void CMario::OnCollisionWithKoopaTroopa(LPCOLLISIONEVENT e)
 	CKoopaTroopa* obj = dynamic_cast<CKoopaTroopa*>(e->obj);
 	// jump on top >> kill Goomba and deflect a bit 
 	if (obj->GetState() == KOOPATROOPA_STATE_SHELL || obj->GetState() == KOOPATROOPA_STATE_ALIVE) {
-		obj->getKicked(nx);
+		if (e->nx != 0 && isRuning){
+			obj->SetState(KOOPATROOPA_STATE_SHELL_PICK_UP);
+			pickup_shell = obj;
+		}
+		else obj->getKicked(nx);
 	}
 	else if (e->ny < 0)
 	{
@@ -577,6 +586,7 @@ void CMario::SetState(int state)
 	{
 	case MARIO_STATE_RUNNING_RIGHT:
 		if (isSitting) break;
+		isRuning = true;
 		if (!isReadyToFly && GetTickCount64() - next_ready_to_fly_mark_count_start > 500) {
 			ready_to_fly_mark++;
 			if (ready_to_fly_mark > 4) {
@@ -591,6 +601,7 @@ void CMario::SetState(int state)
 		break;
 	case MARIO_STATE_RUNNING_LEFT:
 		if (isSitting) break;
+		isRuning = true;
 		maxVx = -MARIO_RUNNING_SPEED;
 		ax = -MARIO_ACCEL_RUN_X;
 		nx = -1;
@@ -777,7 +788,15 @@ void CMario::onKeyDownOfMainMario(int KeyCode) {
 	{
 	case DIK_S:
 		if (isReadyToFly) break;
-		SetState(MARIO_STATE_RELEASE_JUMP);	
+		SetState(MARIO_STATE_RELEASE_JUMP);
+		break;
+	case DIK_A:
+		isRuning = false;
+		DebugOut(L"A");
+		if (pickup_shell) {
+			pickup_shell->getKicked(nx);
+			pickup_shell = NULL;
+		}
 		break;
 	case DIK_DOWN:
 		SetState(MARIO_STATE_SIT_RELEASE);
@@ -817,7 +836,7 @@ void CMario::handleKeyEvent(int flag, int KeyCode) {
 			onKeyUpOfMainMario(KeyCode);
 			break;
 		case KEYEVENT_KEY_DOWN:
-			onKeyUpOfMainMario(KeyCode);
+			onKeyDownOfMainMario(KeyCode);
 			break;
 		case KEYEVENT_KEY_STATE:
 			keyStateOfMainMario();

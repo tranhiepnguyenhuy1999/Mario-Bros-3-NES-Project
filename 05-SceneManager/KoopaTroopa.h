@@ -6,6 +6,8 @@
 #define KOOPATROOPA_GRAVITY 0.00035f
 #define KOOPATROOPA_SPEED 0.035f
 #define KOOPATROOPA_SHELL_SPEED 0.2f
+#define KOOPATROOPA_SHELL_RELEASE_PICK_UP_SPEED_AXIS_X 0.2f
+#define KOOPATROOPA_SHELL_RELEASE_PICK_UP_SPEED_AXIS_Y 0.1f
 
 #define KOOPATROOPA_MAX_Y 50
 
@@ -24,7 +26,8 @@
 #define KOOPATROOPA_STATE_SHELL 300
 #define KOOPATROOPA_STATE_SHELL_MOVING 400
 #define KOOPATROOPA_STATE_TURN 500
-#define PARA_KOOPATROOPA_STATE_JUMP 600
+#define KOOPATROOPA_STATE_SHELL_PICK_UP 600
+#define PARA_KOOPATROOPA_STATE_JUMP 700
 
 #define ID_ANI_KOOPATROOPA_WALKING_LEFT 7000
 #define ID_ANI_KOOPATROOPA_WALKING_RIGHT 7004
@@ -63,7 +66,6 @@ public:
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	virtual void Render();
-
 	virtual int IsCollidable() { return 1; };
 	virtual int IsBlocking() { return 0; }
 	virtual void OnNoCollision(DWORD dt);
@@ -93,5 +95,10 @@ public:
 	}
 	void getJumpedDown(){
 		SetState(KOOPATROOPA_STATE_SHELL);
+	}
+	void getPickUp(float p_speed)
+	{
+		// when shell is picking up, it gets player speed
+		this->vx = p_speed;
 	}
 };

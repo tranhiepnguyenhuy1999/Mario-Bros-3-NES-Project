@@ -190,5 +190,10 @@ void CKoopaTroopa::SetState(int state)
 		break;
 	case PARA_KOOPATROOPA_STATE_JUMP:
 		break;
+	case KOOPATROOPA_STATE_SHELL_PICK_UP:
+		vy = 0;
+		ay = 0;
+		vx = 0;
+		break;
 	}
 }
