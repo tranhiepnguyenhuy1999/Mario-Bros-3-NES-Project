@@ -28,6 +28,7 @@
 
 #include "Camera.h"
 #include "TileMap.h"
+#include "Layer.h"
 
 #include "SampleKeyEventHandler.h"
 
@@ -483,7 +484,11 @@ void CPlayScene::Render()
 	{
 		if(Camera::GetInstance()->isCamContainObject(objects[i])) objects[i]->Render();
 	}
-	
+	float cx, cy;
+	Camera::GetInstance()->getCamPosition(cx, cy);
+	CLayer::GetInstance()->SetPosition(cx, cy);
+	CLayer::GetInstance()->Render();
+
 	CUserBoard::GetInstance()->Render();
 }
 /*

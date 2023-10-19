@@ -100,6 +100,5 @@ public:
 		//	}
 		//}
 	}
-
 	static Camera* GetInstance();
 };
