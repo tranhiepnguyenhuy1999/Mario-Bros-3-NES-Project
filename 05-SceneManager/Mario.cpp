@@ -219,7 +219,7 @@ void CMario::OnCollisionWithKoopaTroopa(LPCOLLISIONEVENT e)
 {
 	CKoopaTroopa* obj = dynamic_cast<CKoopaTroopa*>(e->obj);
 	// jump on top >> kill Goomba and deflect a bit 
-	if (obj->GetState() == KOOPATROOPA_STATE_SHELL || obj->GetState() == KOOPATROOPA_STATE_ALIVE) {
+	if (obj->GetState() == KOOPATROOPA_STATE_SHELL || obj->GetState() == KOOPATROOPA_STATE_SHELL_ALIVE) {
 		if (e->nx != 0 && isRuning){
 			obj->SetState(KOOPATROOPA_STATE_SHELL_PICK_UP);
 			obj->SetPosition(x + nx*MARIO_BIG_BBOX_WIDTH/2 + nx*KOOPATROOPA_BBOX_WIDTH/3, y + MARIO_BIG_BBOX_HEIGHT/8);
