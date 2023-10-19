@@ -159,7 +159,8 @@ class CMario : public CGameObject
 	int untouchable;
 	int type;
 	int ready_to_fly_mark;
-
+	int prev_nx;
+	
 	BOOLEAN isOnPlatform;
 	BOOLEAN isReadyToFly;
 	BOOLEAN isFlying;
@@ -213,6 +214,7 @@ public:
 		level = MARIO_LEVEL_SMALL;
 		type = MARIO_TYPE_MAIN;
 		untouchable = 0;
+		prev_nx = 0;
 		
 		untouchable_start = -1;
 		count_start = -1;

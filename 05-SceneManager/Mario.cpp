@@ -35,7 +35,9 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	// reset untouchable timer if untouchable time has passed
 
 	if (pickup_shell) {
+		if(prev_nx != nx) pickup_shell->SetPosition(x + nx * MARIO_BIG_BBOX_WIDTH / 2 + nx * KOOPATROOPA_BBOX_WIDTH / 3, y + MARIO_BIG_BBOX_HEIGHT / 8);
 		pickup_shell->getPickUp(vx);
+		
 	}
 
 	if (isFlying)
@@ -58,6 +60,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	isOnPlatform = false;
 
 	CCollision::GetInstance()->Process(this, dt, coObjects);
+
+	this->prev_nx = nx;
 }
 
 void CMario::OnNoCollision(DWORD dt)
@@ -218,6 +222,7 @@ void CMario::OnCollisionWithKoopaTroopa(LPCOLLISIONEVENT e)
 	if (obj->GetState() == KOOPATROOPA_STATE_SHELL || obj->GetState() == KOOPATROOPA_STATE_ALIVE) {
 		if (e->nx != 0 && isRuning){
 			obj->SetState(KOOPATROOPA_STATE_SHELL_PICK_UP);
+			obj->SetPosition(x + nx*MARIO_BIG_BBOX_WIDTH/2 + nx*KOOPATROOPA_BBOX_WIDTH/3, y + MARIO_BIG_BBOX_HEIGHT/8);
 			pickup_shell = obj;
 		}
 		else obj->getKicked(nx);
