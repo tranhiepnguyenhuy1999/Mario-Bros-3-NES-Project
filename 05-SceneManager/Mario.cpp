@@ -671,7 +671,6 @@ void CMario::SetState(int state)
 	case MARIO_STATE_START_FLY:
 		isReadyToFly = true;
 		vy = 0;
-		ay = 0;
 		fly_start = GetTickCount64();
 		break;
 	case MARIO_STATE_FLY:

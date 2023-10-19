@@ -24,9 +24,9 @@ map1_map.csv
 # See OBJECT_TYPE constants in AssetIDs.h
 
 # MARIO
-0	2000	352
+0	900	352
 
-#14	800	352
+14	800	352
 
 #goomba
 #2	330	400
