@@ -48,11 +48,11 @@
 #define MARIO_STATE_RELEASE_FLY 1100
 #define MARIO_STATE_END_FLY	1200
 
+#define MARIO_STATE_KICK	1300
+
 #pragma region ANIMATION_ID
 // RACOON
-//#define	ID_ANI_RACOON_TRANSFORM 10009
 #define	ID_ANI_RACOON_TRANSFORM 1700
-
 
 #define ID_ANI_RACOON_IDLE_RIGHT 1700
 #define ID_ANI_RACOON_IDLE_LEFT 1701
@@ -78,6 +78,9 @@
 #define ID_ANI_RACOON_FLY_RIGHT 1714
 #define ID_ANI_RACOON_FLY_LEFT 1715
 
+#define ID_ANI_RACOON_KICK_RIGHT 1716
+#define ID_ANI_RACOON_KICK_LEFT 1717
+
 //BIG
 #define ID_ANI_MARIO_IDLE_RIGHT 400
 #define ID_ANI_MARIO_IDLE_LEFT 401
@@ -102,6 +105,9 @@
 
 #define ID_ANI_MARIO_DIE 999
 
+#define ID_ANI_MARIO_KICK_RIGHT 997
+#define ID_ANI_MARIO_KICK_LEFT 998
+
 // SMALL MARIO
 #define ID_ANI_MARIO_SMALL_IDLE_RIGHT 1100
 #define ID_ANI_MARIO_SMALL_IDLE_LEFT 1102
@@ -121,6 +127,9 @@
 #define ID_ANI_MARIO_SMALL_JUMP_RUN_RIGHT 1600
 #define ID_ANI_MARIO_SMALL_JUMP_RUN_LEFT 1601
 
+#define ID_ANI_MARIO_SMALL_KICK_RIGHT 1602
+#define ID_ANI_MARIO_SMALL_KICK_LEFT 1603
+
 #pragma endregion
 
 #define GROUND_Y 160.0f
@@ -131,6 +140,9 @@
 
 #define	MARIO_TYPE_MAIN	1
 #define	MARIO_TYPE_WORLDMAP		2
+
+#define RACOON_SPRITE_WIDTH  22
+#define RACOON_SPRITE_HEIGHT 28
 
 #define MARIO_BIG_BBOX_WIDTH  14
 #define MARIO_BIG_BBOX_HEIGHT 28
@@ -165,6 +177,8 @@ class CMario : public CGameObject
 	BOOLEAN isReadyToFly;
 	BOOLEAN isFlying;
 	BOOLEAN	isRuning;
+	BOOLEAN	isKicking;
+
 
 	ULONGLONG untouchable_start;
 	ULONGLONG count_start;
@@ -206,7 +220,8 @@ public:
 		isReadyToFly = false;
 		isFlying = false;
 		isRuning = false;
-		
+		isKicking = false;
+
 		maxVx = 0.0f;
 		ax = 0.0f;
 		ay = MARIO_GRAVITY;

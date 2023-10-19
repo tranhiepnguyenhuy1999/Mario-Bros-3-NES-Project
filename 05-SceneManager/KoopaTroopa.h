@@ -102,4 +102,7 @@ public:
 		// when shell is picking up, it gets player speed
 		this->vx = p_speed;
 	}
+	bool IsDie() {
+		return isDie;
+	}
 };

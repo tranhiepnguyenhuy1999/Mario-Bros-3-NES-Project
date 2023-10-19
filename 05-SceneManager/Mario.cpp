@@ -35,9 +35,13 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	// reset untouchable timer if untouchable time has passed
 
 	if (pickup_shell) {
-		if(prev_nx != nx) pickup_shell->SetPosition(x + nx * MARIO_BIG_BBOX_WIDTH / 2 + nx * KOOPATROOPA_BBOX_WIDTH / 3, y + MARIO_BIG_BBOX_HEIGHT / 8);
-		pickup_shell->getPickUp(vx);
-		
+		if (!pickup_shell->IsDie())
+			pickup_shell = NULL;
+		else
+		{
+			if (prev_nx != nx) pickup_shell->SetPosition(x + nx * MARIO_BIG_BBOX_WIDTH / 2 + nx * KOOPATROOPA_BBOX_WIDTH / 3, y + MARIO_BIG_BBOX_HEIGHT / 8);
+			pickup_shell->getPickUp(vx);
+		}
 	}
 
 	if (isFlying)
@@ -225,7 +229,11 @@ void CMario::OnCollisionWithKoopaTroopa(LPCOLLISIONEVENT e)
 			obj->SetPosition(x + nx*MARIO_BIG_BBOX_WIDTH/2 + nx*KOOPATROOPA_BBOX_WIDTH/3, y + MARIO_BIG_BBOX_HEIGHT/8);
 			pickup_shell = obj;
 		}
-		else obj->getKicked(nx);
+		else
+		{
+			SetState(MARIO_STATE_KICK);
+			obj->getKicked(nx);
+		}
 	}
 	else if (e->ny < 0)
 	{
@@ -404,6 +412,10 @@ int CMario::GetAniIdSmall()
 			else
 				aniId = ID_ANI_MARIO_SIT_LEFT;
 		}
+		else if (isKicking) {
+			if (nx > 0) aniId = ID_ANI_MARIO_SMALL_KICK_RIGHT;
+			else aniId = ID_ANI_MARIO_SMALL_KICK_LEFT;
+		}
 		else
 			if (vx == 0)
 			{
@@ -460,6 +472,10 @@ int CMario::GetAniIdBig()
 				aniId = ID_ANI_MARIO_SIT_RIGHT;
 			else
 				aniId = ID_ANI_MARIO_SIT_LEFT;
+		}
+		else if (isKicking) {
+			if (nx > 0) aniId = ID_ANI_MARIO_KICK_RIGHT;
+			else aniId = ID_ANI_MARIO_KICK_LEFT;
 		}
 		else
 			if (vx == 0)
@@ -522,6 +538,10 @@ int CMario::GetAniIdRacoon()
 			else
 				aniId = ID_ANI_MARIO_SIT_LEFT;
 		}
+		else if (isKicking) {
+			if (nx > 0) aniId = ID_ANI_RACOON_KICK_RIGHT;
+			else aniId = ID_ANI_RACOON_KICK_LEFT;
+		}
 		else
 			if (vx == 0)
 			{
@@ -575,17 +595,23 @@ void CMario::Render()
 
 	animations->Get(aniId)->Render(x, y);
 
-	//RenderBoundingBox();
+	RenderBoundingBox();
 	
 	//DebugOutTitle(L"Coins: %d", coin);
 }
 
 void CMario::SetState(int state)
 {
-	if ((this->state == MARIO_STATE_RACOON_TRANSFORM) && (GetTickCount64() - count_start < 500)) return;
-	if ((this->state == MARIO_STATE_ATTACK) && (GetTickCount64() - count_start < 500)) return;
+	if (this->state == MARIO_STATE_RACOON_TRANSFORM && (GetTickCount64() - count_start < 500)) return;
+	else if (this->state == MARIO_STATE_ATTACK && (GetTickCount64() - count_start < 500)) return;
 	// DIE is the end state, cannot be changed! 
-	if (this->state == MARIO_STATE_DIE) return; 
+	else if (this->state == MARIO_STATE_DIE) return; 
+
+
+	if (isKicking && (GetTickCount64() - count_start > 150))
+	{
+		isKicking = false;
+	}
 
 	switch (state)
 	{
@@ -693,17 +719,37 @@ void CMario::SetState(int state)
 	case MARIO_STATE_RELEASE_FLY:
 		ay = MARIO_GRAVITY;
 		break;
+	case MARIO_STATE_KICK:
+		isKicking = true;
+		count_start = GetTickCount64();
+		break;
 	case MARIO_STATE_RACOON_TRANSFORM:
 		count_start = GetTickCount64();
 		break;
 	}
-
 	CGameObject::SetState(state);
 }
 
 void CMario::GetBoundingBox(float &left, float &top, float &right, float &bottom)
 {
-	if (level!=MARIO_LEVEL_SMALL)
+	if (level == MARIO_LEVEL_RACOON)
+	{
+		if (isSitting)
+		{
+			left = x - MARIO_BIG_SITTING_BBOX_WIDTH / 2;
+			top = y - MARIO_BIG_SITTING_BBOX_HEIGHT / 2;
+			right = left + MARIO_BIG_SITTING_BBOX_WIDTH;
+			bottom = top + MARIO_BIG_SITTING_BBOX_HEIGHT;
+		}
+		else
+		{
+			left = x - RACOON_SPRITE_WIDTH / 2;
+			top = y - MARIO_BIG_BBOX_HEIGHT / 2;
+			right = left + RACOON_SPRITE_WIDTH;
+			bottom = top + MARIO_BIG_BBOX_HEIGHT;
+		}
+	}
+	else if (level == MARIO_LEVEL_BIG)
 	{
 		if (isSitting)
 		{
@@ -748,8 +794,7 @@ void CMario::createTailObject() {
 
 	}
 }
-void CMario::onKeyUpOfWorldmapMario(int KeyCode) {
-};
+void CMario::onKeyUpOfWorldmapMario(int KeyCode) {};
 void CMario::onKeyDownOfWorldmapMario(int KeyCode) {};
 void CMario::onKeyUpOfMainMario(int KeyCode) {
 	
@@ -796,10 +841,10 @@ void CMario::onKeyDownOfMainMario(int KeyCode) {
 		break;
 	case DIK_A:
 		isRuning = false;
-		DebugOut(L"A");
 		if (pickup_shell) {
 			pickup_shell->getKicked(nx);
 			pickup_shell = NULL;
+			SetState(MARIO_STATE_KICK);
 		}
 		break;
 	case DIK_DOWN:
