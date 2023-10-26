@@ -25,6 +25,7 @@
 #include "Button.h"
 #include "Mario2.h"
 #include "HiddenBrick.h"
+#include "ChangePositionBlock.h"
 
 #include "Camera.h"
 #include "TileMap.h"
@@ -260,6 +261,14 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		float type = (float)atof(tokens[3].c_str());
 	
 		obj = new CQuestionBrick(x, y, type); break;
+	}
+	case OBJECT_TYPE_CHANGE_POSITON_BLOCK:
+	{
+		float npx = (float)atof(tokens[3].c_str());
+		float npy = (float)atof(tokens[4].c_str());
+
+
+		obj = new CChangePositionBlock(x, y, npx, npy); break;
 	}
 	case OBJECT_TYPE_DOWNBRICK:
 	{

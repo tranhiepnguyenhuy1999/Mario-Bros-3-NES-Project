@@ -20,6 +20,7 @@
 #include "Tail.h"
 #include "ShootingFlower.h"
 #include "Button.h"
+#include "ChangePositionBlock.h"
 
 #include "AssetIDs.h"
 #include "Collision.h"
@@ -117,6 +118,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithLeaf(e);
 	else if (dynamic_cast<CButton*>(e->obj))
 		OnCollisionWithButton(e);
+	else if (dynamic_cast<CChangePositionBlock*>(e->obj))
+		OnCollisionWithChangePositionBlock(e);
 }
 void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 {
@@ -207,6 +210,17 @@ void CMario::OnCollisionWithFlower(LPCOLLISIONEVENT e)
 				SetState(MARIO_STATE_DIE);
 			}
 		}
+}
+
+void CMario::OnCollisionWithChangePositionBlock(LPCOLLISIONEVENT e)
+{
+	CChangePositionBlock* obj = dynamic_cast<CChangePositionBlock*>(e->obj);
+
+	float next_x, next_y;
+
+	obj->getNextPositon(next_x, next_y);
+
+	SetPosition(next_x, next_y);
 }
 void CMario::OnCollisionWithFire(LPCOLLISIONEVENT e)
 {

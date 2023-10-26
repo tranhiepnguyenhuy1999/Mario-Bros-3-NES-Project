@@ -208,7 +208,8 @@ class CMario : public CGameObject
 	void OnCollisionWithPortal(LPCOLLISIONEVENT e);
 	void OnCollisionWithParaKoopaTroopa(LPCOLLISIONEVENT e);
 	void OnCollisionWithButton(LPCOLLISIONEVENT e);
-
+	void OnCollisionWithChangePositionBlock(LPCOLLISIONEVENT e);
+	
 	int GetAniIdBig();
 	int GetAniIdSmall();
 	int GetAniIdRacoon();
