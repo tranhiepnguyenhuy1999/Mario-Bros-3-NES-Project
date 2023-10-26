@@ -10,10 +10,12 @@ CKoopaTroopa::CKoopaTroopa(float x, float y) :CGameObject(x, y)
 	count_start = -1;
 	vx = -KOOPATROOPA_SPEED;
 	nx = -1;
+
 	isDie = false;
 	isHaveFallObj = true;
+
 	fall_object = NULL;
-	SetState(KOOPATROOPA_STATE_MOVING);
+	SetState(KOOPATROOPA_STATE_SHELL);
 }
 
 void CKoopaTroopa::GetBoundingBox(float& left, float& top, float& right, float& bottom)
@@ -128,16 +130,17 @@ void CKoopaTroopa::updateState()
 			}
 		}
 	}
-	else if (state == KOOPATROOPA_STATE_SHELL && (GetTickCount64() - count_start > KOOPATROOPA_DIE_TIMEOUT))
+	else if (state != KOOPATROOPA_STATE_SHELL_MOVING)
 	{
-		SetState(KOOPATROOPA_STATE_ALIVE);
-	}
-	else if (state == KOOPATROOPA_STATE_ALIVE && (GetTickCount64() - count_start > KOOPATROOPA_ALIVE_TIMEOUT))
-	{
-		count_start = -1;
-		y -= (KOOPATROOPA_BBOX_HEIGHT - KOOPATROOPA_BBOX_HEIGHT_SHELL) / 2;
-		vx = nx * KOOPATROOPA_SPEED;
-		SetState(KOOPATROOPA_STATE_MOVING);
+		if (isDie && (GetTickCount64() - count_start > KOOPATROOPA_DIE_TIMEOUT))
+		{
+			SetState(KOOPATROOPA_STATE_ALIVE);
+			SetState(KOOPATROOPA_STATE_MOVING);
+		}
+		else if (isDie && (GetTickCount64() - count_start > KOOPATROOPA_ALIVE_TIMEOUT))
+		{
+			SetState(KOOPATROOPA_STATE_SHELL_ALIVE);
+		}
 	}
 }
 
@@ -146,10 +149,19 @@ void CKoopaTroopa::Render()
 	int aniId = ID_ANI_KOOPATROOPA_WALKING_LEFT;
 	if (isDie)
 	{
-		if (state == KOOPATROOPA_STATE_SHELL) aniId = ID_ANI_KOOPATROOPA_SHELL;
-		else if(state == KOOPATROOPA_STATE_ALIVE) aniId = ID_ANI_KOOPATROOPA_ALIVE;
-		else aniId = ID_ANI_KOOPATROOPA_KICKING;
-	
+		switch (state)
+		{
+			case KOOPATROOPA_STATE_SHELL:
+			case KOOPATROOPA_STATE_SHELL_PICK_UP:
+				aniId = ID_ANI_KOOPATROOPA_SHELL;
+				break;
+			case KOOPATROOPA_STATE_SHELL_ALIVE:
+				aniId = ID_ANI_KOOPATROOPA_ALIVE;
+				break;
+		default:
+			aniId = ID_ANI_KOOPATROOPA_KICKING;
+			break;
+		}
 	}
 	else if (vx > 0) {
 		aniId = ID_ANI_KOOPATROOPA_WALKING_RIGHT;
@@ -178,9 +190,15 @@ void CKoopaTroopa::SetState(int state)
 		vx = 0;
 		break;
 	case KOOPATROOPA_STATE_SHELL_MOVING:
+		ay = KOOPATROOPA_GRAVITY;
+		break;
+	case KOOPATROOPA_STATE_SHELL_ALIVE:
 		break;
 	case KOOPATROOPA_STATE_ALIVE:
-		count_start = GetTickCount64();
+		count_start = -1;
+		ay = KOOPATROOPA_GRAVITY;
+		y -= (KOOPATROOPA_BBOX_HEIGHT - KOOPATROOPA_BBOX_HEIGHT_SHELL) / 2;
+		vx = nx * KOOPATROOPA_SPEED;
 		break;
 	case KOOPATROOPA_STATE_TURN:
 		removeFalObj();

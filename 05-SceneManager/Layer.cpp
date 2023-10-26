@@ -3,11 +3,37 @@
 #include "Textures.h"
 
 CLayer* CLayer::__instance = NULL;
+
 CLayer* CLayer::GetInstance()
 {
 	if (__instance == NULL) __instance = new CLayer(0, 0);
 	return __instance;
 }
+
+void CLayer::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
+{
+	if (isActive)
+	{
+		if (GetTickCount64() - count_start > LAYER_COUNT_TIMEOUT)
+			{
+				count_start = GetTickCount64();
+
+				if (state == LAYER_STATE_FADING_FROM_0_TO_1)
+				{
+					alpha += 0.1f;
+					if (alpha > 1) alpha = 1;
+				}
+				else
+				{
+					alpha -= 0.1f;
+					if (alpha < 0) alpha = 0;
+				}
+
+			}
+	}
+	CGameObject::Update(dt, coObjects);
+}
+
 void CLayer::Render()
 {
 	D3DXVECTOR3 p(x, y, 0);
@@ -27,10 +53,23 @@ void CLayer::Render()
 	Camera::GetInstance()->getCamWidth(cw);
 	Camera::GetInstance()->getCamHeight(ch);
 
-	CGame::GetInstance()->Draw(cw/2, ch/2, bbox, &rect, BBOX_ALPHA);
+	CGame::GetInstance()->Draw(cw/2, ch/2, bbox, &rect, alpha);
 }
 
 void CLayer::GetBoundingBox(float& l, float& t, float& r, float& b)
 {
 	
+}
+void CLayer::SetState(int state)
+{
+	switch (state) {
+	case LAYER_STATE_FADING_FROM_0_TO_1:
+		count_start = GetTickCount64();
+		break;
+	case LAYER_STATE_FADING_FROM_1_TO_0:
+		count_start = GetTickCount64();
+		break;
+	}
+
+	CGameObject::SetState(state);
 }

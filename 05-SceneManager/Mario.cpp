@@ -24,6 +24,7 @@
 #include "AssetIDs.h"
 #include "Collision.h"
 #include "UserBoard.h"
+#include "Layer.h"
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
@@ -55,6 +56,10 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		{
 			SetState(MARIO_STATE_RELEASE_FLY);
 		}
+	}
+	else if (isInPile)
+	{
+		
 	}
 	else if ( GetTickCount64() - untouchable_start > MARIO_UNTOUCHABLE_TIME) 
 	{
@@ -726,6 +731,22 @@ void CMario::SetState(int state)
 	case MARIO_STATE_RACOON_TRANSFORM:
 		count_start = GetTickCount64();
 		break;
+	case MARIO_STATE_GO_DOWN_PILE:
+		ay = 0;
+		vy = MARIO_IN_PILE_SPEED;
+		vx = 0;
+		ax = 0;
+		count_start = GetTickCount64();
+		isInPile = true;
+		break;
+	case MARIO_STATE_GO_UP_PILE:
+		ay = 0;
+		vy = -MARIO_IN_PILE_SPEED;
+		vx = 0;
+		ax = 0;
+		count_start = GetTickCount64();
+		isInPile = true;
+		break;
 	}
 	CGameObject::SetState(state);
 }
@@ -797,15 +818,14 @@ void CMario::createTailObject() {
 void CMario::onKeyUpOfWorldmapMario(int KeyCode) {};
 void CMario::onKeyDownOfWorldmapMario(int KeyCode) {};
 void CMario::onKeyUpOfMainMario(int KeyCode) {
-	
 	switch (KeyCode)
 	{
 	case DIK_DOWN:
-		//mario->GetPosition(x, y);
-		//if (x >= 2256 && x <= 2288) {
-		//	mario->SetPosition(2114, 544);
-		//}
-		SetState(MARIO_STATE_SIT);
+		if (x > 2256 && x < 2288) {
+			SetState(MARIO_STATE_GO_DOWN_PILE);
+			//CLayer::GetInstance()->closeWindow();
+		}
+		else SetState(MARIO_STATE_SIT);
 		break;
 	case DIK_UP:
 		break;

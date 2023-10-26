@@ -461,9 +461,11 @@ void CPlayScene::Update(DWORD dt)
 	{
 		objects[i]->Update(dt, &coObjects);
 	}
+	
+	if(CLayer::GetInstance()->IsActive()) CLayer::GetInstance()->Update(dt, &coObjects);
 
 	// skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload)
-	if (player == NULL) return; 
+	if (player == NULL) return;
 
 	// Update camera to follow mario
 	float px, py;
@@ -484,10 +486,14 @@ void CPlayScene::Render()
 	{
 		if(Camera::GetInstance()->isCamContainObject(objects[i])) objects[i]->Render();
 	}
+
 	float cx, cy;
-	Camera::GetInstance()->getCamPosition(cx, cy);
-	CLayer::GetInstance()->SetPosition(cx, cy);
-	CLayer::GetInstance()->Render();
+	if (CLayer::GetInstance()->IsActive())
+	{
+		Camera::GetInstance()->getCamPosition(cx, cy);
+		CLayer::GetInstance()->SetPosition(cx, cy);
+		CLayer::GetInstance()->Render();
+	}
 
 	CUserBoard::GetInstance()->Render();
 }

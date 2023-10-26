@@ -14,15 +14,17 @@
 #define MARIO_ACCEL_WALK_X	0.0005f
 #define MARIO_ACCEL_RUN_X	0.0001f
 
-#define MARIO_JUMP_SPEED_Y		0.265f
+#define MARIO_JUMP_SPEED_Y		0.285f
 #define MARIO_JUMP_RUN_SPEED_Y	0.3f
 
 #define MARIO_JUMP_DEFLECT_SPEED  0.2f
 
-#define MARIO_GRAVITY	0.0005f
+#define MARIO_GRAVITY	0.00075f
 //#define MARIO_GRAVITY	0.0
 
 #define MARIO_FLY_SPEED  0.075f
+#define MARIO_IN_PILE_SPEED  0.025f
+
 
 
 #define MARIO_STATE_DIE				-10
@@ -49,6 +51,10 @@
 #define MARIO_STATE_END_FLY	1200
 
 #define MARIO_STATE_KICK	1300
+
+#define MARIO_STATE_GO_DOWN_PILE 1400
+#define MARIO_STATE_GO_UP_PILE 1500
+
 
 #pragma region ANIMATION_ID
 // RACOON
@@ -178,6 +184,7 @@ class CMario : public CGameObject
 	BOOLEAN isFlying;
 	BOOLEAN	isRuning;
 	BOOLEAN	isKicking;
+	BOOLEAN isInPile;
 
 
 	ULONGLONG untouchable_start;
@@ -221,6 +228,7 @@ public:
 		isFlying = false;
 		isRuning = false;
 		isKicking = false;
+		isInPile = false;
 
 		maxVx = 0.0f;
 		ax = 0.0f;
@@ -245,7 +253,15 @@ public:
 	void getLevel(int& level) { level = this->level; }
 	int IsCollidable()
 	{
-		return (state != MARIO_STATE_DIE);
+		switch (state)
+		{
+			case MARIO_STATE_DIE:
+			case MARIO_STATE_GO_DOWN_PILE:
+			case MARIO_STATE_GO_UP_PILE:
+				return false;
+			default:
+				return true;
+		}
 	}
 	int IsBlocking() { return (state != MARIO_STATE_DIE && untouchable == 0); }
 
