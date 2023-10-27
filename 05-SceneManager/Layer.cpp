@@ -21,15 +21,30 @@ void CLayer::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				if (state == LAYER_STATE_FADING_FROM_0_TO_1)
 				{
 					alpha += 0.1f;
-					if (alpha > 1) alpha = 1;
+					if (alpha > 1)
+					{
+						alpha = 1;
+						isActive = false;
+						count_start = GetTickCount64();
+					}
+		
 				}
 				else
 				{
 					alpha -= 0.1f;
-					if (alpha < 0) alpha = 0;
+					if (alpha < 0)
+					{
+						alpha = 0;
+						isActive = false;
+					}
 				}
 
 			}
+	}
+	else
+	{
+		if (GetTickCount64() - count_start > 500) alpha = 0.0f;
+
 	}
 	CGameObject::Update(dt, coObjects);
 }

@@ -180,12 +180,12 @@ class CMario : public CGameObject
 	int prev_nx;
 	
 	BOOLEAN isOnPlatform;
+	BOOLEAN isOnTransportPile;
 	BOOLEAN isReadyToFly;
 	BOOLEAN isFlying;
 	BOOLEAN	isRuning;
 	BOOLEAN	isKicking;
 	BOOLEAN isInPile;
-
 
 	ULONGLONG untouchable_start;
 	ULONGLONG count_start;
@@ -225,6 +225,7 @@ public:
 	{
 		isSitting = false;
 		isOnPlatform = false;
+		isOnTransportPile = false;
 		isReadyToFly = false;
 		isFlying = false;
 		isRuning = false;
@@ -254,11 +255,10 @@ public:
 	void getLevel(int& level) { level = this->level; }
 	int IsCollidable()
 	{
+		if (isInPile) return false;
 		switch (state)
 		{
 			case MARIO_STATE_DIE:
-			case MARIO_STATE_GO_DOWN_PILE:
-			case MARIO_STATE_GO_UP_PILE:
 				return false;
 			default:
 				return true;

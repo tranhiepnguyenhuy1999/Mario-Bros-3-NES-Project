@@ -32,6 +32,7 @@ public:
 	void setCamWidth(int width) { cWidth = width; r = l + cWidth; };
 	void setCamHeight(int height) { cHeight = height; b = t + cHeight; };
 
+	void setIsFixed(bool val) { isFixed = val; }
 
 	void getCamWidth(int& width) { width = cWidth; };
 	void getCamHeight(int& height) { height = cHeight; };
@@ -72,6 +73,12 @@ public:
 
 		if (t < 0) { t = 0; b = t + cHeight; }
 		else if (b > MAX_MAP_HEIGHT) { b = MAX_MAP_HEIGHT; t = b - cHeight; }
+	}
+	void setFixedCamPosition(float cl, float ct) {
+		l = cl;
+		t = ct;
+		r = l + cWidth;
+		b = t + cHeight;
 	}
 	void getCamPosition(float& cx, float& cy) {
 		cx = l;

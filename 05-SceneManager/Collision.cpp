@@ -1,5 +1,6 @@
 #include "Collision.h"
 #include "GameObject.h"
+
 #include "DownBrick.h"
 
 #include "debug.h"
@@ -201,9 +202,13 @@ void CCollision::Filter( LPGAMEOBJECT objSrc,
 		{
 			continue;
 		}
-
-		if (dynamic_cast<CDownBrick*>(c->obj) && c->nx != 0) continue;
-		if (dynamic_cast<CDownBrick*>(c->obj) && c->ny > 0) continue;
+		
+		// downbrick logic handle 
+		if (dynamic_cast<CDownBrick*>(c->obj))
+		{
+			if (c->nx != 0) continue;
+			else if (c->ny > 0) continue;
+		}
 
 		if (c->t < min_tx && c->nx != 0 && filterX == 1) {
 			min_tx = c->t; min_ix = i;

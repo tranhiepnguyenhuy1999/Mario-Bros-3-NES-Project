@@ -9,7 +9,7 @@ green-piranhaplant.txt
 
 [TILESET]
 # width|height|maxTiles|sizeTileX|sizeTileY|frame_time|textID
-16	16	116	11	11	10000	500
+16	16	117	11	11	10000	500
 
 [TILEDMAP]
 #load tile map
@@ -201,7 +201,7 @@ map1_map.csv
 
 10	2320	384	1
 
-10	2256	112	11
+28	2256	112	11
 27 	2256	144	2104	464
 
 10	2256	368	2

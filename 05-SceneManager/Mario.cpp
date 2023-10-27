@@ -21,11 +21,13 @@
 #include "ShootingFlower.h"
 #include "Button.h"
 #include "ChangePositionBlock.h"
+#include "TransportPile.h"
 
 #include "AssetIDs.h"
 #include "Collision.h"
 #include "UserBoard.h"
 #include "Layer.h"
+#include "Camera.h"
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
@@ -58,9 +60,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 			SetState(MARIO_STATE_RELEASE_FLY);
 		}
 	}
-	else if (isInPile)
-	{
-		
+	else if (isInPile && GetTickCount64()- count_start > 100) {
+		isInPile = false;
 	}
 	else if ( GetTickCount64() - untouchable_start > MARIO_UNTOUCHABLE_TIME) 
 	{
@@ -84,14 +85,20 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 {
 	if (e->ny != 0 && e->obj->IsBlocking())
 	{
-		vy = 0;
-		if (e->ny < 0) isOnPlatform = true;
+		vy = 0; 
+		
+		if (dynamic_cast<CTransportPile*>(e->obj)) isOnTransportPile = true; else isOnTransportPile = false;
+
+		if (e->ny < 0)
+		{
+			isOnPlatform = true;
+		}
 	}
-	else 
-	if (e->nx != 0 && e->obj->IsBlocking())
+	else if (e->nx != 0 && e->obj->IsBlocking())
 	{
 		vx = 0;
 	}
+
 	if (dynamic_cast<CGoomba*>(e->obj))
 		OnCollisionWithGoomba(e);
 	else if (dynamic_cast<CParaGoomba*>(e->obj))
@@ -211,17 +218,13 @@ void CMario::OnCollisionWithFlower(LPCOLLISIONEVENT e)
 			}
 		}
 }
-
 void CMario::OnCollisionWithChangePositionBlock(LPCOLLISIONEVENT e)
 {
 	CChangePositionBlock* obj = dynamic_cast<CChangePositionBlock*>(e->obj);
 
-	float next_x, next_y;
-
-	obj->getNextPositon(next_x, next_y);
-
-	SetPosition(next_x, next_y);
+	obj->handlePlayerTouched();
 }
+
 void CMario::OnCollisionWithFire(LPCOLLISIONEVENT e)
 {
 	if (untouchable == 0)
@@ -750,21 +753,20 @@ void CMario::SetState(int state)
 		vy = MARIO_IN_PILE_SPEED;
 		vx = 0;
 		ax = 0;
-		count_start = GetTickCount64();
 		isInPile = true;
+		count_start = GetTickCount64();
 		break;
 	case MARIO_STATE_GO_UP_PILE:
 		ay = 0;
 		vy = -MARIO_IN_PILE_SPEED;
 		vx = 0;
 		ax = 0;
-		count_start = GetTickCount64();
 		isInPile = true;
+		count_start = GetTickCount64();
 		break;
 	}
 	CGameObject::SetState(state);
 }
-
 void CMario::GetBoundingBox(float &left, float &top, float &right, float &bottom)
 {
 	if (level == MARIO_LEVEL_RACOON)
@@ -835,9 +837,8 @@ void CMario::onKeyUpOfMainMario(int KeyCode) {
 	switch (KeyCode)
 	{
 	case DIK_DOWN:
-		if (x > 2256 && x < 2288) {
+		if (isOnTransportPile) {
 			SetState(MARIO_STATE_GO_DOWN_PILE);
-			//CLayer::GetInstance()->closeWindow();
 		}
 		else SetState(MARIO_STATE_SIT);
 		break;
@@ -913,6 +914,7 @@ void CMario::handleKeyEvent(int flag, int KeyCode) {
 	{
 	case MARIO_TYPE_MAIN:
 	{
+		//if (isInPile) break;
 		switch (flag)
 		{
 		case KEYEVENT_KEY_UP:

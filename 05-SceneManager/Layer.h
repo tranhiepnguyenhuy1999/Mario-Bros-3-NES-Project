@@ -46,6 +46,8 @@ public:
 		return isActive;
 	}
 
+	bool IsClosedWindow() { return alpha == 1; }
+
 	static CLayer* GetInstance();
 
 };

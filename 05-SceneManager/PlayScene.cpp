@@ -26,6 +26,7 @@
 #include "Mario2.h"
 #include "HiddenBrick.h"
 #include "ChangePositionBlock.h"
+#include "TransportPile.h"
 
 #include "Camera.h"
 #include "TileMap.h"
@@ -280,6 +281,11 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		float height = (float)atof(tokens[3].c_str());
 		obj = new CPile(x, y, height); break;
 	}
+	case OBJECT_TYPE_TRANSPORT_PILE:
+	{
+		float height = (float)atof(tokens[3].c_str());
+		obj = new CTransportPile(x, y, height); break;
+	}
 	case OBJECT_TYPE_CLOUDBRICK: obj = new CCloudBrick(x, y); break;
 	case OBJECT_TYPE_SMALLCOIN: obj = new CSmallCoin(x, y); break;
 	case OBJECT_TYPE_FLOWER: obj = new CFlower(x, y); break;
@@ -471,7 +477,7 @@ void CPlayScene::Update(DWORD dt)
 		objects[i]->Update(dt, &coObjects);
 	}
 	
-	if(CLayer::GetInstance()->IsActive()) CLayer::GetInstance()->Update(dt, &coObjects);
+	CLayer::GetInstance()->Update(dt, &coObjects);
 
 	// skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload)
 	if (player == NULL) return;
