@@ -764,6 +764,12 @@ void CMario::SetState(int state)
 		isInPile = true;
 		count_start = GetTickCount64();
 		break;
+	case MARIO_STATE_OUT_PILE:
+		vy = 0;
+		ay = MARIO_GRAVITY;
+		isInPile = false;
+		count_start = -1;
+		break;
 	}
 	CGameObject::SetState(state);
 }

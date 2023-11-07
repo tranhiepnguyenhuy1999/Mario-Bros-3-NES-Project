@@ -30,6 +30,7 @@ public:
 			Camera::GetInstance()->setFixedCamPosition(1968, 432);
 			CMario* player = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 			player->SetPosition(next_position_x, next_position_y);
+			player->SetState(MARIO_STATE_OUT_PILE);
 		}
 	}
 	void GetBoundingBox(float& l, float& t, float& r, float& b);
