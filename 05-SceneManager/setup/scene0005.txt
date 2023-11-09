@@ -1,11 +1,11 @@
 # list of object assets to load in this scene
 [ASSETS]
-mario.txt
-small-object.txt
-goomba.txt
-koopatroopa.txt
-piranhaplant.txt
-green-piranhaplant.txt
+assets/mario.txt
+assets/small-object.txt
+assets/goomba.txt
+assets/koopatroopa.txt
+assets/piranhaplant.txt
+assets/green-piranhaplant.txt
 
 [TILESET]
 # width|height|maxTiles|sizeTileX|sizeTileY|frame_time|textID
@@ -13,7 +13,7 @@ green-piranhaplant.txt
 
 [TILEDMAP]
 #load tile map
-map1_map.csv
+tilemap/map1_map.csv
 [CAMERA]
 # setting camera initial props
 # cleft|ctop|isFixed
@@ -24,7 +24,7 @@ map1_map.csv
 # See OBJECT_TYPE constants in AssetIDs.h
 
 # MARIO
-0	2256	0
+0	2576	336
 
 #14	800	352
 
@@ -211,6 +211,10 @@ map1_map.csv
 
 1	2256	304
 1	2272	304
+
+#card
+29	2688	336
+
 #Platform
 #5	80	352	16	15	5	1089	1090	1091
 5	0	416	16	15	39	1089	1090	1091	

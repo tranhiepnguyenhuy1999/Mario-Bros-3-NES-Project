@@ -27,6 +27,8 @@
 #include "HiddenBrick.h"
 #include "ChangePositionBlock.h"
 #include "TransportPile.h"
+#include "Card.h"
+#include "MovingObject.h"
 
 #include "Camera.h"
 #include "TileMap.h"
@@ -286,6 +288,10 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		float height = (float)atof(tokens[3].c_str());
 		obj = new CTransportPile(x, y, height); break;
 	}
+	case OBJECT_TYPE_CARD:
+	{
+		obj = new CCard(x, y); break;
+	}
 	case OBJECT_TYPE_CLOUDBRICK: obj = new CCloudBrick(x, y); break;
 	case OBJECT_TYPE_SMALLCOIN: obj = new CSmallCoin(x, y); break;
 	case OBJECT_TYPE_FLOWER: obj = new CFlower(x, y); break;
@@ -333,7 +339,18 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 	objects.push_back(obj);
 }
-void CPlayScene::createNewObject(int id, float x, float y, float nx=0, float ny=0, LPGAMEOBJECT obj_src) // nx, ny : can be direction and int v at the same time
+void CPlayScene::AddMovingObject(float x, float y, float nx, float ny, int ani_id, int delete_times) {
+	DebugOut(L"add new one");
+	CGameObject* obj = NULL;
+
+	obj = new CMovingObject(x, y, nx, ny, ani_id, delete_times);
+	
+	// General object setup
+	obj->SetPosition(x, y);
+
+	objects.push_back(obj);
+};
+void CPlayScene::createNewObject(int id, float x, float y, float  nx, float ny, LPGAMEOBJECT obj_src) // nx, ny : can be direction and int v at the same time
 {
 	CGameObject* obj = NULL;
 	float px, py;

@@ -44,6 +44,8 @@ public:
 	virtual void createNewObject(int id, float x, float y, float nx, float ny, LPGAMEOBJECT objSrc = NULL);
 	virtual void playerTouchedButtonP();
 
+	virtual void AddMovingObject(float x, float y, float nx, float ny, int ani_id, int delete_times);
+	
 	virtual void getPlayerLevel(int& level) {
 		player->getLevel(level);
 	};

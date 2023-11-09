@@ -22,6 +22,7 @@
 #include "Button.h"
 #include "ChangePositionBlock.h"
 #include "TransportPile.h"
+#include "Card.h"
 
 #include "AssetIDs.h"
 #include "Collision.h"
@@ -127,6 +128,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithButton(e);
 	else if (dynamic_cast<CChangePositionBlock*>(e->obj))
 		OnCollisionWithChangePositionBlock(e);
+	else if (dynamic_cast<CCard*>(e->obj))
+		OnCollisionWithCard(e);
 }
 void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 {
@@ -221,10 +224,8 @@ void CMario::OnCollisionWithFlower(LPCOLLISIONEVENT e)
 void CMario::OnCollisionWithChangePositionBlock(LPCOLLISIONEVENT e)
 {
 	CChangePositionBlock* obj = dynamic_cast<CChangePositionBlock*>(e->obj);
-
 	obj->handlePlayerTouched();
 }
-
 void CMario::OnCollisionWithFire(LPCOLLISIONEVENT e)
 {
 	if (untouchable == 0)
@@ -399,6 +400,15 @@ void CMario::OnCollisionWithButton(LPCOLLISIONEVENT e)
 {
 	CButton* obj = dynamic_cast<CButton*>(e->obj);
 	if(obj->GetState() != BUTTON_STATE_ACTIVE) obj->SetState(BUTTON_STATE_ACTIVE);
+}
+void CMario::OnCollisionWithCard(LPCOLLISIONEVENT e)
+{
+	CCard* obj = dynamic_cast<CCard*>(e->obj);
+	if (obj->GetState() != CARD_STATE_TOUCHED)
+	{
+		obj->SetState(CARD_STATE_TOUCHED);
+		obj->handlePlayerTouched();
+	}
 }
 void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)
 {

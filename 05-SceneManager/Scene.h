@@ -29,6 +29,7 @@ public:
 	virtual void Update(DWORD dt) = 0;
 	virtual void Render() = 0;
 	virtual void getPlayerLevel(int& level) = 0;
+	virtual void AddMovingObject(float x, float y, float nx = 0, float ny = 0, int ani_id = 0, int delete_times = 1000) = 0;
 	virtual void createNewObject(int id, float x, float y, float nx=0, float ny=0, LPGAMEOBJECT objSrc = NULL)=0;
 	virtual void playerTouchedButtonP() = 0;
 
