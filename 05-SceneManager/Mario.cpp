@@ -141,6 +141,8 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 		if (goomba->GetState() != GOOMBA_STATE_DIE)
 		{
 			goomba->SetState(GOOMBA_STATE_DIE);
+			goomba->AddPointToUserBoard();
+
 			vy = -MARIO_JUMP_DEFLECT_SPEED;
 		}
 	}
@@ -182,6 +184,9 @@ void CMario::OnCollisionWithParaGoomba(LPCOLLISIONEVENT e)
 			{
 				obj->SetState(PARAGOOMBA_STATE_DIE);
 			}
+			
+			obj->AddPointToUserBoard();
+
 			vy = -MARIO_JUMP_DEFLECT_SPEED;
 		}
 	}
@@ -261,6 +266,8 @@ void CMario::OnCollisionWithKoopaTroopa(LPCOLLISIONEVENT e)
 	else if (e->ny < 0)
 	{
 		obj->getJumpedDown();
+		obj->AddPointToUserBoard();
+
 		vy = -MARIO_JUMP_DEFLECT_SPEED;
 	}
 	//else
@@ -302,6 +309,8 @@ void CMario::OnCollisionWithParaKoopaTroopa(LPCOLLISIONEVENT e)
 				obj->SetState(KOOPATROOPA_STATE_SHELL);
 			}
 		}
+		obj->AddPointToUserBoard();
+
 		vy = -MARIO_JUMP_DEFLECT_SPEED;
 		return;
 	}
@@ -333,35 +342,25 @@ void CMario::OnCollisionWithQuestionBrick(LPCOLLISIONEVENT e)
 
 	if (e->ny > 0)
 	{
-			float qx, qy, qvx;
-			obj->GetPosition(qx, qy);
+			float objx, objy;
+			obj->GetPosition(objx, objy);
 			
 			if (obj->getType() == 1)
 			{
-				CGame::GetInstance()->GetCurrentScene()->createNewObject(OBJECT_TYPE_SMALLCOIN, qx, qy-16);
-				CUserBoard::GetInstance()->updateProps(ID_PROP_COIN, +1);
-				CUserBoard::GetInstance()->updateProps(ID_PROP_POINT, +100);
+				CGame::GetInstance()->GetCurrentScene()->createNewObject(OBJECT_TYPE_SMALLCOIN, objx, objy - 16);
+				UserInfo::GetInstance()->updateProps(ID_PROPS_COIN, +1);
 			}
 			else
 			{
-				// check direction
-				if (this->x <= qx + 8) {
-					qvx = -1;
-				}
-				else
-				{
-					qvx = 1;
-				}
 				if (level == MARIO_LEVEL_BIG)
 				{
-					CGame::GetInstance()->GetCurrentScene()->createNewObject(OBJECT_TYPE_LEAF, qx, qy);
-					CUserBoard::GetInstance()->updateProps(ID_PROP_POINT, +1000);
+					CGame::GetInstance()->GetCurrentScene()->createNewObject(OBJECT_TYPE_LEAF, objx, objy);
 				}
 				else
 				{			
-					CGame::GetInstance()->GetCurrentScene()->createNewObject(OBJECT_TYPE_MUSHROOM, qx, qy, qvx);
-					CUserBoard::GetInstance()->updateProps(ID_PROP_POINT, +1000);
+					CGame::GetInstance()->GetCurrentScene()->createNewObject(OBJECT_TYPE_MUSHROOM, objx, objy, nx);
 				}
+				obj->AddPointToUserBoard();
 			}
 
 			obj->SetState(QUESTIONBRICK_STATE_TOUCHED);
@@ -379,11 +378,12 @@ void CMario::OnCollisionWithDownBrick(LPCOLLISIONEVENT e)
 }
 void CMario::OnCollisionWithMushroom(LPCOLLISIONEVENT e)
 {
-	e->obj->Delete();
-	if (level == MARIO_LEVEL_SMALL) {
-	level = MARIO_LEVEL_BIG;
-	}
+	if (level == MARIO_LEVEL_SMALL) level = MARIO_LEVEL_BIG;
+	
 	y = y - (MARIO_BIG_BBOX_HEIGHT - MARIO_SMALL_BBOX_HEIGHT);
+	
+	e->obj->AddPointToUserBoard();
+	e->obj->Delete();
 }
 void CMario::OnCollisionWithLeaf(LPCOLLISIONEVENT e)
 {
@@ -393,8 +393,8 @@ void CMario::OnCollisionWithLeaf(LPCOLLISIONEVENT e)
 }
 void CMario::OnCollisionWithCoin(LPCOLLISIONEVENT e)
 {
+	e->obj->AddPointToUserBoard();
 	e->obj->Delete();
-	CUserBoard::GetInstance()->updateProps(ID_PROP_COIN, +1);
 }
 void CMario::OnCollisionWithButton(LPCOLLISIONEVENT e)
 {

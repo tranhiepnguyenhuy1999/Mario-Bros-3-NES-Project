@@ -1,9 +1,13 @@
 #include "UserBoard.h"
-#include "debug.h"
-#include "Mario.h"
+
 #include "Game.h"
 #include "PlayScene.h"
 #include "Camera.h"
+#include "UserInfo.h"
+
+#include "Mario.h"
+
+#include "debug.h"
 //8:6
 CUserBoard* CUserBoard::__instance = NULL;
 CUserBoard* CUserBoard::GetInstance()
@@ -14,6 +18,9 @@ CUserBoard* CUserBoard::GetInstance()
 void CUserBoard::Render()
 {
 	translateNumberToSprite();
+
+	int point, fly_mark, life, coin;
+	UserInfo::GetInstance()->getAllProps(coin, life, fly_mark, point);
 	
 	int cHeight;
 	float cx, cy;
@@ -70,6 +77,10 @@ void CUserBoard::translateNumberToSprite() {
 	vtime.clear();
 	vlife.clear();
 	vpoint.clear();
+
+	int point, fly_mark, life, coin;
+	UserInfo::GetInstance()->getAllProps(coin, life, fly_mark, point);
+
 	//DebugOut(L"fly %d \n", isFlyStak);
 	if (countdown >= 1 && loop_start != -1)
 	{

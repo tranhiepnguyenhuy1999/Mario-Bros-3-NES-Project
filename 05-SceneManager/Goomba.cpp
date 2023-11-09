@@ -4,6 +4,7 @@
 
 CGoomba::CGoomba(float x, float y):CGameObject(x, y)
 {
+	point = 100;
 	this->ax = 0;
 	this->ay = GOOMBA_GRAVITY;
 	die_start = -1;

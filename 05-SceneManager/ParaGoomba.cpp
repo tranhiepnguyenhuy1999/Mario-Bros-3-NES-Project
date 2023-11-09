@@ -4,6 +4,7 @@
 
 CParaGoomba::CParaGoomba(float x, float y) :CGameObject(x, y)
 {
+	point = 100;
 	this->ay = PARAGOOMBA_GRAVITY;
 	vx = -PARAGOOMBA_SPEED;
 	isOnFlatform = false;

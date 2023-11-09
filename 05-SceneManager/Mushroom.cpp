@@ -1,6 +1,7 @@
 #include "Mushroom.h"
 CMushroom::CMushroom(float x, float y, float vx) :CGameObject(x, y)
 {
+	point = 1000;
 	range = y - MUSHROOM_BBOX_HEIGHT;
 
 	SetState(MUSHROOM_STATE_RELASE);

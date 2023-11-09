@@ -194,6 +194,7 @@
     <ClCompile Include="TileSet.cpp" />
     <ClCompile Include="TransportPile.cpp" />
     <ClCompile Include="UserBoard.cpp" />
+    <ClCompile Include="UserInfo.cpp" />
     <ClCompile Include="Utils.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -251,6 +252,7 @@
     <ClInclude Include="TileSet.h" />
     <ClInclude Include="TransportPile.h" />
     <ClInclude Include="UserBoard.h" />
+    <ClInclude Include="UserInfo.h" />
     <ClInclude Include="Utils.h" />
   </ItemGroup>
   <ItemGroup>

@@ -8,6 +8,7 @@
 #include "Animations.h"
 #include "Sprites.h"
 #include "Collision.h"
+#include "UserInfo.h"
 
 using namespace std;
 
@@ -26,9 +27,12 @@ protected:
 
 	int nx;	 
 
+	int point;
+
 	int state;
 
 	bool isDeleted; 
+
 
 public: 
 	void SetPosition(float x, float y) { this->x = x, this->y = y; }
@@ -43,7 +47,7 @@ public:
 
 	void RenderBoundingBox();
 	CGameObject();
-	CGameObject(float x, float y) :CGameObject() { this->x = x; this->y = y; }
+	CGameObject(float x, float y) :CGameObject() { this->x = x; this->y = y; point = 0; }
 
 	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom) = 0;
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) {};
@@ -63,6 +67,9 @@ public:
 	// Is this object blocking other object? If YES, collision framework will automatically push the other object
 	virtual int IsBlocking() { return 1; }
 
+	virtual void AddPointToUserBoard() {
+		UserInfo::GetInstance()->updateProps(ID_PROPS_POINT, point);
+	};
 	~CGameObject();
 
 	static bool IsDeleted(const LPGAMEOBJECT &o) { return o->isDeleted; }

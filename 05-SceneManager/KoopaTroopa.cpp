@@ -6,6 +6,8 @@
 
 CKoopaTroopa::CKoopaTroopa(float x, float y) :CGameObject(x, y)
 {
+	point = 100;
+
 	this->ay = KOOPATROOPA_GRAVITY;
 	count_start = -1;
 	vx = -KOOPATROOPA_SPEED;

@@ -22,59 +22,26 @@
 #define ID_ANI_NUMBER_WHITE_LEFT 10022
 #define ID_ANI_NUMBER_WHITE_P 10023
 
-#define ID_PROP_POINT 1
-#define ID_PROP_LIFE 2 
-#define ID_PROP_COIN 3
-#define ID_PROP_FLY_MARK 4 
-
 class CUserBoard : public CGameObject {
 	static CUserBoard* __instance;
-	int coin, life, fly_mark, countdown;
-	double point;
+	int countdown = 000;
 	vector<int> vpoint;
 	vector<int> vcoin;
 	vector<int> vlife;
 	vector<int> vtime;
 	ULONGLONG loop_start;
-	
+
 	int getAniId(int num);
 	void translateNumberToSprite();
 
 public:	
 	CUserBoard(float x, float y) : CGameObject(x, y) {
 		loop_start = -1;
-		fly_mark = 0;
-		point = 0;
-		coin = 0;
-		life = 0;
-		countdown = 000;
+
 	}
 	void Render();
-	void startCount() {
-		loop_start = GetTickCount64();
-	}
-	void updateProps(int key, int val) { 
-		switch (key)	
-		{
-		case ID_PROP_POINT:
-			point += val;
-			break;
-		case ID_PROP_LIFE:
-			life += val;
-			break;
-		case ID_PROP_COIN:
-			coin += val;
-			break;
-		case ID_PROP_FLY_MARK:
-			fly_mark += val;
-			break;
-		default:
-			break;
-		}
-	}
 
 	void RenderBoundingBox();
 	void GetBoundingBox(float& l, float& t, float& r, float& b) {};
-
 	static CUserBoard* GetInstance();
 };

@@ -18,6 +18,7 @@ class CCoin : public CGameObject {
 public:
 	CCoin(float x, float y, int type=0) : CGameObject(x, y) {
 		this->type = type;
+		point = 50;
 	}
 	
 	void Render();
