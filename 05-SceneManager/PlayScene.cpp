@@ -29,6 +29,7 @@
 #include "TransportPile.h"
 #include "Card.h"
 #include "MovingObject.h"
+#include "StopMovingObject.h"
 
 #include "Camera.h"
 #include "TileMap.h"
@@ -339,12 +340,22 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 	objects.push_back(obj);
 }
-void CPlayScene::AddMovingObject(float x, float y, float nx, float ny, int ani_id, int delete_times) {
-	DebugOut(L"add new one");
+void CPlayScene::AddMovingObject(float x, float y, float nx, float ny, float ax, float ay, int ani_id, int delete_times) {
 	CGameObject* obj = NULL;
 
-	obj = new CMovingObject(x, y, nx, ny, ani_id, delete_times);
+	obj = new CMovingObject(x, y, nx, ny, ax, ay, ani_id, delete_times);
 	
+	// General object setup
+	obj->SetPosition(x, y);
+
+	objects.push_back(obj);
+};
+void CPlayScene::AddStopMovingObjectAxisY(float x, float y, float nx, float ny, float ax, float ay, int ani_id, int delete_times, bool direct) {
+	
+	CGameObject* obj = NULL;
+
+	obj = new CStopMovingObjectAxisY(x, y, nx, ny, ax, ay, ani_id, delete_times, direct);
+
 	// General object setup
 	obj->SetPosition(x, y);
 

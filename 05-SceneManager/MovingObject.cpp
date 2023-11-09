@@ -1,8 +1,11 @@
 #include "MovingObject.h"
 #include "debug.h"
 
-CMovingObject::CMovingObject(float x, float y, float vx, float vy, int ani_id, int delete_times):CGameObject(x, y)
+CMovingObject::CMovingObject(float x, float y, float vx, float vy, float ax, float ay, int ani_id, int delete_times):CGameObject(x, y)
 {
+	this->ax = ax;
+	this->ay = ay;
+
 	this->vx = vx;
 	this->vy = vy;
 	this->ani_id = ani_id;
@@ -19,6 +22,9 @@ void CMovingObject::GetBoundingBox(float& left, float& top, float& right, float&
 }
 void CMovingObject::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	vx += ax * dt;
+	vy += ay * dt;
+
 	x += vx * dt;
 	y += vy * dt;
 
@@ -27,13 +33,13 @@ void CMovingObject::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		isDeleted = true;
 		return;
 	}
+
 	CGameObject::Update(dt, coObjects);
 }
 
 
 void CMovingObject::Render()
 {
-	DebugOut(L"add new one %d", ani_id);
 	CAnimations::GetInstance()->Get(ani_id)->Render(x, y);
 	RenderBoundingBox();
 }

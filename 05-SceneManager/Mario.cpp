@@ -40,6 +40,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	// reset untouchable timer if untouchable time has passed
 
 	if (pickup_shell) {
+		DebugOut(L"Start pickup shell !!! \n");
+
 		if (!pickup_shell->IsDie())
 			pickup_shell = NULL;
 		else
@@ -48,9 +50,19 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 			pickup_shell->getPickUp(vx);
 		}
 	}
+	
+	if (low_fly_remain_start != -1)
+	{
+		if (GetTickCount64() - low_fly_remain_start > 250) {
+			ay = MARIO_GRAVITY;
+			low_fly_remain_start = -1;
+		}
+	}
 
 	if (isFlying)
 	{
+		DebugOut(L"Flying time !!! \n");
+
 		if (GetTickCount64() - fly_start > MARIO_FLY_TIME)
 		{
 			SetState(MARIO_STATE_END_FLY);
@@ -62,6 +74,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		}
 	}
 	else if (isInPile && GetTickCount64()- count_start > 100) {
+		DebugOut(L"Start in pile !!! \n");
 		isInPile = false;
 	}
 	else if ( GetTickCount64() - untouchable_start > MARIO_UNTOUCHABLE_TIME) 
@@ -69,6 +82,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		untouchable_start = 0;
 		untouchable = 0;
 	}
+
 	isOnPlatform = false;
 
 	CCollision::GetInstance()->Process(this, dt, coObjects);
@@ -690,6 +704,11 @@ void CMario::SetState(int state)
 			else
 				vy = -MARIO_JUMP_SPEED_Y;
 		}
+		else if (GetTickCount64() - low_fly_remain_start < 250)
+		{
+			vy = 0.05f;
+			ay = 0.0f;
+		}
 		break;
 
 	case MARIO_STATE_RELEASE_JUMP:
@@ -864,7 +883,11 @@ void CMario::onKeyUpOfMainMario(int KeyCode) {
 		SetState(MARIO_STATE_ATTACK);
 		break;
 	case DIK_S:
-		if (isReadyToFly && level == MARIO_LEVEL_RACOON) SetState(MARIO_STATE_FLY); else SetState(MARIO_STATE_JUMP);
+		if (isReadyToFly && level == MARIO_LEVEL_RACOON) SetState(MARIO_STATE_FLY);
+		else {
+			SetState(MARIO_STATE_JUMP);
+			low_fly_remain_start = GetTickCount64();
+		}
 		break;
 	case DIK_1:
 		SetLevel(MARIO_LEVEL_SMALL);

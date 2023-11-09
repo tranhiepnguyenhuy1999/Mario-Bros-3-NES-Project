@@ -38,13 +38,16 @@ protected:
 
 	void LoadAssets(LPCWSTR assetFile);
 	
-public: 
+public:
+
 	CPlayScene(int id, LPCWSTR filePath);
 	
 	virtual void createNewObject(int id, float x, float y, float nx, float ny, LPGAMEOBJECT objSrc = NULL);
 	virtual void playerTouchedButtonP();
 
-	virtual void AddMovingObject(float x, float y, float nx, float ny, int ani_id, int delete_times);
+	virtual void AddMovingObject(float x, float y, float nx, float ny, float ax, float ay, int ani_id, int delete_times);
+	virtual void AddStopMovingObjectAxisY(float x, float y, float nx, float ny, float ax, float ay, int ani_id, int delete_times, bool direct);
+
 	
 	virtual void getPlayerLevel(int& level) {
 		player->getLevel(level);

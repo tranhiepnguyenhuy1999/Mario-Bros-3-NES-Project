@@ -194,6 +194,7 @@ class CMario : public CGameObject
 	ULONGLONG next_ready_to_fly_mark_count_start;
 	ULONGLONG fly_start;
 	ULONGLONG fly_remain_start;
+	ULONGLONG low_fly_remain_start;
 
 	CKoopaTroopa* pickup_shell;
 
@@ -249,6 +250,7 @@ public:
 		fly_start = -1;
 		next_ready_to_fly_mark_count_start = -1;
 		fly_remain_start = -1;
+		low_fly_remain_start = -1;
 
 		pickup_shell = NULL;
 	}

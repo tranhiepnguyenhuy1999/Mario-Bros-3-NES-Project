@@ -188,6 +188,7 @@
     <ClCompile Include="SmallCoin.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="Sprites.cpp" />
+    <ClCompile Include="StopMovingObject.cpp" />
     <ClCompile Include="Tail.cpp" />
     <ClCompile Include="Textures.cpp" />
     <ClCompile Include="TileMap.cpp" />
@@ -245,6 +246,7 @@
     <ClInclude Include="SmallCoin.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="Sprites.h" />
+    <ClInclude Include="StopMovingObject.h" />
     <ClInclude Include="Tail.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Textures.h" />

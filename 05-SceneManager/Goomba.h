@@ -25,9 +25,11 @@ protected:
 	bool isActive=false;
 
 	ULONGLONG die_start;
+public: 	
+	CGoomba(float x, float y);
 
-	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom);
-	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects);
+	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
+	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	virtual void Render();
 
 	virtual int IsCollidable() { return 1; };
@@ -36,7 +38,11 @@ protected:
 
 	virtual void OnCollisionWith(LPCOLLISIONEVENT e);
 	void OnCollisionWithTail(LPCOLLISIONEVENT e);
-public: 	
-	CGoomba(float x, float y);
+	
 	virtual void SetState(int state);
+	
+	virtual void AddPointToUserBoard() {
+		CGameObject::AddPointToUserBoard();
+		CGame::GetInstance()->GetCurrentScene()->AddStopMovingObjectAxisY(x, y, 0, -0.05f,0,0.00005f, 10200, 5000, false);
+	};
 };
