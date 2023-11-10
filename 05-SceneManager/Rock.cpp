@@ -10,6 +10,7 @@ CRock::CRock(float x, float y, float nx, float ny) :CGameObject(x, y)
 	vx = nx*ROCK_SPEED;
 	vy = ny*ROCK_BOUNCE_SPEED;
 	ay = ROCK_GRAVITY;
+	ax = 0;
 	isOnGround = false;
 }
 void CRock::Render()
@@ -46,10 +47,10 @@ void CRock::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 }
 void CRock::GetBoundingBox(float& l, float& t, float& r, float& b)
 {
-	l = x - TAIL_BBOX_WIDTH / 2;
-	t = y - TAIL_BBOX_HEIGHT / 2;
-	r = l + TAIL_BBOX_WIDTH;
-	b = t + TAIL_BBOX_HEIGHT;
+	l = x - ROCK_BBOX_WIDTH / 2;
+	t = y - ROCK_BBOX_HEIGHT / 2;
+	r = l + ROCK_BBOX_WIDTH;
+	b = t + ROCK_BBOX_HEIGHT;
 }
 void CRock::SetState(int state)
 {

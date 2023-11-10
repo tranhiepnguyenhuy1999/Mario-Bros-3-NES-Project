@@ -10,8 +10,8 @@
 
 #define ID_ANI_ROCK 10025
 
-#define	TAIL_BBOX_WIDTH 4
-#define TAIL_BBOX_HEIGHT 8
+#define	ROCK_BBOX_WIDTH 4
+#define ROCK_BBOX_HEIGHT 8
 
 class CRock : public CGameObject {
 	float ax, ay;

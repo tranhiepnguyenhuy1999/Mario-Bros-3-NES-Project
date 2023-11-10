@@ -7,7 +7,6 @@
 #include "Mario.h"
 #include "Goomba.h"
 #include "Map.h"
-#include "CloudBrick.h"
 #include "TileSet.h"
 #include "QuestionBrick.h"
 #include "Mushroom.h"

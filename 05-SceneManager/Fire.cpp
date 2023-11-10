@@ -54,8 +54,4 @@ void CFire::GetBoundingBox(float& l, float& t, float& r, float& b)
 void CFire::SetState(int state)
 {
 	CGameObject::SetState(state);
-
-	switch (state)
-	{
-	}
 }

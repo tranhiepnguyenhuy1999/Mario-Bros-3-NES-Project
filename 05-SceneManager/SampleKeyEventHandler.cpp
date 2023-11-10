@@ -4,7 +4,6 @@
 #include "Game.h"
 
 #include "Mario.h"
-#include "Mario2.h"
 #include "PlayScene.h"
 
 void CSampleKeyHandler::OnKeyDown(int KeyCode)

@@ -68,7 +68,7 @@ void CLayer::Render()
 	Camera::GetInstance()->getCamWidth(cw);
 	Camera::GetInstance()->getCamHeight(ch);
 
-	CGame::GetInstance()->Draw(cw/2, ch/2, bbox, &rect, alpha);
+	CGame::GetInstance()->Draw((float)cw/2, (float)ch/2, bbox, &rect, alpha);
 }
 
 void CLayer::GetBoundingBox(float& l, float& t, float& r, float& b)

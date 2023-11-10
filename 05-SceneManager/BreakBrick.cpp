@@ -41,8 +41,8 @@ void CBreakBrick::SetState(int state)
 	CGameObject::SetState(state);
 }
 void CBreakBrick::createRockObject() {
-		CGame::GetInstance()->GetCurrentScene()->createNewObject(OBJECT_TYPE_ROCK, x, y, -1, -1.15);
-		CGame::GetInstance()->GetCurrentScene()->createNewObject(OBJECT_TYPE_ROCK, x, y, 1, -1);
-		CGame::GetInstance()->GetCurrentScene()->createNewObject(OBJECT_TYPE_ROCK, x, y, -1, -0.75f);
-		CGame::GetInstance()->GetCurrentScene()->createNewObject(OBJECT_TYPE_ROCK, x, y, 1, -0.85f);
+		CGame::GetInstance()->GetCurrentScene()->createNewObject(OBJECT_TYPE_ROCK, x, y, -1.0f, -1.15f);
+		CGame::GetInstance()->GetCurrentScene()->createNewObject(OBJECT_TYPE_ROCK, x, y, 1.0f, -1.0f);
+		CGame::GetInstance()->GetCurrentScene()->createNewObject(OBJECT_TYPE_ROCK, x, y, -1.0f, -0.75f);
+		CGame::GetInstance()->GetCurrentScene()->createNewObject(OBJECT_TYPE_ROCK, x, y, 1.0f, -0.85f);
 }

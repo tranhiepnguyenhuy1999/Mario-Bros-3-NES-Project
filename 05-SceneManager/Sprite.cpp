@@ -42,7 +42,7 @@ void CSprite::Draw(float x, float y)
 
 	D3DXMATRIX matTranslation;
 
-	FLOAT pi = 3.14159265359;
+	//FLOAT pi = 3.14159265359;
 
 	x = (FLOAT)floor(x);
 	y = (FLOAT)floor(y);

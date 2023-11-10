@@ -7,19 +7,19 @@
 
 #define ID_ANI_SMALL_COIN 11001
 
-#define COIN_SPEED 0.2f
-#define COIN_MAX_Y 50
-#define	COIN_WIDTH 10
-#define COIN_BBOX_WIDTH 9
-#define COIN_BBOX_HEIGHT 14
+#define SMALL_COIN_SPEED 0.2f
+#define SMALL_COIN_MAX_Y 50
+#define	SMALL_COIN_WIDTH 10
+#define SMALL_COIN_BBOX_WIDTH 9
+#define SMALL_COIN_BBOX_HEIGHT 14
 
 
 class CSmallCoin : public CGameObject {
 	float yLimit;
 public:
 	CSmallCoin(float x, float y) : CGameObject(x, y) {
-		yLimit = y - COIN_MAX_Y;
-		vy = -COIN_SPEED;
+		yLimit = y - SMALL_COIN_MAX_Y;
+		vy = -SMALL_COIN_SPEED;
 	}
 	void Render();
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
@@ -28,7 +28,7 @@ public:
 			y = yLimit;
 			vy = -vy;
 		}
-		if (y >= yLimit + COIN_MAX_Y) {
+		if (y >= yLimit + SMALL_COIN_MAX_Y) {
 			isDeleted = true; return;
 		}
 		CGameObject::Update(dt, coObjects);

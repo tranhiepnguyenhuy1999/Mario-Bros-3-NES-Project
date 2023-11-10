@@ -27,6 +27,7 @@ public:
 		cWidth = 0;
 		cHeight = 0;
 		px = 0; py = 0;
+		isFixed = false;
 	}
 
 	void setCamWidth(int width) { cWidth = width; r = l + cWidth; };

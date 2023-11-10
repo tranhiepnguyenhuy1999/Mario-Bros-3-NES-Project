@@ -78,9 +78,6 @@
     <ClCompile Include="Map.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CloudBrick.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="TileSet.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -130,9 +127,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Rock.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Mario2.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="HiddenBrick.cpp">
@@ -248,9 +242,6 @@
     <ClInclude Include="Map.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CloudBrick.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="TileSet.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -303,9 +294,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Rock.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Mario2.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="HiddenBrick.h">

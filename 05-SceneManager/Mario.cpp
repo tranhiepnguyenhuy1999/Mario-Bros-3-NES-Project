@@ -36,6 +36,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	vx += ax * dt;
 
 	if (abs(vx) > abs(maxVx)) vx = maxVx;
+	if (type == MARIO_TYPE_WORLDMAP && abs(vy) > abs(maxVy)) vy = maxVy;
 
 	// reset untouchable timer if untouchable time has passed
 
@@ -372,7 +373,7 @@ void CMario::OnCollisionWithQuestionBrick(LPCOLLISIONEVENT e)
 				}
 				else
 				{			
-					CGame::GetInstance()->GetCurrentScene()->createNewObject(OBJECT_TYPE_MUSHROOM, objx, objy, nx);
+					CGame::GetInstance()->GetCurrentScene()->createNewObject(OBJECT_TYPE_MUSHROOM, objx, objy, (float)nx);
 				}
 				obj->AddPointToUserBoard();
 			}
@@ -564,16 +565,36 @@ int CMario::GetAniIdRacoon()
 		if (abs(ax) == MARIO_ACCEL_RUN_X)
 		{
 			if (nx >= 0)
-				aniId = ID_ANI_RACOON_JUMP_RUN_RIGHT;
+			{
+				if (vy > 0)
+				{
+					aniId = ID_ANI_RACOON_LOW_FLY_RIGHT;
+				}
+				else aniId = ID_ANI_RACOON_JUMP_RUN_RIGHT;
+			}
 			else
 				aniId = ID_ANI_RACOON_JUMP_RUN_LEFT;
 		}
 		else
 		{
 			if (nx >= 0)
-				aniId = ID_ANI_RACOON_JUMP_WALK_RIGHT;
+			{
+				if (vy > 0)
+				{
+					if(low_fly_remain_start != -1) aniId = ID_ANI_RACOON_LOW_FLY_RIGHT;
+					else aniId = ID_ANI_RACOON_JUMP_WALK_DOWN_RIGHT;
+				}
+				else aniId = ID_ANI_RACOON_JUMP_WALK_RIGHT;
+			}
 			else
-				aniId = ID_ANI_RACOON_JUMP_WALK_LEFT;
+			{
+				if (vy > 0)
+				{
+					if (low_fly_remain_start != -1) aniId = ID_ANI_RACOON_LOW_FLY_LEFT;
+					else aniId = ID_ANI_RACOON_JUMP_WALK_DOWN_LEFT;
+				}
+				else aniId = ID_ANI_RACOON_JUMP_WALK_LEFT;
+			}
 		}
 	}
 	else
@@ -622,7 +643,9 @@ void CMario::Render()
 {
 	CAnimations* animations = CAnimations::GetInstance();
 	int aniId = -1;
-	if (state == MARIO_STATE_RACOON_TRANSFORM) aniId = ID_ANI_RACOON_TRANSFORM;
+
+	if (type == MARIO_TYPE_WORLDMAP) aniId = ID_ANI_MARIO_WORLDMAP;
+	else if (state == MARIO_STATE_RACOON_TRANSFORM) aniId = ID_ANI_RACOON_TRANSFORM;
 	else if (state == MARIO_STATE_ATTACK)
 	{
 	 if(nx>0)
@@ -695,6 +718,16 @@ void CMario::SetState(int state)
 		ax = -MARIO_ACCEL_WALK_X;
 		nx = -1;
 		break;
+	case MARIO_STATE_WALKING_UP:
+		if (isSitting) break;
+		maxVy = -MARIO_WALKING_SPEED;
+		ay = -MARIO_ACCEL_WALK_X;
+		break;
+	case MARIO_STATE_WALKING_DOWN:
+		if (isSitting) break;
+		maxVy = MARIO_WALKING_SPEED;
+		ay = MARIO_ACCEL_WALK_X;
+		break;
 	case MARIO_STATE_JUMP:
 		if (isSitting) break;
 		if (isOnPlatform)
@@ -704,10 +737,14 @@ void CMario::SetState(int state)
 			else
 				vy = -MARIO_JUMP_SPEED_Y;
 		}
-		else if (GetTickCount64() - low_fly_remain_start < 250)
+		else if(level == MARIO_LEVEL_RACOON)
 		{
-			vy = 0.05f;
-			ay = 0.0f;
+			if (GetTickCount64() - low_fly_remain_start > 250) break;
+			if (vy > 0)
+			{
+				ay = 0.0f;
+				vy = 0.035f;
+			}
 		}
 		break;
 
@@ -735,6 +772,10 @@ void CMario::SetState(int state)
 		break;
 	case MARIO_STATE_IDLE:
 		if (isFlying && !isOnPlatform) break;
+		if (type == MARIO_TYPE_WORLDMAP) {
+			ay = 0.0f;
+			vy = 0.0f;
+		}
 		ax = 0.0f;
 		vx = 0.0f;	
 		break;
@@ -866,7 +907,14 @@ void CMario::createTailObject() {
 
 	}
 }
-void CMario::onKeyUpOfWorldmapMario(int KeyCode) {};
+void CMario::onKeyUpOfWorldmapMario(int KeyCode) {
+	switch (KeyCode)
+	{
+	case DIK_S:
+			CGame::GetInstance()->InitiateSwitchScene(5);
+		break;
+	}
+};
 void CMario::onKeyDownOfWorldmapMario(int KeyCode) {};
 void CMario::onKeyUpOfMainMario(int KeyCode) {
 	switch (KeyCode)
@@ -947,9 +995,29 @@ void CMario::keyStateOfMainMario() {
 	}
 	else SetState(MARIO_STATE_IDLE);
 };
+void CMario::keyStateOfWorldmapMario() {
+	LPGAME game = CGame::GetInstance();
 
+	if (game->IsKeyDown(DIK_RIGHT))
+	{
+		SetState(MARIO_STATE_WALKING_RIGHT);
+	}
+	else if (game->IsKeyDown(DIK_LEFT))
+	{
+		SetState(MARIO_STATE_WALKING_LEFT);
+	}
+	else if (game->IsKeyDown(DIK_UP))
+	{
+		SetState(MARIO_STATE_WALKING_UP);
+	}
+	else if (game->IsKeyDown(DIK_DOWN))
+	{
+		SetState(MARIO_STATE_WALKING_DOWN);
+	}
+	else SetState(MARIO_STATE_IDLE);
+};
 void CMario::handleKeyEvent(int flag, int KeyCode) {
-	switch (this->type)
+	switch ((int)this->type)
 	{
 	case MARIO_TYPE_MAIN:
 	{
@@ -969,6 +1037,21 @@ void CMario::handleKeyEvent(int flag, int KeyCode) {
 		break;
 	}
 	case MARIO_TYPE_WORLDMAP:
+	{
+		//if (isInPile) break;
+		switch (flag)
+		{
+		case KEYEVENT_KEY_UP:
+			onKeyUpOfWorldmapMario(KeyCode);
+			break;
+		case KEYEVENT_KEY_DOWN:
+			onKeyDownOfWorldmapMario(KeyCode);
+			break;
+		case KEYEVENT_KEY_STATE:
+			keyStateOfWorldmapMario();
+			break;
+		}
 		break;
+	}
 	}
 }

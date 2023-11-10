@@ -48,13 +48,13 @@ void CUserBoard::Render()
 	animations->Get(ID_ANI_NUMBER1)->Render(x - 78 +38 + 6, y -18 +8 + 6 );
 
 	// time
-	for (int i = 0; i < vtime.size(); i++) {
+	for (int i = 0; i < (int)vtime.size(); i++) {
 		int aniId = getAniId(vtime[i]);
 		animations->Get(aniId)->Render(x - 78 + 126 + 4 + i * 8, y - 18 + 16 + 6);
 	}
 
 	// point
-	for (int i = 0; i < vpoint.size(); i++) {
+	for (int i = 0; i < (int)vpoint.size(); i++) {
 		int aniId = getAniId(vpoint[i]);
 		animations->Get(aniId)->Render(x - 78 + 53 + 4 +i*8, y - 18 + 16 + 6);
 	}
@@ -105,10 +105,10 @@ void CUserBoard::translateNumberToSprite() {
 			vtime.push_back(temp % 10);
 		}
 		else {
-			int result = temp / pow(10, i);
+			int result = (int)(temp / pow(10, i));
 			//DebugOut(L"i: %d \n", result);
 			vtime.push_back(result);
-			temp = temp - result * pow(10, i);
+			temp = temp - (int)(result * pow(10, i));
 		}
 	}
 	// point
@@ -117,10 +117,10 @@ void CUserBoard::translateNumberToSprite() {
 			vpoint.push_back((int)point % 10);
 		}
 		else {
-			int result = point/pow(10, i);
+			int result = (int)(point/pow(10, i));
 			//DebugOut(L"i: %d \n", result);
 			vpoint.push_back(result);
-			point = point - result * pow(10, i);
+			point = point - (int)(result * pow(10, i));
 		}
 	}
 	//life
@@ -128,7 +128,7 @@ void CUserBoard::translateNumberToSprite() {
 		if (i == 0) {
 			vlife.push_back(life % 10);
 		}
-		else vlife.push_back(life / pow(10, i));
+		else vlife.push_back((int)(life / pow(10, i)));
 	}
 	RenderBoundingBox();
 }
@@ -185,5 +185,5 @@ void CUserBoard::RenderBoundingBox()
 	rect.bottom = (int)b - (int)t;
 
 
-	CGame::GetInstance()->Draw(cWidth/2, cHeight - 35/2, bbox, nullptr, 1.0f, rect.right - 1, rect.bottom - 1);
+	CGame::GetInstance()->Draw((float)cWidth/2, (float)cHeight - 35.0f/2, bbox, nullptr, 1.0f, rect.right - 1, rect.bottom - 1);
 }

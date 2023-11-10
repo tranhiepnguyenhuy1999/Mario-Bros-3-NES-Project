@@ -23,7 +23,6 @@
 #include "BreakBrick.h"
 #include "Rock.h"
 #include "Button.h"
-#include "Mario2.h"
 #include "HiddenBrick.h"
 #include "ChangePositionBlock.h"
 #include "TransportPile.h"
@@ -172,7 +171,7 @@ void CPlayScene::_ParseSection_CAMERA(string line)
 	int ctop = atoi(tokens[1].c_str());
 	bool isFixed = atoi(tokens[2].c_str());
 	
-	Camera::GetInstance()->setInitialCamProps(cleft, ctop, isFixed);
+	Camera::GetInstance()->setInitialCamProps((float)cleft, (float)ctop, isFixed);
 }
 void CPlayScene::_ParseSection_TILEDMAP(string line)
 {
@@ -227,27 +226,19 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	switch (object_type)
 	{
 	case OBJECT_TYPE_MARIO:
+	{
 		if (player!=NULL) 
 		{
 			DebugOut(L"[ERROR] MARIO object was created before!\n");
 			return;
 		}
-		obj = new CMario(x, y);
+		float type = (float)atof(tokens[3].c_str());
+		obj = new CMario(x, y, type);
 		player = (CMario*)obj;
 		Camera::GetInstance()->setCamPosition(x, y);
 		DebugOut(L"[INFO] Player object has been created!\n");
 		break;
-	case OBJECT_TYPE_MARIO2:
-		if (player != NULL)
-		{
-			DebugOut(L"[ERROR] MARIO2 object was created before!\n");
-			return;
-		}
-		obj = new CMario2(x, y);
-		player = (CMario2*)obj;
-
-		DebugOut(L"[INFO] Player object has been created!\n");
-		break;
+	}
 	case OBJECT_TYPE_GOOMBA: obj = new CGoomba(x,y); break;
 	case OBJECT_TYPE_PARAGOOMBA: obj = new CParaGoomba(x, y); break;
 	case OBJECT_TYPE_KOOPATROOPA: obj = new CKoopaTroopa(x, y); break;
@@ -277,7 +268,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_DOWNBRICK:
 	{
 		float length = (float)atof(tokens[3].c_str());
-	obj = new CDownBrick(x, y, length); break;
+	obj = new CDownBrick(x, y, (int)length); break;
 	}
 	case OBJECT_TYPE_PILE:
 	{
@@ -293,7 +284,6 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	{
 		obj = new CCard(x, y); break;
 	}
-	case OBJECT_TYPE_CLOUDBRICK: obj = new CCloudBrick(x, y); break;
 	case OBJECT_TYPE_SMALLCOIN: obj = new CSmallCoin(x, y); break;
 	case OBJECT_TYPE_FLOWER: obj = new CFlower(x, y); break;
 	case OBJECT_TYPE_SHOOTING_FLOWER:
@@ -364,14 +354,9 @@ void CPlayScene::AddStopMovingObjectAxisY(float x, float y, float nx, float ny, 
 void CPlayScene::createNewObject(int id, float x, float y, float  nx, float ny, LPGAMEOBJECT obj_src) // nx, ny : can be direction and int v at the same time
 {
 	CGameObject* obj = NULL;
-	float px, py;
+
 	switch (id)
 	{
-	case OBJECT_TYPE_GOOMBA: obj = new CGoomba(x, y); break;
-	case OBJECT_TYPE_BRICK: obj = new CBrick(x, y); break;
-	case OBJECT_TYPE_QUESTIONBRICK: obj = new CQuestionBrick(x, y); break;
-	case OBJECT_TYPE_HIDDENBRICK: obj = new CHiddenBrick(x, y); break;
-	case OBJECT_TYPE_CLOUDBRICK: obj = new CCloudBrick(x, y); break;
 	case OBJECT_TYPE_MUSHROOM: obj = new CMushroom(x, y, nx); break;
 	case OBJECT_TYPE_LEAF: obj = new CLeaf(x, y); break;
 	case OBJECT_TYPE_TAIL: obj = new CTail(x, y, nx); break;
@@ -538,7 +523,7 @@ void CPlayScene::Render()
 		CLayer::GetInstance()->Render();
 	}
 
-	CUserBoard::GetInstance()->Render();
+	//CUserBoard::GetInstance()->Render();
 }
 /*
 *	Clear all objects from this scene

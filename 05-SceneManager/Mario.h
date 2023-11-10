@@ -14,7 +14,7 @@
 #define MARIO_ACCEL_WALK_X	0.0005f
 #define MARIO_ACCEL_RUN_X	0.0001f
 
-#define MARIO_JUMP_SPEED_Y		0.285f
+#define MARIO_JUMP_SPEED_Y		0.335f
 #define MARIO_JUMP_RUN_SPEED_Y	0.3f
 
 #define MARIO_JUMP_DEFLECT_SPEED  0.2f
@@ -56,7 +56,8 @@
 #define MARIO_STATE_GO_UP_PILE 1500
 #define MARIO_STATE_OUT_PILE 1600
 
-
+#define MARIO_STATE_WALKING_UP	1700
+#define MARIO_STATE_WALKING_DOWN	1800
 
 #pragma region ANIMATION_ID
 // RACOON
@@ -88,6 +89,13 @@
 
 #define ID_ANI_RACOON_KICK_RIGHT 1716
 #define ID_ANI_RACOON_KICK_LEFT 1717
+
+#define ID_ANI_RACOON_LOW_FLY_RIGHT 1718
+#define ID_ANI_RACOON_LOW_FLY_LEFT 1719
+
+#define ID_ANI_RACOON_JUMP_WALK_DOWN_RIGHT 1720
+#define ID_ANI_RACOON_JUMP_WALK_DOWN_LEFT 1721
+
 
 //BIG
 #define ID_ANI_MARIO_IDLE_RIGHT 400
@@ -138,6 +146,10 @@
 #define ID_ANI_MARIO_SMALL_KICK_RIGHT 1602
 #define ID_ANI_MARIO_SMALL_KICK_LEFT 1603
 
+
+// WORLDMAP
+#define ID_ANI_MARIO_WORLDMAP 1650
+
 #pragma endregion
 
 #define GROUND_Y 160.0f
@@ -146,8 +158,8 @@
 #define	MARIO_LEVEL_BIG		2
 #define	MARIO_LEVEL_RACOON	3
 
-#define	MARIO_TYPE_MAIN	1
-#define	MARIO_TYPE_WORLDMAP		2
+#define	MARIO_TYPE_MAIN	0
+#define	MARIO_TYPE_WORLDMAP		1
 
 #define RACOON_SPRITE_WIDTH  22
 #define RACOON_SPRITE_HEIGHT 28
@@ -171,13 +183,13 @@
 class CMario : public CGameObject
 {
 	BOOLEAN isSitting;
-	float maxVx;
+	float maxVx, maxVy;
 	float ax;				// acceleration on x 
 	float ay;				// acceleration on y 
 
 	int level;
 	int untouchable;
-	int type;
+	float type;
 	int ready_to_fly_mark;
 	int prev_nx;
 	
@@ -220,12 +232,13 @@ class CMario : public CGameObject
 
 	void onKeyUpOfWorldmapMario(int KeyCode);
 	void onKeyDownOfWorldmapMario(int KeyCode);
+	void keyStateOfWorldmapMario();
 
 	void onKeyUpOfMainMario(int KeyCode);
 	void onKeyDownOfMainMario(int KeyCode);
 	void keyStateOfMainMario();
 public:
-	CMario(float x, float y) : CGameObject(x, y)
+	CMario(float x, float y, float p_type) : CGameObject(x, y)
 	{
 		isSitting = false;
 		isOnPlatform = false;
@@ -237,11 +250,12 @@ public:
 		isInPile = false;
 
 		maxVx = 0.0f;
+		maxVy = 0.0f;
 		ax = 0.0f;
-		ay = MARIO_GRAVITY;
 		ready_to_fly_mark = 0;
-		level = MARIO_LEVEL_SMALL;
-		type = MARIO_TYPE_MAIN;
+		level = MARIO_LEVEL_RACOON;
+		type = p_type;
+		if (p_type == MARIO_TYPE_MAIN) ay = MARIO_GRAVITY; else ay = 0;
 		untouchable = 0;
 		prev_nx = 0;
 		

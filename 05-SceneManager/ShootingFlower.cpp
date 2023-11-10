@@ -94,6 +94,8 @@ int CShootingFlower::getMovingFlowerAniId(int flag) {
 		return ID_ANI_SHOOTING_FLOWER_UP_RIGHT_MOVING;
 	case 4:
 		return ID_ANI_SHOOTING_FLOWER_DOWN_RIGHT_MOVING;
+	default:
+		return 0;
 	}
 
 };
@@ -108,6 +110,8 @@ int CShootingFlower::getStaticFlowerAniId(int flag) {
 		return ID_ANI_SHOOTING_FLOWER_UP_RIGHT_IDLE;
 	case 4:
 		return ID_ANI_SHOOTING_FLOWER_DOWN_RIGHT_IDLE;
+	default:
+		return 0;
 	}
 };
 int CShootingFlower::getMovingFlowerType2AniId(int flag) {
@@ -121,6 +125,8 @@ int CShootingFlower::getMovingFlowerType2AniId(int flag) {
 		return ID_ANI_SHOOTING_FLOWER2_UP_RIGHT_MOVING;
 	case 4:
 		return ID_ANI_SHOOTING_FLOWER2_DOWN_RIGHT_MOVING;
+	default:
+		return 0;
 	}
 
 };
@@ -135,6 +141,8 @@ int CShootingFlower::getStaticFlowerType2AniId(int flag) {
 		return ID_ANI_SHOOTING_FLOWER2_UP_RIGHT_IDLE;
 	case 4:
 		return ID_ANI_SHOOTING_FLOWER2_DOWN_RIGHT_IDLE;
+	default:
+		return 0;
 	}
 };
 int CShootingFlower::getFlowerPosition() {
@@ -154,7 +162,7 @@ int CShootingFlower::getFlowerPosition() {
 void CShootingFlower::Render()
 {
 	int flag = getFlowerPosition();
-	int aniId;
+	int aniId = 0;
 
 	if (this->state == SHOOTING_FLOWER_STATE_STATIC) {
 		switch ((int)this->type)

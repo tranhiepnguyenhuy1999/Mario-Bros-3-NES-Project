@@ -24,10 +24,10 @@ void CTileMap::Render()
 		{
 			// check tile x y 
 			float l, t, r, b;
-			l = j * 16;
-			t = i * 16;
-			r = l + 16;
-			b = t + 16;
+			l = (float)(j * 16);
+			t = (float)(i * 16);
+			r = (float)(l + 16);
+			b = (float)(t + 16);
 
 			if (cam->isCamContain(l, t, r, b))
 			{

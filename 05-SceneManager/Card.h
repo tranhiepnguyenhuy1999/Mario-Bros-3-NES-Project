@@ -54,6 +54,6 @@ public:
 		default:
 			break;
 		}
-		CGame::GetInstance()->GetCurrentScene()->AddMovingObject(x, y, 0, -0.1f, ani_id, 20000);
+		CGame::GetInstance()->GetCurrentScene()->AddMovingObject(x, y, 0.0f, -0.1f, 0.0f, 0.0f, ani_id, 20000);
 	};
 };

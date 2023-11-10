@@ -1,13 +1,13 @@
 # list of object assets to load in this scene
 [ASSETS]
-mario.txt
-small-object.txt
+assets/mario.txt
+assets/small-object.txt
 [TILESET]
 # width|height|maxTiles|sizeTileX|sizeTileY|frame_time|textID
 16	16	37	4	11	10000	510
 [TILEDMAP]
-# load tile map
-world_map.csv
+#load tile map
+tilemap/world_map.csv
 [CAMERA]
 # setting camera initial props
 # cleft|ctop|isFixed
@@ -17,6 +17,5 @@ world_map.csv
 # type: 0 = Mario , 1 = Brick, 2 = Goomba, 3 = Koopas
 # See OBJECT_TYPE constants in AssetIDs.h
 # MARIO
-0	100	100
-
+0	100	100	1
 
