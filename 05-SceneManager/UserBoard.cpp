@@ -60,14 +60,14 @@ void CUserBoard::Render()
 	}
 
 	//p 
-	for (int i = 0; i < 6; i++) {
+	for (int i = 1; i < 7; i++) {
 		if (i <= fly_mark) {
-			animations->Get(ID_ANI_NUMBER_WHITE_LEFT)->Render(x - 78 + 53 + 4 + i * 8, y - 18 + 8 + 6);
+			animations->Get(ID_ANI_NUMBER_WHITE_LEFT)->Render(x - 78 + 53 + 4 + (i-1) * 8, y - 18 + 8 + 6);
 		}
 		else
-			animations->Get(ID_ANI_NUMBER_BLACK_LEFT)->Render(x - 78 + 53 + 4 + i * 8, y - 18 + 8 + 6);
+			animations->Get(ID_ANI_NUMBER_BLACK_LEFT)->Render(x - 78 + 53 + 4 + (i-1) * 8, y - 18 + 8 + 6);
 	}
-	if (fly_mark ==5)
+	if (fly_mark ==6)
 		animations->Get(ID_ANI_NUMBER_WHITE_P)->Render(x - 78 + 53 + 6 + 6 * 8 +2 , y - 18 + 8 + 6);
 	else
 		animations->Get(ID_ANI_NUMBER_BLACK_P)->Render(x - 78 + 53 + 6 + 6 * 8 + 2, y - 18 + 8 + 6);

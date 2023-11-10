@@ -32,7 +32,7 @@ public:
 			coin += val;
 			break;
 		case ID_PROPS_FLY_MARK:
-			fly_mark += val;
+			fly_mark = val;
 			break;
 		default:
 			break;

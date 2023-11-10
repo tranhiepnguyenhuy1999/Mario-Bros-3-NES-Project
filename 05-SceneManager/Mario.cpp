@@ -60,7 +60,24 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		}
 	}
 
-	if (isFlying)
+	if (next_ready_to_fly_mark_count_start != -1)
+	{
+		DebugOut(L"Minus ready fly mark !!! \n");
+
+		if (!isReadyToFly && GetTickCount64() - next_ready_to_fly_mark_count_start > 350)
+		{
+			ready_to_fly_mark--;
+			if (ready_to_fly_mark < -1)
+			{
+				next_ready_to_fly_mark_count_start = -1;
+			}
+			else next_ready_to_fly_mark_count_start=GetTickCount64();
+			
+			UserInfo::GetInstance()->updateProps(ID_PROPS_FLY_MARK, ready_to_fly_mark);
+
+		}
+	}
+	else if (isFlying)
 	{
 		DebugOut(L"Flying time !!! \n");
 
@@ -556,11 +573,20 @@ int CMario::GetAniIdBig()
 int CMario::GetAniIdRacoon()
 {
 	int aniId = -1;
-	if (isFlying) {
-		aniId = ID_ANI_RACOON_FLY_RIGHT;
+	if (isFlying && !isOnPlatform) {
+		if (nx >= 0)
+			aniId = ID_ANI_RACOON_FLY_RIGHT;
+		else
+			aniId = ID_ANI_RACOON_FLY_LEFT;
 	}
-	else
-	if (!isOnPlatform)
+	else if (isReadyToFly && isRuning)
+	{
+		if (nx >= 0)
+			aniId = ID_ANI_RACOON_READY_FLY_RIGHT;
+		else
+			aniId = ID_ANI_RACOON_READY_FLY_LEFT;
+	}
+	else if (!isOnPlatform)
 	{
 		if (abs(ax) == MARIO_ACCEL_RUN_X)
 		{
@@ -687,13 +713,17 @@ void CMario::SetState(int state)
 	case MARIO_STATE_RUNNING_RIGHT:
 		if (isSitting) break;
 		isRuning = true;
-		if (!isReadyToFly && GetTickCount64() - next_ready_to_fly_mark_count_start > 500) {
+		if (!isReadyToFly && GetTickCount64() - next_ready_to_fly_mark_count_start > 250) { 
+			
 			ready_to_fly_mark++;
-			if (ready_to_fly_mark > 4) {
+
+			if (ready_to_fly_mark > 6) {
 				SetState(MARIO_STATE_START_FLY);
 				next_ready_to_fly_mark_count_start = -1;
 			}
 			else next_ready_to_fly_mark_count_start = GetTickCount64();
+
+			UserInfo::GetInstance()->updateProps(ID_PROPS_FLY_MARK, ready_to_fly_mark);
 		}
 		maxVx = MARIO_RUNNING_SPEED;
 		ax = MARIO_ACCEL_RUN_X;
@@ -743,7 +773,7 @@ void CMario::SetState(int state)
 			if (vy > 0)
 			{
 				ay = 0.0f;
-				vy = 0.035f;
+				vy = 0.05f;
 			}
 		}
 		break;
@@ -777,7 +807,8 @@ void CMario::SetState(int state)
 			vy = 0.0f;
 		}
 		ax = 0.0f;
-		vx = 0.0f;	
+		vx = 0.0f;
+		isRuning = false;
 		break;
 	case MARIO_STATE_ATTACK:
 		if (level != 3) return;
@@ -805,7 +836,8 @@ void CMario::SetState(int state)
 	case MARIO_STATE_END_FLY:
 		isFlying = false;
 		isReadyToFly = false;
-		ready_to_fly_mark = 0;
+		ready_to_fly_mark = -1;
+		UserInfo::GetInstance()->updateProps(ID_PROPS_FLY_MARK, ready_to_fly_mark);
 		ay = MARIO_GRAVITY;
 		break;
 	case MARIO_STATE_RELEASE_FLY:

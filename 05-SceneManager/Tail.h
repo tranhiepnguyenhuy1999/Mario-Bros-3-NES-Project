@@ -23,7 +23,7 @@ class CTail : public CGameObject {
 	void OnCollisionWithBreakBrick(LPCOLLISIONEVENT e);
 	void OnCollisionWithParaGoomba(LPCOLLISIONEVENT e);
 	void OnCollisionWithKoopaTroopa(LPCOLLISIONEVENT e);
-
+	void OnCollisionWithQuestionBrick(LPCOLLISIONEVENT e);
 public:
 	CTail(float x, float y, float nx);
 

@@ -523,7 +523,7 @@ void CPlayScene::Render()
 		CLayer::GetInstance()->Render();
 	}
 
-	//CUserBoard::GetInstance()->Render();
+	CUserBoard::GetInstance()->Render();
 }
 /*
 *	Clear all objects from this scene

@@ -4,6 +4,8 @@
 #include "KoopaTroopa.h"
 #include "BreakBrick.h"
 #include "Button.h"
+#include "QuestionBrick.h"
+#include "Mario.h"
 
 #include "debug.h"
 
@@ -43,6 +45,8 @@ void CTail::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithKoopaTroopa(e);
 	else if (dynamic_cast<CBreakBrick*>(e->obj))
 		OnCollisionWithBreakBrick(e);
+	else if (dynamic_cast<CQuestionBrick*>(e->obj))
+		OnCollisionWithQuestionBrick(e);
 }
 void CTail::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 {
@@ -76,6 +80,41 @@ void CTail::OnCollisionWithKoopaTroopa(LPCOLLISIONEVENT e)
 
 			item->SetState(KOOPATROOPA_STATE_SHELL);
 }
+void CTail::OnCollisionWithQuestionBrick(LPCOLLISIONEVENT e)
+{
+	CQuestionBrick* obj = dynamic_cast<CQuestionBrick*>(e->obj);
+
+	if (obj->GetState() != QUESTIONBRICK_STATE_UNACTIVE) return;
+
+	float objx, objy;
+	obj->GetPosition(objx, objy);
+	if (obj->getType() == 1)
+	{
+		CGame::GetInstance()->GetCurrentScene()->createNewObject(OBJECT_TYPE_SMALLCOIN, objx, objy - 16);
+		UserInfo::GetInstance()->updateProps(ID_PROPS_COIN, +1);
+	}
+	else
+	{
+		int plevel;
+		CGame::GetInstance()->GetCurrentScene()->getPlayerLevel(plevel);
+
+		if (plevel == MARIO_LEVEL_BIG)
+		{
+			CGame::GetInstance()->GetCurrentScene()->createNewObject(OBJECT_TYPE_LEAF, objx, objy);
+		}
+		else if (plevel == MARIO_LEVEL_RACOON)
+		{
+			CGame::GetInstance()->GetCurrentScene()->createNewObject(OBJECT_TYPE_LEAF, objx, objy);
+		}
+		else if(plevel==MARIO_LEVEL_SMALL){
+			CGame::GetInstance()->GetCurrentScene()->createNewObject(OBJECT_TYPE_MUSHROOM, objx, objy, (float)nx);
+		}
+		obj->AddPointToUserBoard();
+	}
+
+	obj->SetState(QUESTIONBRICK_STATE_TOUCHED);
+}
+
 void CTail::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	if ((state != TAIL_STATE_DIE) && (GetTickCount64() - count_start >250))
