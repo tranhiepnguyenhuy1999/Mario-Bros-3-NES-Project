@@ -1,8 +1,11 @@
 #pragma once
 #include "GameObject.h"
 
-#define GOOMBA_GRAVITY 0.001f
+#define GOOMBA_GRAVITY 0.00075f
 #define GOOMBA_WALKING_SPEED 0.035f
+#define GOOMBA_DIE_BY_TAIL_TOUCHED_SPEED 0.125f
+#define GOOMBA_DIE_BY_TAIL_TOUCHED_BOUNCE 0.25f
+
 
 
 #define GOOMBA_BBOX_WIDTH 16
@@ -13,9 +16,13 @@
 
 #define GOOMBA_STATE_WALKING 100
 #define GOOMBA_STATE_DIE 200
+#define GOOMBA_STATE_DIE_UPSIDE_DOWN 300
+
 
 #define ID_ANI_GOOMBA_WALKING 5000
 #define ID_ANI_GOOMBA_DIE 5001
+#define ID_ANI_GOOMBA_DIE_UPSIDE_DOWN 6004
+
 
 class CGoomba : public CGameObject
 {
@@ -32,12 +39,11 @@ public:
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	virtual void Render();
 
-	virtual int IsCollidable() { return 1; };
+	virtual int IsCollidable() { return state==GOOMBA_STATE_WALKING; };
 	virtual int IsBlocking() { return 0; }
 	virtual void OnNoCollision(DWORD dt);
 
 	virtual void OnCollisionWith(LPCOLLISIONEVENT e);
-	void OnCollisionWithTail(LPCOLLISIONEVENT e);
 	
 	virtual void SetState(int state);
 	

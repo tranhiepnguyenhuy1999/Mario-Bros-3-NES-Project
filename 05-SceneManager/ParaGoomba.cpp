@@ -1,6 +1,8 @@
 #include "ParaGoomba.h"
 #include "QuestionBrick.h"
+
 #include "AssetIDs.h"
+#include "Camera.h"
 
 CParaGoomba::CParaGoomba(float x, float y) :CGameObject(x, y)
 {
@@ -62,6 +64,14 @@ void CParaGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		if(GetTickCount64() - count_start > PARAGOOMBA_LOOP_TIMEOUT)
 		this->isDeleted = true;
 	}
+	else if (state == PARAGOOMBA_STATE_DIE_UPSIDE_DOWN)
+	{
+		if (!Camera::GetInstance()->isCamContainObject(this))
+		{
+			isDeleted = true;
+			return;
+		}
+	}
 	else if (level == PARAGOOMBA_LEVEL_NORMAL)
 	{
 		SetState(PARAGOOMBA_STATE_MOVING);
@@ -98,11 +108,12 @@ void CParaGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 void CParaGoomba::Render()
 {
 	int aniId = ID_ANI_PARAGOOMBA_WALKING;
-	if (state == PARAGOOMBA_STATE_DIE)
-	{
-		aniId = ID_ANI_PARAGOOMBA_DIE;
-	}
+	if (state == PARAGOOMBA_STATE_DIE)	aniId = ID_ANI_PARAGOOMBA_DIE;
+	else if (state == PARAGOOMBA_STATE_DIE_UPSIDE_DOWN)	aniId = ID_ANI_PARAGOOMBA_DIE_UPSIDE_DOWN;
+
 	CAnimations::GetInstance()->Get(aniId)->Render(x, y);
+	
+	//wings ani
 	if (level==PARAGOOMBA_LEVEL_FLY)
 	{
 		CAnimations::GetInstance()->Get(ID_ANI_PARAGOOMBA_WINNG_RIGHT)->Render(x + PARAGOOMBA_BBOX_WIDTH/2, y-PARAGOOMBA_BBOX_HEIGHT/2);
@@ -122,6 +133,11 @@ void CParaGoomba::SetState(int state)
 		vx = 0;
 		vy = 0;
 		ay = 0;
+		break;
+	case PARAGOOMBA_STATE_DIE_UPSIDE_DOWN:
+		vx = PARAGOOMBA_DIE_BY_TAIL_TOUCHED_SPEED;
+		vy = -PARAGOOMBA_DIE_BY_TAIL_TOUCHED_BOUNCE;
+		level = PARAGOOMBA_LEVEL_NORMAL;
 		break;
 	case PARAGOOMBA_STATE_JUMP:
 		isOnFlatform = false;

@@ -46,8 +46,13 @@ void CTail::OnCollisionWith(LPCOLLISIONEVENT e)
 }
 void CTail::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 {
-	CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
-	goomba->SetState(GOOMBA_STATE_DIE);
+	CGoomba* obj = dynamic_cast<CGoomba*>(e->obj);
+
+	if (obj->GetState() == GOOMBA_STATE_WALKING)
+	{
+		obj->SetState(GOOMBA_STATE_DIE_UPSIDE_DOWN);
+		CGame::GetInstance()->GetCurrentScene()->AddMovingObject(x, y, 0.0f, 0.0f, 0.0f, 0.0f, ID_ANI_TAIL_TOUCHED_ENEMY, 200);
+	}
 }
 void CTail::OnCollisionWithBreakBrick (LPCOLLISIONEVENT e)
 {
@@ -57,8 +62,13 @@ void CTail::OnCollisionWithBreakBrick (LPCOLLISIONEVENT e)
 }
 void CTail::OnCollisionWithParaGoomba(LPCOLLISIONEVENT e)
 {
-	CParaGoomba* goomba = dynamic_cast<CParaGoomba*>(e->obj);
-	goomba->SetState(GOOMBA_STATE_DIE);
+	CParaGoomba* obj = dynamic_cast<CParaGoomba*>(e->obj);
+
+	if (obj->GetState() == PARAGOOMBA_STATE_MOVING)
+	{
+		obj->SetState(PARAGOOMBA_STATE_DIE_UPSIDE_DOWN);
+		CGame::GetInstance()->GetCurrentScene()->AddMovingObject(x, y, 0.0f, 0.0f, 0.0f, 0.0f, ID_ANI_TAIL_TOUCHED_ENEMY, 200);
+	}
 }
 void CTail::OnCollisionWithKoopaTroopa(LPCOLLISIONEVENT e)
 {

@@ -12,6 +12,10 @@
 
 #define TAIL_STATE_RELASE 100
 #define TAIL_STATE_DIE 200
+
+#define ID_ANI_TAIL_TOUCHED_ENEMY 10300
+
+
 class CTail : public CGameObject {
 	ULONGLONG count_start;
 

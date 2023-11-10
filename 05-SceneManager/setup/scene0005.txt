@@ -24,7 +24,7 @@ tilemap/map1_map.csv
 # See OBJECT_TYPE constants in AssetIDs.h
 
 # MARIO
-0	700	336	0
+0	200	336	0
 #14	800	352
 
 #goomba
@@ -34,7 +34,7 @@ tilemap/map1_map.csv
 #2	928	352
 #2	960	352
 #para goomba
-#15	300	352
+15	300	352
 
 #koopatroopa
 #14	592	352

@@ -1,5 +1,7 @@
 #include "Goomba.h"
 #include "Tail.h"
+
+#include "Camera.h"
 #include "debug.h"
 
 CGoomba::CGoomba(float x, float y):CGameObject(x, y)
@@ -37,11 +39,6 @@ void CGoomba::OnNoCollision(DWORD dt)
 
 void CGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
 {
-
-	if (dynamic_cast<CTail*>(e->obj))
-	{
-		OnCollisionWithTail(e);
-	}
 	if (!e->obj->IsBlocking()) return; 
 	if (dynamic_cast<CGoomba*>(e->obj)) return; 
 
@@ -53,12 +50,6 @@ void CGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
 	{
 		vx = -vx;
 	}
-
-
-}
-void CGoomba::OnCollisionWithTail(LPCOLLISIONEVENT e)
-{
-	if (state != GOOMBA_STATE_DIE) SetState(GOOMBA_STATE_DIE);
 }
 
 void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
@@ -76,11 +67,17 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	vy += ay * dt;
 	vx += ax * dt;
 
-	if ( (state==GOOMBA_STATE_DIE) && (GetTickCount64() - die_start > GOOMBA_DIE_TIMEOUT) )
+	if ( state==GOOMBA_STATE_DIE && (GetTickCount64() - die_start > GOOMBA_DIE_TIMEOUT) )
 	{
 		isDeleted = true;
 		return;
 	}
+	else if (state == GOOMBA_STATE_DIE_UPSIDE_DOWN && !Camera::GetInstance()->isCamContainObject(this))
+	{
+		isDeleted = true;
+		return;
+	}
+
 
 	CGameObject::Update(dt, coObjects);
 	CCollision::GetInstance()->Process(this, dt, coObjects);
@@ -90,13 +87,12 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 void CGoomba::Render()
 {
 	int aniId = ID_ANI_GOOMBA_WALKING;
-	if (state == GOOMBA_STATE_DIE) 
-	{
-		aniId = ID_ANI_GOOMBA_DIE;
-	}
+	if (state == GOOMBA_STATE_DIE)	aniId = ID_ANI_GOOMBA_DIE;
+	else if (state == GOOMBA_STATE_DIE_UPSIDE_DOWN)	aniId = ID_ANI_GOOMBA_DIE_UPSIDE_DOWN;
+
 
 	CAnimations::GetInstance()->Get(aniId)->Render(x,y);
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 
 void CGoomba::SetState(int state)
@@ -110,6 +106,11 @@ void CGoomba::SetState(int state)
 			vx = 0;
 			vy = 0;
 			ay = 0; 
+			break;
+		case GOOMBA_STATE_DIE_UPSIDE_DOWN:
+			die_start = GetTickCount64();
+			vx = GOOMBA_DIE_BY_TAIL_TOUCHED_SPEED;
+			vy = -GOOMBA_DIE_BY_TAIL_TOUCHED_BOUNCE;
 			break;
 		case GOOMBA_STATE_WALKING: 
 			vx = -GOOMBA_WALKING_SPEED;
