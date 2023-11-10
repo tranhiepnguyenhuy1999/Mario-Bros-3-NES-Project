@@ -39,6 +39,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	if (type == MARIO_TYPE_WORLDMAP && abs(vy) > abs(maxVy)) vy = maxVy;
 
 	// reset untouchable timer if untouchable time has passed
+	////DebugOut(L"state %d !!! \n", state);
 
 	if (pickup_shell) {
 		DebugOut(L"Start pickup shell !!! \n");
@@ -54,7 +55,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	
 	if (low_fly_remain_start != -1)
 	{
-		if (GetTickCount64() - low_fly_remain_start > 250) {
+		if (!isInPile && GetTickCount64() - low_fly_remain_start > 100) {
 			ay = MARIO_GRAVITY;
 			low_fly_remain_start = -1;
 		}
@@ -91,9 +92,9 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 			SetState(MARIO_STATE_RELEASE_FLY);
 		}
 	}
-	else if (isInPile && GetTickCount64()- count_start > 100) {
-		DebugOut(L"Start in pile !!! \n");
-		isInPile = false;
+	else if (isInPile && GetTickCount64()- count_start > 250) {
+		DebugOut(L"Already in pile !!! \n");
+		if(state==MARIO_STATE_GO_DOWN_PILE || state == MARIO_STATE_GO_UP_PILE) state = MARIO_STATE_IDLE;
 	}
 	else if ( GetTickCount64() - untouchable_start > MARIO_UNTOUCHABLE_TIME) 
 	{
@@ -118,9 +119,19 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 {
 	if (e->ny != 0 && e->obj->IsBlocking())
 	{
-		vy = 0; 
 		
-		if (dynamic_cast<CTransportPile*>(e->obj)) isOnTransportPile = true; else isOnTransportPile = false;
+		if (dynamic_cast<CTransportPile*>(e->obj))
+		{
+			if (e->ny > 0 && isCanGoUpPile)
+			{
+				SetState(MARIO_STATE_GO_UP_PILE);
+				return;
+			}
+			isOnTransportPile = true; 
+		}
+		else isOnTransportPile = false;
+
+		vy = 0;
 
 		if (e->ny < 0)
 		{
@@ -152,8 +163,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithDownBrick(e);
 	else if (dynamic_cast<CShootingFlower*>(e->obj))
 		OnCollisionWithFlower(e);
-	//else if (dynamic_cast<CFire*>(e->obj))
-	//	OnCollisionWithFire(e);
+	else if (dynamic_cast<CFire*>(e->obj))
+		OnCollisionWithFire(e);
 	else if (dynamic_cast<CLeaf*>(e->obj))
 		OnCollisionWithLeaf(e);
 	else if (dynamic_cast<CButton*>(e->obj))
@@ -586,6 +597,9 @@ int CMario::GetAniIdRacoon()
 		else
 			aniId = ID_ANI_RACOON_READY_FLY_LEFT;
 	}
+	else if (isInPile) {
+		aniId = ID_ANI_RACOON_IN_PILE;
+	}
 	else if (!isOnPlatform)
 	{
 		if (abs(ax) == MARIO_ACCEL_RUN_X)
@@ -627,9 +641,9 @@ int CMario::GetAniIdRacoon()
 		if (isSitting)
 		{
 			if (nx > 0)
-				aniId = ID_ANI_MARIO_SIT_RIGHT;
+				aniId = ID_ANI_RACOON_SIT_RIGHT;
 			else
-				aniId = ID_ANI_MARIO_SIT_LEFT;
+				aniId = ID_ANI_RACOON_SIT_LEFT;
 		}
 		else if (isKicking) {
 			if (nx > 0) aniId = ID_ANI_RACOON_KICK_RIGHT;
@@ -779,6 +793,7 @@ void CMario::SetState(int state)
 		break;
 
 	case MARIO_STATE_RELEASE_JUMP:
+		if (isInPile) break;
 		if (vy < 0) vy += MARIO_JUMP_SPEED_Y / 2;
 		break;
 
@@ -1009,6 +1024,8 @@ void CMario::onKeyDownOfMainMario(int KeyCode) {
 void CMario::keyStateOfMainMario() {
 	LPGAME game = CGame::GetInstance();
 
+	if (state == MARIO_STATE_GO_UP_PILE) return;
+
 	if (game->IsKeyDown(DIK_RIGHT))
 	{
 		if (game->IsKeyDown(DIK_A))
@@ -1016,14 +1033,22 @@ void CMario::keyStateOfMainMario() {
 			SetState(MARIO_STATE_RUNNING_RIGHT);
 		}
 		else
+		{
+			if (game->IsKeyDown(DIK_UP)) isCanGoUpPile = true;
 			SetState(MARIO_STATE_WALKING_RIGHT);
+		}
+			
 	}
 	else if (game->IsKeyDown(DIK_LEFT))
 	{
 		if (game->IsKeyDown(DIK_A))
 			SetState(MARIO_STATE_RUNNING_LEFT);
 		else
+		{
+			if (game->IsKeyDown(DIK_UP)) isCanGoUpPile = true;
 			SetState(MARIO_STATE_WALKING_LEFT);
+		}
+
 	}
 	else SetState(MARIO_STATE_IDLE);
 };
@@ -1053,7 +1078,7 @@ void CMario::handleKeyEvent(int flag, int KeyCode) {
 	{
 	case MARIO_TYPE_MAIN:
 	{
-		//if (isInPile) break;
+		if (isInPile) break;
 		switch (flag)
 		{
 		case KEYEVENT_KEY_UP:
@@ -1070,7 +1095,6 @@ void CMario::handleKeyEvent(int flag, int KeyCode) {
 	}
 	case MARIO_TYPE_WORLDMAP:
 	{
-		//if (isInPile) break;
 		switch (flag)
 		{
 		case KEYEVENT_KEY_UP:

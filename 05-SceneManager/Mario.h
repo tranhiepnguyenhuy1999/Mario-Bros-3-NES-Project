@@ -59,6 +59,8 @@
 #define MARIO_STATE_WALKING_UP	1700
 #define MARIO_STATE_WALKING_DOWN	1800
 
+#define MARIO_STATE_UNCOLLIDALE 1900
+
 #pragma region ANIMATION_ID
 // RACOON
 #define	ID_ANI_RACOON_TRANSFORM 1700
@@ -98,6 +100,11 @@
 
 #define ID_ANI_RACOON_READY_FLY_RIGHT 1722
 #define ID_ANI_RACOON_READY_FLY_LEFT 1723
+
+#define ID_ANI_RACOON_IN_PILE 1724
+
+#define ID_ANI_RACOON_SIT_RIGHT 1725
+#define ID_ANI_RACOON_SIT_LEFT 1726
 
 //BIG
 #define ID_ANI_MARIO_IDLE_RIGHT 400
@@ -202,6 +209,8 @@ class CMario : public CGameObject
 	BOOLEAN	isRuning;
 	BOOLEAN	isKicking;
 	BOOLEAN isInPile;
+	BOOLEAN isCanGoUpPile;
+
 
 	ULONGLONG untouchable_start;
 	ULONGLONG count_start;
@@ -250,6 +259,7 @@ public:
 		isRuning = false;
 		isKicking = false;
 		isInPile = false;
+		isCanGoUpPile = false;
 
 		maxVx = 0.0f;
 		maxVy = 0.0f;
@@ -276,10 +286,11 @@ public:
 	void getLevel(int& level) { level = this->level; }
 	int IsCollidable()
 	{
-		if (isInPile) return false;
 		switch (state)
 		{
 			case MARIO_STATE_DIE:
+			case MARIO_STATE_GO_DOWN_PILE:
+			case MARIO_STATE_GO_UP_PILE:
 				return false;
 			default:
 				return true;

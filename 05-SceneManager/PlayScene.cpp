@@ -261,9 +261,15 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	{
 		float npx = (float)atof(tokens[3].c_str());
 		float npy = (float)atof(tokens[4].c_str());
+		float is_down = (float)atof(tokens[5].c_str());
+		float ncl = (float)atof(tokens[6].c_str());
+		float nct = (float)atof(tokens[7].c_str());
+		float is_fixed = (float)atof(tokens[8].c_str());
+		float dpx = (float)atof(tokens[9].c_str());
+		float dpy = (float)atof(tokens[10].c_str());
 
-
-		obj = new CChangePositionBlock(x, y, npx, npy); break;
+		obj = new CChangePositionBlock(x, y,npx, npy, is_down, ncl, nct, is_fixed, dpx, dpy);
+		break;
 	}
 	case OBJECT_TYPE_DOWNBRICK:
 	{

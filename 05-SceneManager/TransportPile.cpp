@@ -1,7 +1,15 @@
 #include "TransportPile.h"
+#include "Pile.h"
 
 void CTransportPile::Render()
 {
+	CAnimations* animations = CAnimations::GetInstance();
+	animations->Get(ID_ANI_PILE_HEAD_FIRST)->Render(x, y);
+	animations->Get(ID_ANI_PILE_HEAD_LAST)->Render(x + 16, y);
+	for (int i = 0; i < height; i++) {
+		animations->Get(ID_ANI_PILE_BODY_FIRST)->Render(x, y + 16 + i * 16);
+		animations->Get(ID_ANI_PILE_BODY_LAST)->Render(x + 16, y + 16 + i * 16);
+	}
 }
 
 void CTransportPile::GetBoundingBox(float& l, float& t, float& r, float& b)

@@ -4,8 +4,8 @@ using namespace std;
 #include "GameObject.h"
 #include <Windows.h>
 
-#define MAX_MAP_WIDTH 3328
-#define MAX_MAP_HEIGHT 464
+#define MAX_MAP_WIDTH 2816
+#define MAX_MAP_HEIGHT 608
 
 class Camera
 {
@@ -20,6 +20,7 @@ class Camera
 	float py; // player y
 
 	boolean isFixed;
+	boolean isFixedAxisX;
 
 public:
 	Camera() {
@@ -33,7 +34,7 @@ public:
 	void setCamWidth(int width) { cWidth = width; r = l + cWidth; };
 	void setCamHeight(int height) { cHeight = height; b = t + cHeight; };
 
-	void setIsFixed(bool val) { isFixed = val; }
+	void setIsFixed(bool val, bool val1=false) { isFixed = val; isFixedAxisX = val1; }
 
 	void getCamWidth(int& width) { width = cWidth; };
 	void getCamHeight(int& height) { height = cHeight; };
@@ -55,7 +56,15 @@ public:
 		this->px = px;
 		this->py = py;
 
-		if (isFixed) return;
+		if (isFixedAxisX)
+		{
+			l = px - cWidth / 2;
+			r = l + cWidth;
+			//if (t < 0) { t = 0; b = t + cHeight; }
+			//else if (b > MAX_MAP_HEIGHT) { b = MAX_MAP_HEIGHT; t = b - cHeight; }
+			return;
+		}
+		else if (isFixed) return;
 
 		l = px - cWidth/2;
 		r = l + cWidth;
