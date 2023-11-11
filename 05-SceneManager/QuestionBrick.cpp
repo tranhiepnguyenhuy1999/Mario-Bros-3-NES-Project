@@ -1,10 +1,12 @@
 #include "QuestionBrick.h"
+#include "AssetIDs.h"
+#include "Mario.h"
 
-CQuestionBrick::CQuestionBrick(float x, float y, float type) : CGameObject(x, y) {
+CQuestionBrick::CQuestionBrick(float x, float y, float type, int state) : CGameObject(x, y) {
 
 	this->type = type;
 	range = y - QUESTIONBRICK_MOVING_BOUNCE_RANGE;
-	SetState(QUESTIONBRICK_STATE_UNACTIVE);
+	SetState(state);
 }
 void CQuestionBrick::Render()
 {
@@ -37,6 +39,26 @@ void CQuestionBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			SetState(QUESTIONBRICK_STATE_ACTIVE);
 		}
 	}
+	else if (state == QUESTIONBRICK_STATE_ACTIVE)
+	{
+		if (type == QUESTION_BRICK_TYPE_SPECIAL)
+		{
+			int plevel;
+			CGame::GetInstance()->GetCurrentScene()->getPlayerLevel(plevel);
+			if (plevel == MARIO_LEVEL_BIG)
+			{
+				CGame::GetInstance()->GetCurrentScene()->createNewObject(OBJECT_TYPE_LEAF, x, y);
+			}
+			else
+			{
+				CGame::GetInstance()->GetCurrentScene()->createNewObject(OBJECT_TYPE_MUSHROOM, x, y, (float)nx);
+			}
+			CGame::GetInstance()->GetCurrentScene()->createNewObject(OBJECT_TYPE_ACTIVE_QUESTIONBRICK, x, y);
+
+			this->Delete();
+		}
+	}
+
 	CGameObject::Update(dt, coObjects);
 }
 void CQuestionBrick::SetState(int state)
@@ -51,6 +73,11 @@ void CQuestionBrick::SetState(int state)
 		break;
 	case  QUESTIONBRICK_STATE_TOUCHED:
 		ay = -QUESTIONBRICK_MOVING_BOUNCE;
+		if (type == 1)
+		{
+			CGame::GetInstance()->GetCurrentScene()->createNewObject(OBJECT_TYPE_SMALLCOIN, x, y - 16);
+			UserInfo::GetInstance()->updateProps(ID_PROPS_COIN, +1);
+		}
 		break;
 	case  QUESTIONBRICK_STATE_ACTIVE:
 		ay = 0;

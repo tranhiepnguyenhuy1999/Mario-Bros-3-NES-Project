@@ -33,6 +33,7 @@ protected:
 
 	bool isDeleted; 
 
+	bool isTrigger;
 
 public: 
 	void SetPosition(float x, float y) { this->x = x, this->y = y; }
@@ -45,9 +46,14 @@ public:
 	virtual void Delete() { isDeleted = true;  }
 	bool IsDeleted() { return isDeleted; }
 
+	bool IsTrigger() { return isTrigger;  }
+	void setIsTrigger(bool val=true){
+		isTrigger = val;
+	}
+
 	void RenderBoundingBox();
 	CGameObject();
-	CGameObject(float x, float y) :CGameObject() { this->x = x; this->y = y; point = 0; }
+	CGameObject(float x, float y) :CGameObject() { this->x = x; this->y = y; point = 0; isTrigger = false; }
 
 	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom) = 0;
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) {};

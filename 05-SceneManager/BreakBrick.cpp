@@ -37,6 +37,7 @@ void CBreakBrick::SetState(int state)
 	{
 		CGame::GetInstance()->GetCurrentScene()->createNewObject(OBJECT_TYPE_BUTTON, x, y - BREAK_BRICK_BBOX_HEIGHT);
 	}
+	else if (state == BREAK_BRICK_STATE_TRANSFORM_TO_COIN && type == BREAK_BRICK_TYPE_SPECIAL) return;
 
 	CGameObject::SetState(state);
 }

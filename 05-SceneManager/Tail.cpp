@@ -86,32 +86,6 @@ void CTail::OnCollisionWithQuestionBrick(LPCOLLISIONEVENT e)
 
 	if (obj->GetState() != QUESTIONBRICK_STATE_UNACTIVE) return;
 
-	float objx, objy;
-	obj->GetPosition(objx, objy);
-	if (obj->getType() == 1)
-	{
-		CGame::GetInstance()->GetCurrentScene()->createNewObject(OBJECT_TYPE_SMALLCOIN, objx, objy - 16);
-		UserInfo::GetInstance()->updateProps(ID_PROPS_COIN, +1);
-	}
-	else
-	{
-		int plevel;
-		CGame::GetInstance()->GetCurrentScene()->getPlayerLevel(plevel);
-
-		if (plevel == MARIO_LEVEL_BIG)
-		{
-			CGame::GetInstance()->GetCurrentScene()->createNewObject(OBJECT_TYPE_LEAF, objx, objy);
-		}
-		else if (plevel == MARIO_LEVEL_RACOON)
-		{
-			CGame::GetInstance()->GetCurrentScene()->createNewObject(OBJECT_TYPE_LEAF, objx, objy);
-		}
-		else if(plevel==MARIO_LEVEL_SMALL){
-			CGame::GetInstance()->GetCurrentScene()->createNewObject(OBJECT_TYPE_MUSHROOM, objx, objy, (float)nx);
-		}
-		obj->AddPointToUserBoard();
-	}
-
 	obj->SetState(QUESTIONBRICK_STATE_TOUCHED);
 }
 

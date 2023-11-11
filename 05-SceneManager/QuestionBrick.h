@@ -26,7 +26,7 @@ class CQuestionBrick : public CGameObject {
 	float ay;
 
 public:
-	CQuestionBrick(float x, float y, float type = 1);
+	CQuestionBrick(float x, float y, float type = 1, int state=QUESTIONBRICK_STATE_UNACTIVE);
 
 	void Render();
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);

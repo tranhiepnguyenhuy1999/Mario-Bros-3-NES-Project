@@ -103,20 +103,16 @@ public:
 		obj->GetBoundingBox(o_l, o_t, o_r, o_b);
 		return !(o_r < l || o_l > r || o_t > b || o_b < t);
 	}
-	void checkIsCameraOver(vector<LPGAMEOBJECT>& objects) {
-		//for (size_t i = 0; i < objects.size(); i++)
-		//{
-		//	float objl, objt, objr, objb;
-		//	objects[i]->GetBoundingBox(objl, objt, objr, objb);
-		//	if (isCamContain(objl, objt, objr, objb))
-		//	{
-		//		objects[i]->setIsActiveTrue();
-		//	}
-		//	if (dynamic_cast<CGunShip*>(objects[i])) continue;
-		//	else if (objr < l || objt < b) {
-		//		objects[i]->setIsCameraOverTrue();
-		//	}
-		//}
+	void triggerObjectByCamera(vector<LPGAMEOBJECT>& objects) {
+		for (size_t i = 0; i < objects.size(); i++)
+		{
+			float objl, objt, objr, objb;
+			objects[i]->GetBoundingBox(objl, objt, objr, objb);
+			if (isCamContain(objl, objt, objr, objb))
+			{
+				objects[i]->setIsTrigger();
+			}
+		}
 	}
 	static Camera* GetInstance();
 };

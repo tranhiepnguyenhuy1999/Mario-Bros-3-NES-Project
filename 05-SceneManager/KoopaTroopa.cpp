@@ -17,7 +17,8 @@ CKoopaTroopa::CKoopaTroopa(float x, float y) :CGameObject(x, y)
 	isHaveFallObj = true;
 
 	fall_object = NULL;
-	SetState(KOOPATROOPA_STATE_SHELL);
+
+	SetState(KOOPATROOPA_STATE_MOVING);
 }
 
 void CKoopaTroopa::GetBoundingBox(float& left, float& top, float& right, float& bottom)
@@ -69,37 +70,9 @@ void CKoopaTroopa::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 }
 void CKoopaTroopa::OnCollisionWithQuestionBrick(LPCOLLISIONEVENT e)
 {
-		CQuestionBrick* obj = dynamic_cast<CQuestionBrick*>(e->obj);
-		int pLevel;
-		CGame::GetInstance()->GetCurrentScene()->getPlayerLevel(pLevel);
-		if (obj->GetState() == QUESTIONBRICK_STATE_UNACTIVE)
-		{
-			float qx, qy, qvx;
-			obj->GetPosition(qx, qy);
-
-			if (obj->getType() == 1)
-			{
-				CGame::GetInstance()->GetCurrentScene()->createNewObject(OBJECT_TYPE_SMALLCOIN, qx, qy - 16);
-			}
-			else
-			{
-				// check direction
-				if (this->x <= qx + 8) {
-					qvx = -1;
-				}
-				else
-				{
-					qvx = 1;
-				}
-				if (pLevel == MARIO_LEVEL_BIG)
-					CGame::GetInstance()->GetCurrentScene()->createNewObject(OBJECT_TYPE_LEAF, qx, qy);
-				else
-					CGame::GetInstance()->GetCurrentScene()->createNewObject(OBJECT_TYPE_MUSHROOM, qx, qy, qvx);
-			}
-
-			obj->SetState(QUESTIONBRICK_STATE_TOUCHED);
-		}
-
+	if (state != KOOPATROOPA_STATE_SHELL_MOVING) return;
+	CQuestionBrick* obj = dynamic_cast<CQuestionBrick*>(e->obj);
+	obj->SetState(QUESTIONBRICK_STATE_TOUCHED);
 }
 void CKoopaTroopa::OnCollisionWithDownBrick(LPCOLLISIONEVENT e)
 {

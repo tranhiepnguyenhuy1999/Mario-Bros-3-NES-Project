@@ -392,28 +392,7 @@ void CMario::OnCollisionWithQuestionBrick(LPCOLLISIONEVENT e)
 
 	if (e->ny > 0)
 	{
-			float objx, objy;
-			obj->GetPosition(objx, objy);
-			
-			if (obj->getType() == 1)
-			{
-				CGame::GetInstance()->GetCurrentScene()->createNewObject(OBJECT_TYPE_SMALLCOIN, objx, objy - 16);
-				UserInfo::GetInstance()->updateProps(ID_PROPS_COIN, +1);
-			}
-			else
-			{
-				if (level == MARIO_LEVEL_BIG)
-				{
-					CGame::GetInstance()->GetCurrentScene()->createNewObject(OBJECT_TYPE_LEAF, objx, objy);
-				}
-				else
-				{			
-					CGame::GetInstance()->GetCurrentScene()->createNewObject(OBJECT_TYPE_MUSHROOM, objx, objy, (float)nx);
-				}
-				obj->AddPointToUserBoard();
-			}
-
-			obj->SetState(QUESTIONBRICK_STATE_TOUCHED);
+		obj->SetState(QUESTIONBRICK_STATE_TOUCHED);
 	}
 
 }
@@ -444,6 +423,7 @@ void CMario::OnCollisionWithLeaf(LPCOLLISIONEVENT e)
 void CMario::OnCollisionWithCoin(LPCOLLISIONEVENT e)
 {
 	e->obj->AddPointToUserBoard();
+	UserInfo::GetInstance()->updateProps(ID_PROPS_COIN, 1);
 	e->obj->Delete();
 }
 void CMario::OnCollisionWithButton(LPCOLLISIONEVENT e)

@@ -1,4 +1,5 @@
 #include "Fire.h"
+#include "Platform.h"
 
 CFire::CFire(float x, float y, float nx, float ny ) :CGameObject(x, y)
 {
@@ -20,9 +21,11 @@ void CFire::OnNoCollision(DWORD dt)
 
 void CFire::OnCollisionWith(LPCOLLISIONEVENT e)
 {
-	if (!e->obj->IsBlocking()) return;
-	if (dynamic_cast<CFire*>(e->obj)) return;
-
+	if (e->obj->IsBlocking())
+	{
+		this->Delete();
+		return;
+	}
 	if (e->ny != 0)
 	{
 		vy = 0;

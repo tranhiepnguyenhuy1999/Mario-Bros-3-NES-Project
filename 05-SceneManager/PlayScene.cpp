@@ -29,6 +29,7 @@
 #include "Card.h"
 #include "MovingObject.h"
 #include "StopMovingObject.h"
+#include "ActiveQuestionBrick.h"
 
 #include "Camera.h"
 #include "TileMap.h"
@@ -363,6 +364,8 @@ void CPlayScene::createNewObject(int id, float x, float y, float  nx, float ny, 
 
 	switch (id)
 	{
+	case OBJECT_TYPE_BRICK: obj = new CBrick(x, y); break;
+	case OBJECT_TYPE_ACTIVE_QUESTIONBRICK: obj = new CActiveQuestionBrick(x, y); break;
 	case OBJECT_TYPE_MUSHROOM: obj = new CMushroom(x, y, nx); break;
 	case OBJECT_TYPE_LEAF: obj = new CLeaf(x, y); break;
 	case OBJECT_TYPE_TAIL: obj = new CTail(x, y, nx); break;
@@ -493,7 +496,7 @@ void CPlayScene::Update(DWORD dt)
 
 	for (size_t i = 0; i < objects.size(); i++)
 	{
-		objects[i]->Update(dt, &coObjects);
+		if(objects[i]->IsTrigger()) objects[i]->Update(dt, &coObjects);
 	}
 	
 	CLayer::GetInstance()->Update(dt, &coObjects);
@@ -506,6 +509,7 @@ void CPlayScene::Update(DWORD dt)
 	player->GetPosition(px, py);
 
 	Camera::GetInstance()->setCamPosition(px,py);
+	Camera::GetInstance()->triggerObjectByCamera(objects);
 
 	CUserBoard::GetInstance()->SetPosition(200, 432);
 
