@@ -62,7 +62,11 @@ void CTail::OnCollisionWithBreakBrick (LPCOLLISIONEVENT e)
 {
 	CBreakBrick* obj = dynamic_cast<CBreakBrick*>(e->obj);
 
-	if(obj->GetState() != BREAK_BRICK_STATE_TOUCHED) obj->SetState(BREAK_BRICK_STATE_TOUCHED);
+	if (obj->GetState() == BREAK_BRICK_STATE_NORMAL)
+	{
+		obj->SetState(BREAK_BRICK_STATE_TOUCHED);
+		obj->AddPointToUserBoard();
+	}
 }
 void CTail::OnCollisionWithParaGoomba(LPCOLLISIONEVENT e)
 {

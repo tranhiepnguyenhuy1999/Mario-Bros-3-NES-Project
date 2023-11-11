@@ -3,10 +3,23 @@
 void CBreakBrick::Render()
 {
 	CAnimations* animations = CAnimations::GetInstance();
-	if(type == BREAK_BRICK_TYPE_SPECIAL && state== BREAK_BRICK_STATE_TOUCHED)
-		animations->Get(ID_ANI_BREAK_BRICK_TYPE2_TOUCHED)->Render(x, y);
-	else 
-		animations->Get(ID_ANI_BREAK_BRICK_UNTOUCHED)->Render(x, y);
+	int aniId = 0;
+	switch (state)
+	{
+	case BREAK_BRICK_STATE_NORMAL:
+		aniId = ID_ANI_BREAK_BRICK_NORMAL;
+		break;
+	case BREAK_BRICK_STATE_TOUCHED:
+		if(type == BREAK_BRICK_TYPE_SPECIAL)	aniId = ID_ANI_BREAK_BRICK_TYPE2_TOUCHED;
+		break;
+	case BREAK_BRICK_STATE_TRANSFORM_TO_COIN:
+		aniId = ID_ANI_BREAK_BRICK_TRANSFORM_TO_COIN;
+		break;
+	default:
+		break;
+	}
+	
+	animations->Get(aniId)->Render(x, y);
 	//RenderBoundingBox();
 }
 
@@ -24,21 +37,29 @@ void CBreakBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		createRockObject();
 		isDeleted = true;
 	}
-	else if (state == BREAK_BRICK_STATE_TRANSFORM_TO_COIN && type != BREAK_BRICK_TYPE_SPECIAL)
+	else if (state == BREAK_BRICK_STATE_TRANSFORM_TO_COIN && GetTickCount64() -count_start > BREAK_BRICK_TRANSFORM_TO_COIN_TIMEOUT)
 	{
-		CGame::GetInstance()->GetCurrentScene()->createNewObject(OBJECT_TYPE_STATIC_COIN, x, y);
-		isDeleted = true;
-
+		SetState(BREAK_BRICK_STATE_NORMAL);
 	}
 }
 void CBreakBrick::SetState(int state)
 {
-	if (state == BREAK_BRICK_STATE_TOUCHED && type == BREAK_BRICK_TYPE_SPECIAL)
+	switch (state)
 	{
-		CGame::GetInstance()->GetCurrentScene()->createNewObject(OBJECT_TYPE_BUTTON, x, y - BREAK_BRICK_BBOX_HEIGHT);
+	case BREAK_BRICK_STATE_NORMAL:
+		point = 10;
+		break;
+	case BREAK_BRICK_STATE_TOUCHED:
+		if(type == BREAK_BRICK_TYPE_SPECIAL) CGame::GetInstance()->GetCurrentScene()->createNewObject(OBJECT_TYPE_BUTTON, x, y - BREAK_BRICK_BBOX_HEIGHT);
+		break;
+	case BREAK_BRICK_STATE_TRANSFORM_TO_COIN:
+		if (type == BREAK_BRICK_TYPE_SPECIAL) return;
+		count_start = GetTickCount64();
+		point = 50;
+		break;
+	default:
+		break;
 	}
-	else if (state == BREAK_BRICK_STATE_TRANSFORM_TO_COIN && type == BREAK_BRICK_TYPE_SPECIAL) return;
-
 	CGameObject::SetState(state);
 }
 void CBreakBrick::createRockObject() {

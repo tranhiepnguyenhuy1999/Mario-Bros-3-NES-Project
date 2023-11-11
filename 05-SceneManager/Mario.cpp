@@ -23,6 +23,7 @@
 #include "ChangePositionBlock.h"
 #include "TransportPile.h"
 #include "Card.h"
+#include "BreakBrick.h"
 
 #include "AssetIDs.h"
 #include "Collision.h"
@@ -180,6 +181,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithChangePositionBlock(e);
 	else if (dynamic_cast<CCard*>(e->obj))
 		OnCollisionWithCard(e);
+	else if (dynamic_cast<CBreakBrick*>(e->obj))
+		OnCollisionWithBreakBrick(e);
 }
 void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 {
@@ -214,6 +217,23 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 				}
 			}
 		}
+	}
+}
+void CMario::OnCollisionWithBreakBrick(LPCOLLISIONEVENT e)
+{
+	CBreakBrick* obj = dynamic_cast<CBreakBrick*>(e->obj);
+
+	if (e->ny > 0)
+	{
+		if (obj->GetState() == BREAK_BRICK_STATE_NORMAL)
+		{
+			if(obj->GetType() == BREAK_BRICK_TYPE_SPECIAL) obj->SetState(BREAK_BRICK_STATE_TOUCHED);
+		}
+	}
+	else if (obj->GetState() == BREAK_BRICK_STATE_TRANSFORM_TO_COIN) {
+		UserInfo::GetInstance()->updateProps(ID_PROPS_COIN, 1);
+		obj->AddPointToUserBoard();
+		obj->Delete();
 	}
 }
 void CMario::OnCollisionWithParaGoomba(LPCOLLISIONEVENT e)
