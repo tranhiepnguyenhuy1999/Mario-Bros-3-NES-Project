@@ -96,11 +96,18 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		DebugOut(L"Already in pile !!! \n");
 		if(state==MARIO_STATE_GO_DOWN_PILE || state == MARIO_STATE_GO_UP_PILE) state = MARIO_STATE_IDLE;
 	}
+	else if (isUnControl && isOnPlatform) {
+		float cl, ct, cr, cb;
+		Camera::GetInstance()->getCamBoundingBox(cl, ct, cr, cb);
+		if (x > cr) SetState(MARIO_STATE_IDLE);
+		else SetState(MARIO_STATE_WALKING_RIGHT);
+	}
 	else if ( GetTickCount64() - untouchable_start > MARIO_UNTOUCHABLE_TIME) 
 	{
 		untouchable_start = 0;
 		untouchable = 0;
 	}
+
 
 	isOnPlatform = false;
 
@@ -451,6 +458,7 @@ void CMario::OnCollisionWithCard(LPCOLLISIONEVENT e)
 	{
 		obj->SetState(CARD_STATE_TOUCHED);
 		obj->handlePlayerTouched();
+		SetState(MARIO_STATE_UNCONTROL);
 	}
 }
 void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)
@@ -887,6 +895,14 @@ void CMario::SetState(int state)
 		isInPile = false;
 		count_start = -1;
 		break;
+	case MARIO_STATE_UNCONTROL:
+		isUnControl = true;
+		vy = 0.0f;
+		ax = 0.0f;
+		vx = 0.0f;
+		isRuning = false;
+		count_start = GetTickCount64();
+		break;
 	}
 	CGameObject::SetState(state);
 }
@@ -1078,7 +1094,8 @@ void CMario::handleKeyEvent(int flag, int KeyCode) {
 	{
 	case MARIO_TYPE_MAIN:
 	{
-		if (isInPile) break;
+		if(isInPile) break;
+		if (isUnControl) break;
 		switch (flag)
 		{
 		case KEYEVENT_KEY_UP:

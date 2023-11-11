@@ -59,7 +59,7 @@
 #define MARIO_STATE_WALKING_UP	1700
 #define MARIO_STATE_WALKING_DOWN	1800
 
-#define MARIO_STATE_UNCOLLIDALE 1900
+#define MARIO_STATE_UNCONTROL 1900
 
 #pragma region ANIMATION_ID
 // RACOON
@@ -210,6 +210,7 @@ class CMario : public CGameObject
 	BOOLEAN	isKicking;
 	BOOLEAN isInPile;
 	BOOLEAN isCanGoUpPile;
+	BOOLEAN isUnControl;
 
 
 	ULONGLONG untouchable_start;
@@ -260,6 +261,7 @@ public:
 		isKicking = false;
 		isInPile = false;
 		isCanGoUpPile = false;
+		isUnControl = false;
 
 		maxVx = 0.0f;
 		maxVy = 0.0f;

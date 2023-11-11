@@ -5,7 +5,7 @@ using namespace std;
 #include <Windows.h>
 
 #define MAX_MAP_WIDTH 2816
-#define MAX_MAP_HEIGHT 608
+#define MAX_MAP_HEIGHT 464
 
 class Camera
 {
@@ -29,6 +29,7 @@ public:
 		cHeight = 0;
 		px = 0; py = 0;
 		isFixed = false;
+		isFixedAxisX = false;
 	}
 
 	void setCamWidth(int width) { cWidth = width; r = l + cWidth; };
