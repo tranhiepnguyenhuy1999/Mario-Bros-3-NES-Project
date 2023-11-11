@@ -10,7 +10,7 @@ protected:
 	boolean isOnFlatform;
 
 public:
-	CParaKoopaTroopa(float x, float y);
+	CParaKoopaTroopa(float x, float y, int  obj_type);
 
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	virtual void OnCollisionWith(LPCOLLISIONEVENT e);

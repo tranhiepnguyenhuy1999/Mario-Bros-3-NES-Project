@@ -242,8 +242,18 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	}
 	case OBJECT_TYPE_GOOMBA: obj = new CGoomba(x,y); break;
 	case OBJECT_TYPE_PARAGOOMBA: obj = new CParaGoomba(x, y); break;
-	case OBJECT_TYPE_KOOPATROOPA: obj = new CKoopaTroopa(x, y); break;
-	case OBJECT_TYPE_PARAKOOPATROOPA: obj = new CParaKoopaTroopa(x, y); break;
+	case OBJECT_TYPE_KOOPATROOPA:
+	{
+		int type = (float)atoi(tokens[3].c_str());
+
+		obj = new CKoopaTroopa(x, y, type); break;
+	}
+	case OBJECT_TYPE_PARAKOOPATROOPA:
+	{
+		int type = (float)atoi(tokens[3].c_str());
+
+		obj = new CParaKoopaTroopa(x, y, type); break;
+	}
 	case OBJECT_TYPE_MAP: obj = new CMap(x, y); break;
 	case OBJECT_TYPE_BRICK: obj = new CBrick(x,y); break;
 	case OBJECT_TYPE_BREAKBRICK: 

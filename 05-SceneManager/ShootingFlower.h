@@ -35,17 +35,17 @@
 #define ID_ANI_SHOOTING_FLOWER_DOWN_RIGHT_MOVING 19008
 
 // id ani type 2
-#define ID_ANI_SHOOTING_FLOWER2_UP_LEFT_IDLE 12001
-#define ID_ANI_SHOOTING_FLOWER2_DOWN_LEFT_IDLE 12002
+#define ID_ANI_SHOOTING_RED_FLOWER_UP_LEFT_IDLE 12001
+#define ID_ANI_SHOOTING_RED_FLOWER_DOWN_LEFT_IDLE 12002
 
-#define ID_ANI_SHOOTING_FLOWER2_UP_LEFT_MOVING 12003
-#define ID_ANI_SHOOTING_FLOWER2_DOWN_LEFT_MOVING 12004
+#define ID_ANI_SHOOTING_RED_FLOWER_UP_LEFT_MOVING 12003
+#define ID_ANI_SHOOTING_RED_FLOWER_DOWN_LEFT_MOVING 12004
 
-#define ID_ANI_SHOOTING_FLOWER2_UP_RIGHT_IDLE 12005
-#define ID_ANI_SHOOTING_FLOWER2_DOWN_RIGHT_IDLE 12006
+#define ID_ANI_SHOOTING_RED_FLOWER_UP_RIGHT_IDLE 12005
+#define ID_ANI_SHOOTING_RED_FLOWER_DOWN_RIGHT_IDLE 12006
 
-#define ID_ANI_SHOOTING_FLOWER2_UP_RIGHT_MOVING 12007
-#define ID_ANI_SHOOTING_FLOWER2_DOWN_RIGHT_MOVING 12008
+#define ID_ANI_SHOOTING_RED_FLOWER_UP_RIGHT_MOVING 12007
+#define ID_ANI_SHOOTING_RED_FLOWER_DOWN_RIGHT_MOVING 12008
 
 class CShootingFlower : public CGameObject
 {
@@ -73,7 +73,7 @@ protected:
 	void shooting();
 
 public:
-	CShootingFlower(float x, float y, float type);
+	CShootingFlower(float x, float y, float obj_type);
 
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
@@ -84,4 +84,8 @@ public:
 
 	virtual void OnCollisionWith(LPCOLLISIONEVENT e);
 	virtual void SetState(int state);
+
+	bool IsFlowerAtBottom() {
+		return y == bot;
+	}
 };

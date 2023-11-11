@@ -4,9 +4,10 @@
 #include "Goomba.h"
 #include "Mario.h"
 
-CKoopaTroopa::CKoopaTroopa(float x, float y) :CGameObject(x, y)
+CKoopaTroopa::CKoopaTroopa(float x, float y, int obj_type) :CGameObject(x, y)
 {
 	point = 100;
+	type = obj_type;
 
 	this->ay = KOOPATROOPA_GRAVITY;
 	count_start = -1;

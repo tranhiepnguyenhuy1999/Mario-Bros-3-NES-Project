@@ -4,7 +4,7 @@
 #include "Goomba.h"
 #include "Mario.h"
 
-CParaKoopaTroopa::CParaKoopaTroopa(float x, float y) :CKoopaTroopa(x, y)
+CParaKoopaTroopa::CParaKoopaTroopa(float x, float y, int obj_type) :CKoopaTroopa(x, y, obj_type)
 {
 	nx = 1;
 	isOnFlatform = false;

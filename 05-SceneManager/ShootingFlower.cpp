@@ -3,7 +3,7 @@
 #include "Pile.h"
 #include "Camera.h"
 #include "debug.h"
-CShootingFlower::CShootingFlower(float x, float y, float type) :CGameObject(x, y)
+CShootingFlower::CShootingFlower(float x, float y, float obj_type) :CGameObject(x, y)
 {
 	ay = 0;
 	top = y - SHOOTING_FLOWER_BBOX_HEIGHT;
@@ -11,7 +11,7 @@ CShootingFlower::CShootingFlower(float x, float y, float type) :CGameObject(x, y
 	loop_start = -1;
 	is_after_shooting = false;
 	isWorking = true;
-	this->type = type;
+	type = obj_type;
 	SetState(SHOOTING_FLOWER_STATE_STATIC);
 }
 
@@ -118,13 +118,13 @@ int CShootingFlower::getMovingFlowerType2AniId(int flag) {
 	switch (flag)
 	{
 	case 1:
-		return ID_ANI_SHOOTING_FLOWER2_UP_LEFT_MOVING;
+		return ID_ANI_SHOOTING_RED_FLOWER_UP_LEFT_MOVING;
 	case 2:
-		return ID_ANI_SHOOTING_FLOWER2_DOWN_LEFT_MOVING;
+		return ID_ANI_SHOOTING_RED_FLOWER_DOWN_LEFT_MOVING;
 	case 3:
-		return ID_ANI_SHOOTING_FLOWER2_UP_RIGHT_MOVING;
+		return ID_ANI_SHOOTING_RED_FLOWER_UP_RIGHT_MOVING;
 	case 4:
-		return ID_ANI_SHOOTING_FLOWER2_DOWN_RIGHT_MOVING;
+		return ID_ANI_SHOOTING_RED_FLOWER_DOWN_RIGHT_MOVING;
 	default:
 		return 0;
 	}
@@ -134,13 +134,13 @@ int CShootingFlower::getStaticFlowerType2AniId(int flag) {
 	switch (flag)
 	{
 	case 1:
-		return ID_ANI_SHOOTING_FLOWER2_UP_LEFT_IDLE;
+		return ID_ANI_SHOOTING_RED_FLOWER_UP_LEFT_IDLE;
 	case 2:
-		return ID_ANI_SHOOTING_FLOWER2_DOWN_LEFT_IDLE;
+		return ID_ANI_SHOOTING_RED_FLOWER_DOWN_LEFT_IDLE;
 	case 3:
-		return ID_ANI_SHOOTING_FLOWER2_UP_RIGHT_IDLE;
+		return ID_ANI_SHOOTING_RED_FLOWER_UP_RIGHT_IDLE;
 	case 4:
-		return ID_ANI_SHOOTING_FLOWER2_DOWN_RIGHT_IDLE;
+		return ID_ANI_SHOOTING_RED_FLOWER_DOWN_RIGHT_IDLE;
 	default:
 		return 0;
 	}

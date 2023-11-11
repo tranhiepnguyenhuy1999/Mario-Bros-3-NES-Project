@@ -36,11 +36,15 @@
 #define ID_ANI_KOOPATROOPA_KICKING 7002
 #define ID_ANI_KOOPATROOPA_ALIVE 7003
 
+#define KOOPATROOPA_TYPE_GREEN	0
+#define KOOPATROOPA_TYPE_RED	1
+
+
 class CKoopaTroopa : public CGameObject
 {
 protected:
 	float ay;
-	float type;
+	int type;
 
 	boolean isDie;
 	boolean isHaveFallObj;
@@ -62,7 +66,7 @@ protected:
 	}
 	void updateState();
 public:
-	CKoopaTroopa(float x, float y);
+	CKoopaTroopa(float x, float y, int obj_type);
 
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);

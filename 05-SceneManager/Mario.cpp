@@ -282,7 +282,9 @@ void CMario::OnCollisionWithParaGoomba(LPCOLLISIONEVENT e)
 }
 void CMario::OnCollisionWithFlower(LPCOLLISIONEVENT e)
 {
-		if (untouchable == 0)
+	CShootingFlower* obj = dynamic_cast<CShootingFlower*>(e->obj);
+
+		if (untouchable == 0 && !obj->IsFlowerAtBottom())
 		{
 			if (level > MARIO_LEVEL_SMALL)
 			{
