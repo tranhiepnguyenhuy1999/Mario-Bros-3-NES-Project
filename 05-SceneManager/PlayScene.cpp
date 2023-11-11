@@ -244,13 +244,13 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_PARAGOOMBA: obj = new CParaGoomba(x, y); break;
 	case OBJECT_TYPE_KOOPATROOPA:
 	{
-		int type = (float)atoi(tokens[3].c_str());
+		int type = atoi(tokens[3].c_str());
 
 		obj = new CKoopaTroopa(x, y, type); break;
 	}
 	case OBJECT_TYPE_PARAKOOPATROOPA:
 	{
-		int type = (float)atoi(tokens[3].c_str());
+		int type = atoi(tokens[3].c_str());
 
 		obj = new CParaKoopaTroopa(x, y, type); break;
 	}
@@ -368,7 +368,7 @@ void CPlayScene::AddStopMovingObjectAxisY(float x, float y, float nx, float ny, 
 
 	objects.push_back(obj);
 };
-void CPlayScene::createNewObject(int id, float x, float y, float  nx, float ny, LPGAMEOBJECT obj_src) // nx, ny : can be direction and int v at the same time
+void CPlayScene::CreateNewObject(int id, float x, float y, float  nx, float ny, LPGAMEOBJECT obj_src, int type) // nx, ny : can be direction and int v at the same time
 {
 	CGameObject* obj = NULL;
 
@@ -376,7 +376,7 @@ void CPlayScene::createNewObject(int id, float x, float y, float  nx, float ny, 
 	{
 	case OBJECT_TYPE_BRICK: obj = new CBrick(x, y); break;
 	case OBJECT_TYPE_ACTIVE_QUESTIONBRICK: obj = new CActiveQuestionBrick(x, y); break;
-	case OBJECT_TYPE_MUSHROOM: obj = new CMushroom(x, y, nx); break;
+	case OBJECT_TYPE_MUSHROOM: obj = new CMushroom(x, y, type, nx); break;
 	case OBJECT_TYPE_LEAF: obj = new CLeaf(x, y); break;
 	case OBJECT_TYPE_TAIL: obj = new CTail(x, y, nx); break;
 	case OBJECT_TYPE_ROCK: obj = new CRock(x, y, nx, ny); break;

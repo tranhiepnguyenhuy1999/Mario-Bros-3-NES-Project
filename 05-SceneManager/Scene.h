@@ -31,7 +31,7 @@ public:
 	virtual void getPlayerLevel(int& level) = 0;
 	virtual void AddMovingObject(float x, float y, float nx = 0, float ny = 0, float ax = 0, float ay = 0, int ani_id = 0, int delete_times = 1000) = 0;
 	virtual void AddStopMovingObjectAxisY(float x, float y, float nx = 0, float ny = 0, float ax = 0, float ay = 0, int ani_id = 0, int delete_times = 1000, bool direct = true) = 0;
-	virtual void createNewObject(int id, float x, float y, float nx=0, float ny=0, LPGAMEOBJECT objSrc = NULL)=0;
+	virtual void CreateNewObject(int id, float x, float y, float nx=0, float ny=0, LPGAMEOBJECT objSrc = NULL, int type=0)=0;
 	virtual void playerTouchedButtonP() = 0;
 
 };

@@ -41,7 +41,7 @@ public:
 
 	CPlayScene(int id, LPCWSTR filePath);
 	
-	virtual void createNewObject(int id, float x, float y, float nx, float ny, LPGAMEOBJECT objSrc = NULL);
+	virtual void CreateNewObject(int id, float x, float y, float nx, float ny, LPGAMEOBJECT objSrc, int type);
 	virtual void playerTouchedButtonP();
 
 	virtual void AddMovingObject(float x, float y, float nx, float ny, float ax, float ay, int ani_id, int delete_times);

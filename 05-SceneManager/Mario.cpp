@@ -964,11 +964,11 @@ void CMario::SetLevel(int l)
 void CMario::createTailObject() {
 
 	if (nx < 0) {
-		CGame::GetInstance()->GetCurrentScene()->createNewObject(OBJECT_TYPE_TAIL, x - TAIL_BBOX_WIDTH / 2, y+ MARIO_BIG_BBOX_HEIGHT/2 - TAIL_BBOX_HEIGHT, -1);
+		CGame::GetInstance()->GetCurrentScene()->CreateNewObject(OBJECT_TYPE_TAIL, x - TAIL_BBOX_WIDTH / 2, y+ MARIO_BIG_BBOX_HEIGHT/2 - TAIL_BBOX_HEIGHT, -1);
 	}
 	else
 	{
-		CGame::GetInstance()->GetCurrentScene()->createNewObject(OBJECT_TYPE_TAIL, x + TAIL_BBOX_WIDTH / 2, y + MARIO_BIG_BBOX_HEIGHT / 2 - TAIL_BBOX_HEIGHT,1);
+		CGame::GetInstance()->GetCurrentScene()->CreateNewObject(OBJECT_TYPE_TAIL, x + TAIL_BBOX_WIDTH / 2, y + MARIO_BIG_BBOX_HEIGHT / 2 - TAIL_BBOX_HEIGHT,1);
 
 	}
 }
@@ -1004,6 +1004,9 @@ void CMario::onKeyUpOfMainMario(int KeyCode) {
 		break;
 	case DIK_1:
 		SetLevel(MARIO_LEVEL_SMALL);
+		break;
+	case DIK_P:
+		
 		break;
 	case DIK_2:
 		SetLevel(MARIO_LEVEL_BIG);

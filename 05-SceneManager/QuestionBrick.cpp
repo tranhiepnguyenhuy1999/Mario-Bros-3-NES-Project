@@ -45,15 +45,19 @@ void CQuestionBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		{
 			int plevel;
 			CGame::GetInstance()->GetCurrentScene()->getPlayerLevel(plevel);
-			if (plevel == MARIO_LEVEL_BIG)
+			if (plevel == MARIO_LEVEL_RACOON)
 			{
-				CGame::GetInstance()->GetCurrentScene()->createNewObject(OBJECT_TYPE_LEAF, x, y);
+				CGame::GetInstance()->GetCurrentScene()->CreateNewObject(OBJECT_TYPE_MUSHROOM, x, y, (float)nx, 0.0f, NULL, 1);
+			}
+			else if (plevel == MARIO_LEVEL_BIG)
+			{
+				CGame::GetInstance()->GetCurrentScene()->CreateNewObject(OBJECT_TYPE_LEAF, x, y);
 			}
 			else
 			{
-				CGame::GetInstance()->GetCurrentScene()->createNewObject(OBJECT_TYPE_MUSHROOM, x, y, (float)nx);
+				CGame::GetInstance()->GetCurrentScene()->CreateNewObject(OBJECT_TYPE_MUSHROOM, x, y, (float)nx, 0.0f, NULL, 0);
 			}
-			CGame::GetInstance()->GetCurrentScene()->createNewObject(OBJECT_TYPE_ACTIVE_QUESTIONBRICK, x, y);
+			CGame::GetInstance()->GetCurrentScene()->CreateNewObject(OBJECT_TYPE_ACTIVE_QUESTIONBRICK, x, y);
 
 			this->Delete();
 		}
@@ -75,7 +79,7 @@ void CQuestionBrick::SetState(int state)
 		ay = -QUESTIONBRICK_MOVING_BOUNCE;
 		if (type == 1)
 		{
-			CGame::GetInstance()->GetCurrentScene()->createNewObject(OBJECT_TYPE_SMALLCOIN, x, y - 16);
+			CGame::GetInstance()->GetCurrentScene()->CreateNewObject(OBJECT_TYPE_SMALLCOIN, x, y - 16);
 			UserInfo::GetInstance()->updateProps(ID_PROPS_COIN, +1);
 		}
 		break;

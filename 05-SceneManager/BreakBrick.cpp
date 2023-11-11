@@ -50,7 +50,7 @@ void CBreakBrick::SetState(int state)
 		point = 10;
 		break;
 	case BREAK_BRICK_STATE_TOUCHED:
-		if(type == BREAK_BRICK_TYPE_SPECIAL) CGame::GetInstance()->GetCurrentScene()->createNewObject(OBJECT_TYPE_BUTTON, x, y - BREAK_BRICK_BBOX_HEIGHT);
+		if(type == BREAK_BRICK_TYPE_SPECIAL) CGame::GetInstance()->GetCurrentScene()->CreateNewObject(OBJECT_TYPE_BUTTON, x, y - BREAK_BRICK_BBOX_HEIGHT);
 		break;
 	case BREAK_BRICK_STATE_TRANSFORM_TO_COIN:
 		if (type == BREAK_BRICK_TYPE_SPECIAL) return;
@@ -63,8 +63,8 @@ void CBreakBrick::SetState(int state)
 	CGameObject::SetState(state);
 }
 void CBreakBrick::createRockObject() {
-		CGame::GetInstance()->GetCurrentScene()->createNewObject(OBJECT_TYPE_ROCK, x, y, -1.0f, -1.15f);
-		CGame::GetInstance()->GetCurrentScene()->createNewObject(OBJECT_TYPE_ROCK, x, y, 1.0f, -1.0f);
-		CGame::GetInstance()->GetCurrentScene()->createNewObject(OBJECT_TYPE_ROCK, x, y, -1.0f, -0.75f);
-		CGame::GetInstance()->GetCurrentScene()->createNewObject(OBJECT_TYPE_ROCK, x, y, 1.0f, -0.85f);
+		CGame::GetInstance()->GetCurrentScene()->CreateNewObject(OBJECT_TYPE_ROCK, x, y, -1.0f, -1.15f);
+		CGame::GetInstance()->GetCurrentScene()->CreateNewObject(OBJECT_TYPE_ROCK, x, y, 1.0f, -1.0f);
+		CGame::GetInstance()->GetCurrentScene()->CreateNewObject(OBJECT_TYPE_ROCK, x, y, -1.0f, -0.75f);
+		CGame::GetInstance()->GetCurrentScene()->CreateNewObject(OBJECT_TYPE_ROCK, x, y, 1.0f, -0.85f);
 }

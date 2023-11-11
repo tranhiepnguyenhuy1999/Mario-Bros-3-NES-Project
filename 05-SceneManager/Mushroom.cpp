@@ -1,15 +1,23 @@
 #include "Mushroom.h"
-CMushroom::CMushroom(float x, float y, float vx) :CGameObject(x, y)
+CMushroom::CMushroom(float x, float y, int obj_type, float vx) :CGameObject(x, y)
 {
 	point = 1000;
 	range = y - MUSHROOM_BBOX_HEIGHT;
+	type = obj_type;
 
 	SetState(MUSHROOM_STATE_RELASE);
 }
 void CMushroom::Render()
 {
 	CAnimations* animations = CAnimations::GetInstance();
-	animations->Get(ID_ANI_UNTOUCHED_MUSHROOM)->Render(x, y);
+	int aniId = 0;
+
+	if (type == MUSHROOM_TYPE_RED)
+		aniId = ID_ANI_MUSHROOM;
+	else if (type== MUSHROOM_TYPE_GREEN)
+		aniId = ID_ANI_MUSHROOM_GREEN;
+
+	animations->Get(aniId)->Render(x, y);
 	//RenderBoundingBox();
 }
 void CMushroom::OnNoCollision(DWORD dt)

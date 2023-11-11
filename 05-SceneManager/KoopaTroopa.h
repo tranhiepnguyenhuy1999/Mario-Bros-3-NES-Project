@@ -56,11 +56,11 @@ protected:
 	void createFallObject() {
 
 		if (vx < 0) {
-			CGame::GetInstance()->GetCurrentScene()->createNewObject(OBJECT_TYPE_FALLOBJECT, x - KOOPATROOPA_BBOX_WIDTH / 2 - FALLOBJECT_BBOX_WIDTH / 2, y + (KOOPATROOPA_BBOX_HEIGHT - FALLOBJECT_BBOX_HEIGHT) / 2, 0, 0, this);
+			CGame::GetInstance()->GetCurrentScene()->CreateNewObject(OBJECT_TYPE_FALLOBJECT, x - KOOPATROOPA_BBOX_WIDTH / 2 - FALLOBJECT_BBOX_WIDTH / 2, y + (KOOPATROOPA_BBOX_HEIGHT - FALLOBJECT_BBOX_HEIGHT) / 2, 0, 0, this);
 		}
 		else
 		{
-			CGame::GetInstance()->GetCurrentScene()->createNewObject(OBJECT_TYPE_FALLOBJECT, x + KOOPATROOPA_BBOX_WIDTH / 2 + FALLOBJECT_BBOX_WIDTH / 2, y + (KOOPATROOPA_BBOX_HEIGHT - FALLOBJECT_BBOX_HEIGHT) / 2, 0, 0, this);
+			CGame::GetInstance()->GetCurrentScene()->CreateNewObject(OBJECT_TYPE_FALLOBJECT, x + KOOPATROOPA_BBOX_WIDTH / 2 + FALLOBJECT_BBOX_WIDTH / 2, y + (KOOPATROOPA_BBOX_HEIGHT - FALLOBJECT_BBOX_HEIGHT) / 2, 0, 0, this);
 
 		}
 	}

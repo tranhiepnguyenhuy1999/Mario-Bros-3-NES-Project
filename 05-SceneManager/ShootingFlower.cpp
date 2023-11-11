@@ -269,7 +269,7 @@ void CShootingFlower::shooting()
 		altShootingXSpeed = 0.25f;
 	}
 
-	CGame::GetInstance()->GetCurrentScene()->createNewObject(OBJECT_TYPE_FIRE, x, y, nx * altShootingXSpeed, altShootingYSpeed * ny);
+	CGame::GetInstance()->GetCurrentScene()->CreateNewObject(OBJECT_TYPE_FIRE, x, y, nx * altShootingXSpeed, altShootingYSpeed * ny);
 }
 float CShootingFlower::translateToPercent(float data, boolean isXAxis) {
 	float px, py;
