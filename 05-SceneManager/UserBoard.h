@@ -5,7 +5,9 @@
 #include "Animations.h"
 #include "CountdownTimer.h"
 
-#define ID_ANI_BOARD 10005
+#define ID_ANI_BOARD 10400
+#define ID_ANI_CARD 10401
+
 #define ID_ANI_NUMBER0 10010
 #define ID_ANI_NUMBER1 10011
 #define ID_ANI_NUMBER2 10012

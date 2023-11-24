@@ -30,6 +30,7 @@
 #include "MovingObject.h"
 #include "StopMovingObject.h"
 #include "ActiveQuestionBrick.h"
+#include "NormalObjectWithAni.h"
 
 #include "Camera.h"
 #include "TileMap.h"
@@ -247,6 +248,14 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		int type = atoi(tokens[3].c_str());
 
 		obj = new CKoopaTroopa(x, y, type); break;
+	}
+	case OBJECT_TYPE_NORMALOBJECT_WITH_ANIMATION:
+	{
+		int ani = atoi(tokens[3].c_str());
+
+		obj = new CNormalObjectWithAni(x, y, ani);
+		
+		break;
 	}
 	case OBJECT_TYPE_PARAKOOPATROOPA:
 	{

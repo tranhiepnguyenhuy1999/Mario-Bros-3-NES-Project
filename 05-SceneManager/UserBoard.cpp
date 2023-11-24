@@ -32,6 +32,9 @@ void CUserBoard::Render()
 
 	CAnimations* animations = CAnimations::GetInstance();
 	animations->Get(ID_ANI_BOARD)->Render(x, y);
+
+	animations->Get(ID_ANI_CARD)->Render(x + 120, y);
+
 	//coin
 	for (int i = vcoin.size(); i >0; i--) {
 		int aniId = getAniId(vcoin[i-1]);

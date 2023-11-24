@@ -1,5 +1,5 @@
 [SETTINGS]
-start	5
+start	1
 width	320
 height	240
 
@@ -30,6 +30,8 @@ height	240
 130 	textures\25687-flip.png
 
 150	textures\enemies-upsidedown.png
+
+200	textures\4238.png
 
 500	textures\map1_bank.png
 510	textures\world_bank.png

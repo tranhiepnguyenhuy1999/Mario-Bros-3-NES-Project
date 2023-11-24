@@ -174,6 +174,7 @@
     <ClCompile Include="Mario.cpp" />
     <ClCompile Include="MovingObject.cpp" />
     <ClCompile Include="Mushroom.cpp" />
+    <ClCompile Include="NormalObjectWithAni.cpp" />
     <ClCompile Include="ParaGoomba.cpp" />
     <ClCompile Include="ParaKoopaTroopa.cpp" />
     <ClCompile Include="Pile.cpp" />
@@ -229,6 +230,7 @@
     <ClInclude Include="Mario.h" />
     <ClInclude Include="MovingObject.h" />
     <ClInclude Include="Mushroom.h" />
+    <ClInclude Include="NormalObjectWithAni.h" />
     <ClInclude Include="ParaGoomba.h" />
     <ClInclude Include="ParaKoopaTroopa.h" />
     <ClInclude Include="Pile.h" />
