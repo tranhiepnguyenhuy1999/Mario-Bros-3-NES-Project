@@ -74,13 +74,16 @@ public:
 	// Is this object blocking other object? If YES, collision framework will automatically push the other object
 	virtual int IsBlocking() { return 1; }
 
-	void AddPointToUserBoard(bool isShowPoint = false) {
-		UserInfo::GetInstance()->updateProps(ID_PROPS_POINT, point);
+	virtual void AddPointToUserBoard(bool isShowPoint = false) {
 		
+		UserInfo::GetInstance()->updateProps(ID_PROPS_POINT, point);
+		if (isShowPoint) ShowingPoint();
+	};
+
+	void ShowingPoint() {
 		int aniId = 0;
 		switch (point)
 		{
-		case 0: break;
 		case 100:
 			aniId = ID_ANI_100;
 			break;
@@ -94,9 +97,8 @@ public:
 			break;
 		}
 
-		if(isShowPoint && point !=0)	CGame::GetInstance()->GetCurrentScene()->AddStopMovingObjectAxisY(x, y, 0, -0.05f, 0, 0.00005f, aniId, 5000, false);
-
-	};
+		if ( point != 0)	CGame::GetInstance()->GetCurrentScene()->AddStopMovingObjectAxisY(x, y, 0, -0.05f, 0, 0.00005f, aniId, 5000, false);
+	}
 	~CGameObject();
 
 	static bool IsDeleted(const LPGAMEOBJECT &o) { return o->isDeleted; }

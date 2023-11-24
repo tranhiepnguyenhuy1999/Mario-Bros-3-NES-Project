@@ -16,7 +16,7 @@
 	#cloud
 21001	698	1	713	16	60
 
-	# question-brick
+	### question-brick
 # un-touched
 22001	1140	1	1155	16	60
 22002	1157	1	1172	16	60
@@ -26,7 +26,7 @@
 # touched
 22005	1208	1	1223	16	60
 
-	# mushroom
+	### mushroom
 #red
 23001	1	45	16	60	80
 
@@ -130,7 +130,7 @@
 #1up
 29302	195	89	210	96	40
 
-	#tail slap enemy
+	### tail slap enemy
 29400	379	1	394	16	30
 29401	397	1	412	16	30
 

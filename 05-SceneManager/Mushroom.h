@@ -44,4 +44,16 @@ public:
 	virtual void OnCollisionWith(LPCOLLISIONEVENT e);
 
 	virtual void SetState(int state);
+
+	virtual void AddPointToUserBoard(bool isShowPoint = false) {
+
+		if (type == MUSHROOM_TYPE_GREEN)
+		{
+			UserInfo::GetInstance()->updateProps(ID_PROPS_LIFE, point);
+
+			ShowingPoint();
+		}
+		else CGameObject::AddPointToUserBoard(1);
+	};
+
 };
