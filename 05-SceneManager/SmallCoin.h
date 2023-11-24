@@ -9,17 +9,19 @@
 
 #define SMALL_COIN_SPEED 0.2f
 #define SMALL_COIN_MAX_Y 50
-#define	SMALL_COIN_WIDTH 10
+
 #define SMALL_COIN_BBOX_WIDTH 9
 #define SMALL_COIN_BBOX_HEIGHT 14
 
 
 class CSmallCoin : public CGameObject {
 	float yLimit;
+
 public:
 	CSmallCoin(float x, float y) : CGameObject(x, y) {
 		yLimit = y - SMALL_COIN_MAX_Y;
 		vy = -SMALL_COIN_SPEED;
+		point = 100;
 	}
 	void Render();
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
@@ -29,7 +31,9 @@ public:
 			vy = -vy;
 		}
 		if (y >= yLimit + SMALL_COIN_MAX_Y) {
-			isDeleted = true; return;
+			this->AddPointToUserBoard(1);
+			isDeleted = true; 
+			return;
 		}
 		CGameObject::Update(dt, coObjects);
 	}

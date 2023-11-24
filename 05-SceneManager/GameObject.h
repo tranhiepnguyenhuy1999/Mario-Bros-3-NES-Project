@@ -9,6 +9,7 @@
 #include "Sprites.h"
 #include "Collision.h"
 #include "UserInfo.h"
+#include "AssetIDs.h"
 
 using namespace std;
 
@@ -73,8 +74,28 @@ public:
 	// Is this object blocking other object? If YES, collision framework will automatically push the other object
 	virtual int IsBlocking() { return 1; }
 
-	virtual void AddPointToUserBoard() {
+	void AddPointToUserBoard(bool isShowPoint = false) {
 		UserInfo::GetInstance()->updateProps(ID_PROPS_POINT, point);
+		
+		int aniId = 0;
+		switch (point)
+		{
+		case 0: break;
+		case 100:
+			aniId = ID_ANI_100;
+			break;
+		case 1000:
+			aniId = ID_ANI_1000;
+			break;
+		case 1:
+			aniId = ID_ANI_1UP;
+			break;
+		default:
+			break;
+		}
+
+		if(isShowPoint && point !=0)	CGame::GetInstance()->GetCurrentScene()->AddStopMovingObjectAxisY(x, y, 0, -0.05f, 0, 0.00005f, aniId, 5000, false);
+
 	};
 	~CGameObject();
 

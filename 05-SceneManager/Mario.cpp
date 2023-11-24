@@ -194,7 +194,7 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 		if (goomba->GetState() != GOOMBA_STATE_DIE)
 		{
 			goomba->SetState(GOOMBA_STATE_DIE);
-			goomba->AddPointToUserBoard();
+			goomba->AddPointToUserBoard(1);
 
 			vy = -MARIO_JUMP_DEFLECT_SPEED;
 		}
@@ -255,7 +255,7 @@ void CMario::OnCollisionWithParaGoomba(LPCOLLISIONEVENT e)
 				obj->SetState(PARAGOOMBA_STATE_DIE);
 			}
 			
-			obj->AddPointToUserBoard();
+			obj->AddPointToUserBoard(1);
 
 			vy = -MARIO_JUMP_DEFLECT_SPEED;
 		}
@@ -324,6 +324,7 @@ void CMario::OnCollisionWithKoopaTroopa(LPCOLLISIONEVENT e)
 	CKoopaTroopa* obj = dynamic_cast<CKoopaTroopa*>(e->obj);
 	// jump on top >> kill Goomba and deflect a bit 
 	if (obj->GetState() == KOOPATROOPA_STATE_SHELL || obj->GetState() == KOOPATROOPA_STATE_SHELL_ALIVE) {
+
 		if (e->nx != 0 && isRuning){
 			obj->SetState(KOOPATROOPA_STATE_SHELL_PICK_UP);
 			obj->SetPosition(x + nx*MARIO_BIG_BBOX_WIDTH/2 + nx*KOOPATROOPA_BBOX_WIDTH/3, y + MARIO_BIG_BBOX_HEIGHT/8);
@@ -331,6 +332,7 @@ void CMario::OnCollisionWithKoopaTroopa(LPCOLLISIONEVENT e)
 		}
 		else
 		{
+			if (e->ny < 0) obj->AddPointToUserBoard(1);
 			SetState(MARIO_STATE_KICK);
 			obj->getKicked(nx);
 		}
@@ -338,7 +340,7 @@ void CMario::OnCollisionWithKoopaTroopa(LPCOLLISIONEVENT e)
 	else if (e->ny < 0)
 	{
 		obj->getJumpedDown();
-		obj->AddPointToUserBoard();
+		obj->AddPointToUserBoard(1);
 
 		vy = -MARIO_JUMP_DEFLECT_SPEED;
 	}
@@ -373,16 +375,16 @@ void CMario::OnCollisionWithParaKoopaTroopa(LPCOLLISIONEVENT e)
 		if (obj->GetState() == PARA_KOOPATROOPA_STATE_JUMP)
 		{
 			obj->SetState(KOOPATROOPA_STATE_MOVING);
+			obj->AddPointToUserBoard(1);
 		}
 		else
 		{
 			if (obj->GetState() == KOOPATROOPA_STATE_MOVING)
 			{
 				obj->SetState(KOOPATROOPA_STATE_SHELL);
+				obj->AddPointToUserBoard(1);
 			}
 		}
-		obj->AddPointToUserBoard();
-
 		vy = -MARIO_JUMP_DEFLECT_SPEED;
 		return;
 	}
@@ -433,7 +435,7 @@ void CMario::OnCollisionWithMushroom(LPCOLLISIONEVENT e)
 	
 	y = y - (MARIO_BIG_BBOX_HEIGHT - MARIO_SMALL_BBOX_HEIGHT);
 	
-	e->obj->AddPointToUserBoard();
+	e->obj->AddPointToUserBoard(1);
 	e->obj->Delete();
 }
 void CMario::OnCollisionWithLeaf(LPCOLLISIONEVENT e)

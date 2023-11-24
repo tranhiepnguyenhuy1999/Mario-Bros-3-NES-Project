@@ -46,9 +46,5 @@ public:
 	virtual void OnCollisionWith(LPCOLLISIONEVENT e);
 	
 	virtual void SetState(int state);
-	
-	virtual void AddPointToUserBoard() {
-		CGameObject::AddPointToUserBoard();
-		CGame::GetInstance()->GetCurrentScene()->AddStopMovingObjectAxisY(x, y, 0, -0.05f,0,0.00005f, 10200, 5000, false);
-	};
+
 };

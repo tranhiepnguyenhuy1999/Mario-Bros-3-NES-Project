@@ -1,7 +1,8 @@
 #include "Mushroom.h"
 CMushroom::CMushroom(float x, float y, int obj_type, float vx) :CGameObject(x, y)
 {
-	point = 1000;
+	if (obj_type == MUSHROOM_TYPE_GREEN) point = 1;
+	else point = 1000;
 	range = y - MUSHROOM_BBOX_HEIGHT;
 	type = obj_type;
 

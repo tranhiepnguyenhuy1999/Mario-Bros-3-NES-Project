@@ -76,11 +76,12 @@ void CQuestionBrick::SetState(int state)
 		vy = 0;
 		break;
 	case  QUESTIONBRICK_STATE_TOUCHED:
+
 		ay = -QUESTIONBRICK_MOVING_BOUNCE;
+
 		if (type == 1)
 		{
 			CGame::GetInstance()->GetCurrentScene()->CreateNewObject(OBJECT_TYPE_SMALLCOIN, x, y - 16);
-			UserInfo::GetInstance()->updateProps(ID_PROPS_COIN, +1);
 		}
 		break;
 	case  QUESTIONBRICK_STATE_ACTIVE:
