@@ -6,6 +6,8 @@
 #include "Button.h"
 #include "QuestionBrick.h"
 #include "Mario.h"
+#include "ShootingFlower.h"
+#include "Flower.h"
 
 #include "debug.h"
 
@@ -47,6 +49,12 @@ void CTail::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithBreakBrick(e);
 	else if (dynamic_cast<CQuestionBrick*>(e->obj))
 		OnCollisionWithQuestionBrick(e);
+	else if (dynamic_cast<CQuestionBrick*>(e->obj))
+		OnCollisionWithQuestionBrick(e);
+	else if (dynamic_cast<CShootingFlower*>(e->obj))
+		OnCollisionWithFlower(e);
+	else if (dynamic_cast<CFlower*>(e->obj))
+		OnCollisionWithFlower(e);
 }
 void CTail::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 {
@@ -77,6 +85,13 @@ void CTail::OnCollisionWithParaGoomba(LPCOLLISIONEVENT e)
 		obj->SetState(PARAGOOMBA_STATE_DIE_UPSIDE_DOWN);
 		CGame::GetInstance()->GetCurrentScene()->AddMovingObject(x, y, 0.0f, 0.0f, 0.0f, 0.0f, ID_ANI_TAIL_TOUCHED_ENEMY, 200);
 	}
+}
+void CTail::OnCollisionWithFlower(LPCOLLISIONEVENT e)
+{
+	e->obj->Delete();
+	CGame::GetInstance()->GetCurrentScene()->AddMovingObject(x, y, 0.0f, 0.0f, 0.0f, 0.0f, ID_ANI_TAIL_TOUCHED_ENEMY, 200);
+	CGame::GetInstance()->GetCurrentScene()->AddMovingObject(x, y, 0.0f, 0.0f, 0.0f, 0.0f, 10009, 200);
+
 }
 void CTail::OnCollisionWithKoopaTroopa(LPCOLLISIONEVENT e)
 {

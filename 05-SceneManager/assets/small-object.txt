@@ -40,7 +40,7 @@
 	### user-board
 24001	11	127	164	156	40
 
-	### user- card
+	### user-card
 24002	172	127	243	156	40
 
 #number
