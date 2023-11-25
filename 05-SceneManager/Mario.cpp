@@ -838,7 +838,8 @@ void CMario::SetState(int state)
 		isRuning = false;
 		break;
 	case MARIO_STATE_ATTACK:
-		if (level != 3) return;
+		
+		if (level != 3 || isSitting) return;
 		count_start = GetTickCount64();
 		createTailObject();
 		ax = 0.0f;
