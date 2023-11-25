@@ -303,8 +303,10 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	}
 	case OBJECT_TYPE_TRANSPORT_PILE:
 	{
-		float height = (float)atof(tokens[3].c_str());
-		obj = new CTransportPile(x, y, height); break;
+		int height = (float)atof(tokens[3].c_str());
+		int type = (float)atoi(tokens[4].c_str());
+
+		obj = new CTransportPile(x, y, height, type); break;
 	}
 	case OBJECT_TYPE_CARD:
 	{

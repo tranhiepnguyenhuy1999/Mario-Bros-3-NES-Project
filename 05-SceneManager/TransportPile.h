@@ -9,10 +9,12 @@
 #define PILE_BBOX_HEIGHT 16
 
 class CTransportPile : public CGameObject {
-	float height;	
+	int height;	
+	int type;
 public:
-	CTransportPile(float x, float y, float height) : CGameObject(x, y) {
+	CTransportPile(float x, float y, int height, int obj_type) : CGameObject(x, y) {
 		this->height = height;
+		type = obj_type;
 	}
 	void Render();
 	void Update(DWORD dt) {}

@@ -6,7 +6,7 @@
 #include "debug.h"
 
 #define BLOCK_PUSH_FACTOR 0.1f
-
+	
 CCollision* CCollision::__instance = NULL;
 
 CCollision* CCollision::GetInstance()
