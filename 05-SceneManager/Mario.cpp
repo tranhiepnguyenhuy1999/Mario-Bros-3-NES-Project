@@ -923,9 +923,17 @@ void CMario::GetBoundingBox(float &left, float &top, float &right, float &bottom
 		}
 		else
 		{
-			left = x - RACOON_SPRITE_WIDTH / 2;
+			if (nx < 0)
+			{
+				left = x - RACOON_SPRITE_WIDTH / 2;
+				right = left + MARIO_BIG_BBOX_WIDTH;
+			}
+			else {
+				right = x + RACOON_SPRITE_WIDTH / 2;
+				left = right - RACOON_SPRITE_WIDTH / 2;
+			}
+
 			top = y - MARIO_BIG_BBOX_HEIGHT / 2;
-			right = left + RACOON_SPRITE_WIDTH;
 			bottom = top + MARIO_BIG_BBOX_HEIGHT;
 		}
 	}

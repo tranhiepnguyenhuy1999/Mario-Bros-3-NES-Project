@@ -37,7 +37,7 @@ tilemap/map1_map.csv
 15	1008	384
 
 #koopatroopa
-14	592	352	1
+#14	592	352	1
 
 14	1488	384	0
 

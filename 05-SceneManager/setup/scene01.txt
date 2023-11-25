@@ -17,7 +17,7 @@ tilemap/world_map.csv
 # type: 0 = Mario , 1 = Brick, 2 = Goomba, 3 = Koopas
 # See OBJECT_TYPE constants in AssetIDs.h
 # MARIO
-0	100	100	1
+0	32	48	1
 
 31	16	16	10901
 31	32	16	10901

@@ -17,7 +17,7 @@ public:
 		fly_mark = 0;
 		point = 0;
 		coin = 0;
-		life = 0;
+		life = 1;
 	}
 	void updateProps(int key, int val) {
 		switch (key)

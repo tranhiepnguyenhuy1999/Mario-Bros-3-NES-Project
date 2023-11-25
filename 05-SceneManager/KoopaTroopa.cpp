@@ -62,11 +62,14 @@ void CKoopaTroopa::OnCollisionWith(LPCOLLISIONEVENT e)
 }
 void CKoopaTroopa::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 {
-	CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
+	if (state != KOOPATROOPA_STATE_SHELL_MOVING) return;
 
-	if (goomba->GetState() != GOOMBA_STATE_DIE)
+	CGoomba* obj = dynamic_cast<CGoomba*>(e->obj);
+
+	if (obj->GetState() != GOOMBA_STATE_DIE)
 	{
-		goomba->SetState(GOOMBA_STATE_DIE);
+		obj->SetState(GOOMBA_STATE_DIE_UPSIDE_DOWN);
+		CGame::GetInstance()->GetCurrentScene()->AddMovingObject(x, y, 0.0f, 0.0f, 0.0f, 0.0f, 10300, 200);
 	}
 }
 void CKoopaTroopa::OnCollisionWithQuestionBrick(LPCOLLISIONEVENT e)
